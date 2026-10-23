@@ -4,7 +4,11 @@
 
 国内在线试玩：<https://www.daguojueqi.site/jiuji/>，与《大国崛起》部署在同一台腾讯云上海服务器。
 
-从原 Sites 地址迁移时，请先在旧地址的菜单中导出存档，再到新地址导入；浏览器不会跨域自动搬迁本地存档。部署方式与实际验收见 `docs/tencent-deployment.md`。
+从原 Sites 地址迁移时，请先在旧地址的菜单中导出存档，再到新地址导入；浏览器不会跨域自动搬迁本地存档。
+
+GitHub Pages 开源版试玩：<https://chencheng666.github.io/jiuji/>。
+
+
 
 ## 启动
 
@@ -109,7 +113,7 @@ npm run test:wilderness
 
 存档保存在浏览器本地。正式进度使用 `jiuji.survival.v4`；开发验收可用 `?slot=名称` 隔离存档。首次更新时依次读取旧的 `jiuji.survival.v3` 与 `jiuji.survival.v2`，也可以导入旧版 JSON：已点亮信标的存档从三级继续，其余保留原等级；物品、营地与原存档均保留。导入失败不会替换当前进度。旧议会版本存档不兼容生存版本。
 
-本轮验证见 `docs/verification-v0.4.md`；0.3 历史验收保留在 `docs/verification.md`。
+31 项规则测试与两条合法操作流程可按上面的命令复现。
 
 ## 开源与共建
 
