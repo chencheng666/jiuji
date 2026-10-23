@@ -1,0 +1,15 @@
+{
+  "name": "jiuji-survival",
+  "version": "0.4.1",
+  "private": false,
+  "type": "module",
+  "description": "《九级》采集、合成、建造与文明晋升生存游戏",
+  "scripts": {
+    "dev": "node scripts/server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:wilderness": "node tests/wilderness-journey.mjs",
+    "test:journey": "node tests/nine-level-journey.mjs",
+    "check": "node --check dist/wilderness.js && node --check dist/atmosphere.js && node --check dist/audio.js && node --check dist/chapters.js && node --check dist/survival.js && node --check dist/world.js && node --check dist/play.js"
+  },
+  "license": "MIT"
+}

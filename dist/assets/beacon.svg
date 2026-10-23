@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="协同信标"><title>协同信标</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="80" cy="179" rx="58" ry="13" fill="#213329" opacity=".25" stroke="none"/>
+<path d="m27 164 26-21 55-2 27 23-13 16-80 3Z" fill="#70816b"/>
+<path d="m27 164 53 12 55-12m-55 12 0 8m-24-39 1 20m50-22-1 21" fill="none" stroke="#344f43" stroke-width="2.5"/>
+<path d="m56 158 7-80 15-18 20 20 8 78-24 13Z" fill="#a7ad88"/>
+<path d="m78 60 4 111 24-13-8-78Z" fill="#728e75"/>
+<path d="m64 86 14 8 18-8m-33 20 16 8 21-9m-39 22 19 7 22-7" fill="none" stroke="#475f4a" stroke-width="2.5"/>
+<path d="m71 154 7-12 10 0 7 12-12 7Z" fill="#d5c487" stroke-width="2"/>
+<ellipse cx="80" cy="68" rx="36" ry="15" fill="none" stroke="#485f4a" stroke-width="7"/>
+<ellipse cx="80" cy="66" rx="35" ry="14" fill="none" stroke="#c5c59a" stroke-width="3"/>
+<path d="m70 57-2-20 12-19 14 20-3 19-11 10Z" fill="#d1d6a2"/>
+<path d="m80 18 0 25 0 24 11-10 3-19Z" fill="#83ad8d"/>
+<path d="m68 37 12 6 14-5" fill="none" stroke="#e5e6bf" stroke-width="2"/>
+<path d="M44 43q-10 15-6 28m82-26q8 14 5 29M31 37Q16 60 24 83m105-45q17 22 10 46" fill="none" stroke="#a5bc92" stroke-width="2" opacity=".7"/>
+<path d="m48 168 10 1m47 1 12-3m-48-25 1-6" stroke="#d7cb95" stroke-width="2"/>
+</g></svg>

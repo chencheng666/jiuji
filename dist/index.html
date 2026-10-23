@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#20362f"><meta name="description" content="九级：从一把石斧到一座星火信标。在荒野中采集、合成、建造，点亮物质与意识科技树。"><title>九级 · 从荒野到星海</title><link rel="icon" href="./favicon.svg"><link rel="stylesheet" href="./survival.css"><link rel="modulepreload" href="./play.js"><link rel="modulepreload" href="./survival.js"><link rel="modulepreload" href="./chapters.js"><link rel="modulepreload" href="./wilderness.js"><link rel="modulepreload" href="./world.js"><link rel="modulepreload" href="./atmosphere.js"><link rel="modulepreload" href="./audio.js"></head>
+<body>
+<main id="game">
+  <section id="boot" role="status"><h1>九级</h1><p>正在展开荒野地图…</p><small>首次进入需要加载游戏资源，请稍候。</small><button onclick="location.reload()">重新加载</button></section>
+  <canvas id="world" tabindex="0" aria-label="荒野地图。使用 WASD 移动，E 采集，空格攻击。也可以点击资源自动走近采集。"></canvas>
+  <header class="hud">
+    <button class="brand" data-do="pause" aria-label="九级，打开菜单"><span>九级</span><small>荒野初醒</small></button>
+    <div class="vitals" id="vitals"></div>
+    <div class="clock"><div id="sun">☼</div><p id="day">第 1 天</p><small id="phase">白昼</small></div>
+    <button class="menu-button" data-do="pause" aria-label="暂停菜单">Ⅱ</button>
+  </header>
+  <div id="weather" class="weather"></div><aside id="pinned" class="pinned" hidden></aside><button class="sound-toggle" data-do="sound" aria-pressed="true">音效 开</button>
+  <div class="knowledge" id="knowledge"></div>
+  <nav class="tool-rail" aria-label="营地操作">
+    <button data-do="craft" title="合成 C"><span>⚒</span><b>合成</b><kbd>C</kbd></button>
+    <button data-do="tech" title="科技 T"><span>✧</span><b>科技</b><kbd>T</kbd></button>
+    <button data-do="bag" title="背包 B"><span>▣</span><b>背包</b><kbd>B</kbd></button>
+    <button data-do="map" title="地图 M"><span>⌖</span><b>地图</b><kbd>M</kbd></button><button data-do="journey" title="九级历程 J"><span>Ⅸ</span><b>历程</b><kbd>J</kbd></button>
+  </nav>
+  <aside class="quest" id="quest"></aside>
+  <div class="location" id="location"></div>
+  <button class="mini-map" data-do="map" aria-label="打开探索地图"><canvas id="mini" width="230" height="176"></canvas><span>探索地图 <kbd>M</kbd></span></button>
+  <div id="abilities" class="abilities" hidden></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="context" id="context"></div>
+  <div class="build-controls" id="build-controls" hidden></div>
+  <div class="hotbar-wrap"><div id="hotbar" class="hotbar" aria-label="快捷物品"></div><div class="controls-hint">W A S D 移动 <i>·</i> E 采集 <i>·</i> F 添柴 <i>·</i> 点击资源自动采集</div></div>
+  <div class="touch-controls"><div class="dpad"><button data-move="up" aria-label="向上移动">↑</button><button data-move="left" aria-label="向左移动">←</button><button data-move="down" aria-label="向下移动">↓</button><button data-move="right" aria-label="向右移动">→</button></div><div class="touch-actions"><button data-do="interact">采集</button><button data-do="attack">攻击</button></div></div>
+  <div id="overlay" class="overlay" hidden></div>
+</main>
+<input type="file" id="import-file" accept="application/json,.json" hidden>
+<script type="module" src="./play.js"></script>
+</body></html>

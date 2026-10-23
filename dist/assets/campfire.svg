@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="营火"><title>营火</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<defs><radialGradient id="warm"><stop offset="0" stop-color="#f3bf64" stop-opacity=".5"/><stop offset="1" stop-color="#e8a94e" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="80" cy="157" rx="77" ry="43" fill="url(#warm)" stroke="none"/>
+<ellipse cx="80" cy="179" rx="47" ry="11" fill="#252b21" opacity=".23" stroke="none"/>
+<path d="m43 170 5-14 15-5 13 8 15-6 17 2 12 12-7 15-24 3-23-2-18-2Z" fill="#777a61"/>
+<path d="m50 156 11 3 5 17-17 5m27-22-10 17 23 9 2-20m17-10-17 10 22 17" fill="none" stroke="#383f31" stroke-width="2"/>
+<path d="m48 154 10-12 55 28-5 10Z" fill="#7c5835"/>
+<path d="m48 154 9 6 8-11m35 19 10 5" fill="none" stroke="#b99357" stroke-width="2"/>
+<path d="m48 172 5 9 60-30-6-11Z" fill="#8c6335"/>
+<path d="m56 173 47-25" stroke="#c69b58" stroke-width="2"/>
+<path d="M80 167c-28-2-41-18-31-38 5 8 10 9 12 6-10-26 17-29 14-56 20 16 9 32 22 37 1-11 7-12 7-22 24 36 19 69-24 73Z" fill="#cf7b35"/>
+<path d="M78 163c-17-3-26-16-17-29 10 11 7 0 10-11 4-12 10-13 11-24 14 24-2 30 11 39 5-5 7-12 7-19 10 24 1 42-22 44Z" fill="#efb65a" stroke="#b56b32" stroke-width="2"/>
+<path d="M80 160c-15-5-11-16-5-22 2 4 3 6 5 3 3-5 0-12 5-19 10 16 17 31-5 38Z" fill="#f5d995" stroke="none"/>
+<path d="m52 98-2-7m52-20 3-7m-21-5 1-5" stroke="#edbe71" stroke-width="2"/>
+</g></svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="共生菜圃"><title>共生菜圃</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="80" cy="179" rx="62" ry="12" fill="#222c24" opacity=".2" stroke="none"/>
+<path d="m18 143 62-35 65 36-7 27-61 19-56-25Z" fill="#866948"/>
+<path d="m18 143 62-35 65 36-67 27Z" fill="#554f37"/>
+<path d="m27 145 51-29 57 28-57 23Z" fill="#6b5c3b" stroke-width="2"/>
+<path d="m40 144 37-20m-24 28 39-22m-24 29 38-22m-24 27 38-22" stroke="#3e4632" fill="none" stroke-width="3"/>
+<path d="m25 154 53 25 59-22m-59 14 0 19m-35-39 0 22m69-15-1 22" fill="none" stroke="#af8953" stroke-width="2"/>
+<path d="m51 141 1-29m29 30-2-41m30 48-1-28" fill="none" stroke="#526940" stroke-width="3"/>
+<path d="M51 128q-19-4-19-19 22 0 19 19Zm1-8q-3-19 15-23 4 21-15 23Zm26 2q-24-3-23-22 26 2 23 22Zm2-11q-3-20 17-28 5 25-17 28Zm29 28q-19-3-20-18 23-1 20 18Zm0-11q-2-16 16-20 2 18-16 20Z" fill="#87965a" stroke-width="2.5"/>
+<path d="m37 113 13 12m9-20-7 12m10-12 13 13m16-27-10 14m14 20 12 11m12-22-9 12" stroke="#bec08b" stroke-width="1.5"/>
+<path d="m36 157 9 1m48 12 8-4m-27-26 5 2" stroke="#b49861" stroke-width="2"/>
+</g></svg>

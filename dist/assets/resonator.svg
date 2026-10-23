@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="共鸣坛"><title>共鸣坛</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="80" cy="179" rx="56" ry="14" fill="#1d3029" opacity=".24" stroke="none"/>
+<ellipse cx="80" cy="162" rx="52" ry="23" fill="#7a8066"/>
+<path d="M28 162v13q48 26 104 0v-13q-53 24-104 0Z" fill="#59684f"/>
+<ellipse cx="80" cy="160" rx="38" ry="14" fill="#a5ad83" stroke-width="2"/>
+<path d="m49 164 13-29 33-5 20 33-34 14Z" fill="#798369"/>
+<path d="m61 134 20 11 14-15m-14 15 0 32" fill="none" stroke="#3e5548" stroke-width="2"/>
+<path d="m66 126-4-33 19-37 20 36-6 35-14 13Z" fill="#abc7a3"/>
+<path d="m81 56 0 45 0 39 14-13 6-35Z" fill="#668f78"/>
+<path d="m62 93 19 8 20-9m-20 9 0-45" stroke="#d9dcb0" fill="none" stroke-width="2"/>
+<path d="M47 112q-27-45 13-68m50 64q21-32-10-60" stroke="#8aa78b" stroke-width="3" fill="none" opacity=".75"/>
+<path d="M38 118q-38-55 17-86m65 86q35-43-14-84" stroke="#bdc393" stroke-width="2" fill="none" opacity=".5"/>
+<path d="m46 154 5 3m16 8 1 5m32-11 4-3m20 11-1 5m-79-6 0 5" stroke="#d3cc9b" stroke-width="2"/>
+<path d="m78 37 3-7 4 7-4 7Z" fill="#d9d7a5" stroke="none"/>
+</g></svg>

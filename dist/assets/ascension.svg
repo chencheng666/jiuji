@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="九级星环门"><title>九级星环门</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<defs><radialGradient id="ascension-glow"><stop stop-color="#efe4af" stop-opacity=".42"/><stop offset=".7" stop-color="#dfd199" stop-opacity=".1"/><stop offset="1" stop-color="#dfd199" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="80" cy="179" rx="64" ry="13" fill="#243129" opacity=".23" stroke="none"/>
+<ellipse cx="80" cy="94" rx="71" ry="86" fill="url(#ascension-glow)" stroke="none"/>
+<path d="m19 166 30-19 62 1 31 19-17 15-89 2Z" fill="#93a383"/>
+<path d="m19 166 61 12 62-11m-62 11 0 6" fill="none" stroke="#576f53" stroke-width="2.5"/>
+<path d="m39 168 6-27 16 11-7 21m47 0-7-21 16-11 9 26" fill="#c0ba88"/>
+<path d="M80 18C11 18 9 157 80 164 150 158 149 19 80 18Zm0 17c49 1 51 109 0 114C28 145 32 36 80 35Z" fill="#c9b97e" fill-rule="evenodd"/>
+<path d="M80 26C22 27 21 151 80 156 139 153 139 27 80 26Z" fill="none" stroke="#8c966d" stroke-width="2.5"/>
+<path d="m74 19 6-10 7 10-7 9Zm-44 19 4-8 7 0-1 9-7 4Zm90-7 8 1 4 7-8 5-5-5ZM18 80l8-5 7 7-8 7-7-3Zm112 1 8-6 7 5 0 7-8 3Zm-105 50 6-8 9 4-2 9-8 2Zm96-6 10-1 5 8-7 6-8-5Zm-47 29 6-7 8 6 0 8-8 5Z" fill="#e0cf96" stroke-width="2"/>
+<ellipse cx="80" cy="92" rx="27" ry="47" fill="none" stroke="#d9dcad" stroke-width="2"/>
+<ellipse cx="80" cy="92" rx="47" ry="19" transform="rotate(-30 80 92)" fill="none" stroke="#91ae8e" stroke-width="2"/>
+<path d="m80 58 5 23 19 11-19 9-5 24-6-24-18-9 18-11Z" fill="#e0d9a6" fill-opacity=".75" stroke="#a7b68b" stroke-width="2"/>
+<path d="m80 82 8 10-8 9-8-9Z" fill="#edf0c5" stroke-width="1.5"/>
+<path d="m47 166 14-3m36 2 14 2m-68-60-3-11m77 10 2-9" fill="none" stroke="#e0d7a4" stroke-width="2"/>
+</g></svg>

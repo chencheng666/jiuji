@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="夜影"><title>夜影</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="80" cy="178" rx="46" ry="12" fill="#16262d" opacity=".22" stroke="none"/>
+<path d="M81 180c-31-7-44-23-40-39-17 6-24-1-26-10 17-2 13-21 31-29-3-14 3-28 15-32l-2-26 20 22 22-13-1 25c20 12 22 35 17 48 13 2 15 14 29 14-7 12-18 12-28 8 0 16-17 22-37 32Z" fill="#344148" opacity=".95"/>
+<path d="M78 168q-23-23-17-44-16-13 0-34l10-7 7 11 14-9q25 17 12 38 8 24-26 45Z" fill="#44585b" stroke="none"/>
+<path d="m60 104 14 5-5 10-11-5Zm25 5 15-7 0 12-12 6Z" fill="#d1d79e" stroke="#1f3435" stroke-width="2"/>
+<path d="m64 109 3 3m26-3 2 1" stroke="#eef0c8" stroke-width="2"/>
+<path d="m78 122-5 18 10 4-5 13m-25-15-8 15m57-15 7 10" fill="none" stroke="#6d8280" stroke-width="2"/>
+<path d="m33 159-11 8 15 1m84-5 11 5-12 4" fill="#41535a" stroke="none"/>
+</g></svg>
