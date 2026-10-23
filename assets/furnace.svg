@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="石炉"><title>石炉</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="81" cy="179" rx="53" ry="12" fill="#222a22" opacity=".25" stroke="none"/>
+<path d="m63 84-2-43 34-5 6 45Z" fill="#747b68"/>
+<path d="m61 41 14 6 20-11m-20 11 2 36m-13-23 31-4m-25 18 29-4" stroke="#414b3d" fill="none" stroke-width="2"/>
+<path d="m63 40 0-7 30-4 2 7-20 8Z" fill="#3d4439"/>
+<path d="M36 162V118q1-40 44-43 47-3 49 40l4 47-19 20-64-2Z" fill="#858675"/>
+<path d="M44 117q2-31 35-34 28-3 39 19l-20-1-14 16-21-6Z" fill="#a0a08b" stroke="none"/>
+<path d="m38 117 25-6 21 6 14-16 28 12m-89 27 21-3m48-6 24-2m-78 45 7-14m47 19-1-19m-25-44 0-20m-28 11 2-15" fill="none" stroke="#535e4e" stroke-width="2.5"/>
+<path d="M58 163v-24q0-24 24-24 25-1 25 22l1 28Z" fill="#352f27"/>
+<path d="m60 163 6-14 6 6 11-22 11 20 6-6 6 17Z" fill="#bd7437" stroke="none"/>
+<path d="m72 163 7-18 7 10 4-12 8 21Z" fill="#e3b264" stroke="none"/>
+<path d="m50 166 64 1 5 11-73 1Z" fill="#686d58"/>
+<path d="m60 174 8-2m19 2 18-1m10-51 7 0m-72-3 7-3" stroke="#c5b78d" fill="none" stroke-width="2"/>
+<path d="M80 28q-12-11 3-17m6 14q10-9 3-15" stroke="#8d9783" fill="none" opacity=".65" stroke-width="3"/>
+</g></svg>

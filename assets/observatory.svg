@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="观星仪"><title>观星仪</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="80" cy="179" rx="52" ry="12" fill="#223026" opacity=".23" stroke="none"/>
+<path d="m74 123-28 53 8 6 28-42 23 41 10-6-26-51Z" fill="#8a794d"/>
+<path d="m77 135-2 45 11 6 3-49Z" fill="#a39059"/>
+<path d="m56 164 23-10 26 10m-28 16 6 2m-34-11 5 2m52 0 4-3" stroke="#d0bd83" stroke-width="2" fill="none"/>
+<path d="m66 120 0-20 24-7 12 20-13 18Z" fill="#647b68"/>
+<circle cx="84" cy="111" r="12" fill="#b5a36e"/><circle cx="84" cy="111" r="5" fill="#4d6859" stroke-width="2"/>
+<path d="m45 77 15-17 56 40-14 18Z" fill="#829880"/>
+<path d="m49 78 52 34 4-6-51-34Z" fill="#bac2a0" stroke="none"/>
+<path d="m42 70 14-18 11 8-16 21Zm58 29 9-13 16 12-10 16Z" fill="#bcaa75"/>
+<ellipse cx="49" cy="64" rx="12" ry="17" transform="rotate(36 49 64)" fill="#3c625d"/>
+<ellipse cx="48" cy="62" rx="6" ry="10" transform="rotate(36 48 62)" fill="#91b7a2" stroke-width="2"/>
+<path d="m44 60 3-6m16 27 4-5m10 15 4-6m13 17 3-5" stroke="#d6d6a8" stroke-width="2"/>
+<path d="M106 88q27-19 11-46m-7 9 14 6m-8-15 7 0m-5 12-9 10" fill="none" stroke="#a7ad80" stroke-width="3"/>
+<path d="m83 31 4-8 4 8 8 3-8 3-4 8-4-8-8-3Z" fill="#d6c992" stroke-width="2"/>
+<path d="m34 37 1-6m-5 3 9 0m83-11 0 5m-3-2 6 0" stroke="#a6bc93" stroke-width="1.7"/>
+<path d="m32 174 10-7 9 2-4 8Zm80 5 10-10 10 6-8 6Z" fill="#6e7c61" stroke-width="2"/>
+</g></svg>

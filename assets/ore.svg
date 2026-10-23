@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="铜矿"><title>铜矿</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="80" cy="179" rx="56" ry="12" fill="#222922" opacity=".22" stroke="none"/>
+<path d="m22 151 13-30 20-15 14-28 30 9 9 24 26 15 9 36-29 18-54 1Z" fill="#5e6558"/>
+<path d="m35 121 33-17 11 32-23 26-34-11Z" fill="#798270"/>
+<path d="m69 78 30 9 9 24-29 25-11-32Z" fill="#8f9076"/>
+<path d="m79 136 29-25 26 15 9 36-33-7-19 25-35-18Z" fill="#737460"/>
+<path d="m44 132 14-11 11 12-7 16-20 1Z" fill="#bd8d43"/>
+<path d="m58 121 11 12-14 8-13 9 3-17Z" fill="#e0b76d" stroke-width="1.8"/>
+<path d="m87 94 10 5-2 14-14 9-5-12Z" fill="#d6a15b"/>
+<path d="m108 135 18 3 4 17-11 12-17-12Z" fill="#ba7b3e"/>
+<path d="m108 135 18 3-7 13-17 4Z" fill="#e0af65" stroke-width="1.8"/>
+<path d="m47 166 8 7m28-26 6 10m-2 11 8-4m25-44 8 6" fill="none" stroke="#a5a082" stroke-width="2"/>
+</g></svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="传送门"><title>传送门</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<defs><radialGradient id="gate-glow"><stop stop-color="#b7d4b4" stop-opacity=".65"/><stop offset=".7" stop-color="#7baa9c" stop-opacity=".22"/><stop offset="1" stop-color="#7baa9c" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="80" cy="179" rx="59" ry="12" fill="#20352d" opacity=".25" stroke="none"/>
+<ellipse cx="80" cy="104" rx="48" ry="72" fill="url(#gate-glow)" stroke="none"/>
+<path d="m26 167 28-18 56-1 25 21-15 12-78 4Z" fill="#78866b"/>
+<path d="m26 167 52 11 57-9m-57 9 0 7" fill="none" stroke="#415f4e" stroke-width="2"/>
+<path d="m39 166-7-62 5-48 24-29 13 7-20 29-4 39 7 58Z" fill="#879a7c"/>
+<path d="m93 34 12-8 23 31 2 49-8 62-19-8 9-59-4-37Z" fill="#71896e"/>
+<path d="m61 27 20-8 24 7-12 8-12-3-7 3Z" fill="#bcbd8f"/>
+<path d="m37 56 17 7m-21 40 17-1m-15 29 19-3m54-64 20-7m-16 44 18 5m-22 22 17 7" fill="none" stroke="#3e5948" stroke-width="2.5"/>
+<path d="m43 79 0 9m0 48 3 13m73-68 0 8m-4 51-2 13" stroke="#d4ce97" stroke-width="3"/>
+<path d="M61 145q-13-47 6-81 16-24 30 0 19 35 2 81" fill="none" stroke="#add0ac" stroke-width="3" opacity=".8"/>
+<path d="M67 132q-9-28 4-48 12-18 22 3 10 24-3 48-9 13-14-1-6-15 4-28" fill="none" stroke="#c6d9b3" stroke-width="2" opacity=".65"/>
+<path d="m59 163 20-7 23 7-22 8Z" fill="#b3b88b" stroke-width="2"/>
+<path d="m74 164 7-3 6 3-6 3Z" fill="#6f9b82" stroke-width="1.5"/>
+<path d="m15 110 3-4 3 4-3 5Zm124-27 3-4 3 4-3 5Z" fill="#b2ca9e" stroke="none"/>
+</g></svg>

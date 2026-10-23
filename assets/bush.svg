@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="浆果灌木"><title>浆果灌木</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="80" cy="178" rx="51" ry="12" fill="#232c25" opacity=".21" stroke="none"/>
+<path d="m74 175-4-32-22-19 6-6 24 20 10-27 8 3-10 28 7 30Z" fill="#705d3f"/>
+<path d="M30 156c-16-14-6-36 9-36-7-21 12-34 29-28 10-22 31-15 36 2 24-7 41 10 31 29 19 14 13 34-5 38-8 17-31 12-38 5-19 15-38 9-43 0-8 4-17-1-19-10Z" fill="#536a47"/>
+<path d="M38 122q8-21 25-16 4-16 20-13 18 1 21 21 21-7 25 15-14-9-24 3-15-12-28 3-14-14-27-4Z" fill="#75865a" stroke="none"/>
+<path d="m37 144 10 6 12-7m8 17 8-11 10 5m21-8 11 5 13-7m-70-40 4 11m31-15 2 12" fill="none" stroke="#354e35" stroke-width="2.5"/>
+<g fill="#b87553" stroke="#493f2d" stroke-width="2"><circle cx="48" cy="130" r="6"/><circle cx="78" cy="117" r="7"/><circle cx="113" cy="134" r="6"/><circle cx="91" cy="146" r="6"/><circle cx="61" cy="155" r="5"/></g>
+<path d="m46 127 2-1m28-12 3-1m32 19 2-1m-24 13 2-1" stroke="#e0b076" stroke-width="2"/>
+</g></svg>

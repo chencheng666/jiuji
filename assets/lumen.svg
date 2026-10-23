@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="蓝辉植株"><title>蓝辉植株</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<defs><radialGradient id="lumen-glow"><stop stop-color="#b7dde0" stop-opacity=".35"/><stop offset="1" stop-color="#8cbfcb" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="80" cy="179" rx="40" ry="10" fill="#23352f" opacity=".23" stroke="none"/>
+<ellipse cx="80" cy="108" rx="60" ry="70" fill="url(#lumen-glow)" stroke="none"/>
+<path d="M78 178q6-56-1-100m2 78q-28-19-31-51m34 51q30-29 26-61" fill="none" stroke="#426a5b" stroke-width="4"/>
+<path d="M77 164q-35-5-39-31 33-2 39 31Zm6-1q1-29 35-38-3 29-35 38Zm-5-25q-24-10-25-27 26 2 25 27Zm5-9q7-23 24-26 4 18-24 26Z" fill="#799d88" stroke-width="2.5"/>
+<path d="m47 141 27 21m13-4 23-23m-49-17 15 16m12-12 12-13" stroke="#b6c9a1" stroke-width="1.5"/>
+<path d="M77 88c-23-8-23-25-9-36l9-21 11 23c14 14 13 29-11 34Z" fill="#7dabad"/>
+<path d="M77 83c-12-6-14-19-5-27l5-16 7 17c9 12 7 20-7 26Z" fill="#bbd8d5" stroke="#608f91" stroke-width="2"/>
+<path d="M49 115c-23-6-25-19-14-32l5-19 15 18c17 9 14 26-6 33Z" fill="#71a0a5"/>
+<path d="M48 110c-13-6-15-16-8-24l2-12 10 15c10 7 8 16-4 21Z" fill="#b7d7d7" stroke="#608e94" stroke-width="2"/>
+<path d="M107 106c-19-10-18-25-5-36l12-18 5 24c11 13 5 27-12 30Z" fill="#7aabaf"/>
+<path d="M108 101c-11-7-10-18-1-26l6-13 2 17c6 11 3 18-7 22Z" fill="#c5e0d9" stroke="#608f91" stroke-width="2"/>
+<path d="m74 65 0 9m-31 17 3 9m65-18-2 8" stroke="#e6edce" stroke-width="2"/>
+<path d="m28 125 2-5 2 5 4 1-4 2-2 4-1-4-4-2Zm103-35 1-4 2 4 4 1-4 2-2 4-1-4-4-2Z" fill="#b8dadd" stroke="none"/>
+</g></svg>

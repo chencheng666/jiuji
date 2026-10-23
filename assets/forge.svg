@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="意念锻造台"><title>意念锻造台</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<defs><radialGradient id="forge-glow"><stop stop-color="#d8c995" stop-opacity=".35"/><stop offset="1" stop-color="#b4b989" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="80" cy="179" rx="54" ry="12" fill="#233127" opacity=".23" stroke="none"/>
+<ellipse cx="80" cy="111" rx="58" ry="58" fill="url(#forge-glow)" stroke="none"/>
+<path d="m37 166 4-37 14-7 8 45-13 13Zm63 2 7-44 13 8 5 35-15 12Z" fill="#73876c"/>
+<path d="m36 123 43-17 48 17-5 17-43 16-42-17Z" fill="#a7a77c"/>
+<path d="m36 123 43 16 48-16m-48 16 0 17" fill="none" stroke="#506b51" stroke-width="2.5"/>
+<path d="m55 124 24-9 29 9-29 10Z" fill="#627d63" stroke-width="2"/>
+<path d="m59 174 3-13 17-5 19 6 3 13-21 10Z" fill="#879b78"/>
+<path d="m64 167 16 6 16-5m-16 6 0 11" fill="none" stroke="#4c6b51" stroke-width="2"/>
+<path d="m51 93 17-11 27 2 20-10-1 13-17 12-1 14-27-2-5-13-13 0Z" fill="#a6b49a"/>
+<path d="m68 82 1 13 28 4m-28-4-5 3m9 8 17 1m7-15 10-6" stroke="#54715d" stroke-width="2" fill="none"/>
+<path d="m68 52 12-17 20 10-6 21-15 7-11-8Z" fill="#d1c48c"/>
+<path d="m80 35-1 19 15 12m-15-12-11 11m11-11 21-9" fill="none" stroke="#887f54" stroke-width="2"/>
+<path d="m81 40 10 4m-16 18 2 5" stroke="#f2e0a7" stroke-width="2"/>
+<path d="M44 79q-12-27 14-42m49 8q23 24 12 45" fill="none" stroke="#9fb48c" stroke-width="2.5"/>
+<path d="m46 60 4 6-5 5-5-6Zm74 10 4 5-4 5-5-4Z" fill="#cccb96" stroke-width="1.5"/>
+<path d="m73 117 8-4 8 4m-44 31 4 12m66-10-2 13" stroke="#d3cb91" stroke-width="2" fill="none"/>
+</g></svg>

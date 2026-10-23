@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="木箱"><title>木箱</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="80" cy="179" rx="54" ry="11" fill="#222c24" opacity=".23" stroke="none"/>
+<path d="m28 133 56-21 48 19-2 41-51 15-49-21Z" fill="#8b7049"/>
+<path d="m30 137 49 21 51-19m-51 19 0 29m-48-37 48 21 50-18" fill="none" stroke="#4d4b34" stroke-width="2.5"/>
+<path d="M27 134v-16q2-22 24-30l37-12q27 4 43 22l4 32-56 22Z" fill="#a38a5c"/>
+<path d="M27 134v-16q0-22 24-30 27 11 28 34v30Z" fill="#b39b69"/>
+<path d="m51 88 37-12q27 4 43 22l-52 24Q76 100 51 88Z" fill="#c1ab78"/>
+<path d="m79 122 56-24M31 115l46 20m-38-35 30 16m25-28 13 18m-16 15 1 22m15-24 0 21" fill="none" stroke="#70623d" stroke-width="2"/>
+<path d="m43 92 7-3q26 9 28 31v31l-8-4v-26Q67 103 43 92Zm55-13 8 3q16 7 22 19l3 30-9 2-2-29q-5-15-22-25Z" fill="#69745c"/>
+<path d="m69 148 11 5 2 23-11-5Z" fill="#b8a36b" stroke-width="2"/>
+<path d="m74 157 3 2 1 7-3-1Z" fill="#354436" stroke-width="1.5"/>
+<path d="m37 159 12 5m39 14 22-7m-51-57 7 5" stroke="#d4ba83" stroke-width="2"/>
+<circle cx="74" cy="143" r="1.8" fill="#d5c490" stroke="none"/><circle cx="126" cy="126" r="1.8" fill="#d5c490" stroke="none"/>
+</g></svg>

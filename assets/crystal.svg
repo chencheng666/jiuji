@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" role="img" aria-label="共鸣晶石"><title>共鸣晶石</title><g stroke="#29382c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="80" cy="178" rx="46" ry="14" fill="#182b28" opacity=".24" stroke="none"/>
+<path d="m34 162 20-12 49-3 25 14-9 17-67 4-22-9Z" fill="#696d58"/>
+<path d="m54 156-9-58 15-31 20 24 2 68-14 12Z" fill="#8eb5a0"/>
+<path d="m60 67 1 36 7 68 14-12-2-68Z" fill="#517f75"/>
+<path d="m76 159-3-86 21-36 19 41-7 79-16 15Z" fill="#b8d7b6"/>
+<path d="m94 37-2 45-2 90 16-15 7-79Z" fill="#638f80"/>
+<path d="m73 73 19 9 21-4m-21 4 2-45" fill="none" stroke="#d7e4be" stroke-width="2"/>
+<path d="m105 169 3-48 16-17 11 29-17 39Z" fill="#8bb8a0"/>
+<path d="m124 104-5 33-1 35 17-39Z" fill="#4f7c70"/>
+<path d="m44 164-10-28 7-18 18 20 2 29Z" fill="#aed0a9"/>
+<path d="m41 118 2 25 12 23" fill="none" stroke="#dfe7be" stroke-width="2"/>
+<path d="m84 95-2 33m18-66 4 11m-42 36 2 15" stroke="#e6efcb" stroke-width="2" fill="none"/>
+<path d="m30 85 3 5 5 1-5 2-1 6-2-5-5-1 4-3Zm94-35 2 5 5 1-5 2-1 5-2-4-5-1 4-3Z" fill="#cfd7a7" stroke="none"/>
+</g></svg>
