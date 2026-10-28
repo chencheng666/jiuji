@@ -1,3 +1,4 @@
+import {loadProgress,storeProgress} from './storage.js';
 import * as G from './survival.js';
 import {WorldView} from './world.js';
 import {snapPoint} from './atmosphere.js';
@@ -5,15 +6,15 @@ import {SurvivalAudio} from './audio.js';
 const $=s=>document.querySelector(s),escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const slot=new URLSearchParams(location.search).get('slot');const suffix=slot?'.'+slot.replace(/[^a-zA-Z0-9_-]/g,'').slice(0,32):'';const SAVE_KEY='jiuji.survival.v4'+suffix,OLD_KEYS=['jiuji.survival.v3'+suffix,'jiuji.survival.v2'+suffix];
 let state=G.createGame(),hasSave=false,saveError='',panel='',category='tools',stationId=null,trialId=null,placing=null,lastMessage=-1,toastUntil=0,lastHud=0,lastSave=0,lastFrame=0,deathShown=false;
-try{const raw=localStorage.getItem(SAVE_KEY)||OLD_KEYS.map(k=>localStorage.getItem(k)).find(Boolean);if(raw){state=G.parseSave(raw);hasSave=true;}}catch(e){saveError='本地存档无法读取，可导入备份或重新出发。';}
+try{const loaded=loadProgress(localStorage,SAVE_KEY,OLD_KEYS,G.parseSave);if(loaded.state){state=loaded.state;hasSave=true;if(loaded.recovered)saveError='主存档异常，已从上一份备份恢复。';}else if(loaded.damaged)saveError='存档无法读取，可导入备份或重新出发。';}catch{saveError='浏览器禁止本地存档，请定期导出备份。';}
 const view=new WorldView($('#world')),keys=new Set(),audio=new SurvivalAudio();let continuous=false;let moveTouch={x:0,y:0};
 const glyphs={seed:'❧',ingot:'▱',board:'▤',food:'♨',spear:'↟',torch:'♨',bedroll:'▱',armor:'♜'};
 function icon(id,cls=''){const name=G.ITEMS[id]?.icon||id;return glyphs[name]?`<span class="item-icon ${cls}" aria-hidden="true">${glyphs[name]}</span>`:`<img class="${cls}" src="./assets/${name==='lantern'?'resonator':name}.svg" alt="">`;}
 function costs(cost){return'<div class="cost">'+Object.entries(cost||{}).map(([id,n])=>`<span class="${G.amount(state,id)<n?'missing':''}">${G.RESOURCE_NAMES[id]} ${Math.floor(G.amount(state,id))}/${n}</span>`).join('')+'</div>';}
-function save(){try{localStorage.setItem(SAVE_KEY,G.serialize(state));hasSave=true;return true;}catch(e){notice('自动存档不可用，请从菜单导出备份。');return false;}}
+function save(){try{storeProgress(localStorage,SAVE_KEY,G.serialize(state),G.parseSave);hasSave=true;return true;}catch(e){notice('自动存档不可用，请从菜单导出备份。');return false;}}
 function notice(text){$('#toast').textContent=text;$('#toast').classList.add('show');toastUntil=performance.now()+3600;}
 function resetInput(){keys.clear();moveTouch={x:0,y:0};}
-function show(name,extra){resetInput();if(name!=='welcome')save();panel=name;if(extra){if(name==='trial')trialId=extra;else stationId=extra;}renderPanel();}
+function show(name,extra){resetInput();if(!['welcome','restore'].includes(name))save();panel=name;if(extra){if(name==='trial')trialId=extra;else stationId=extra;}renderPanel();}
 function close(){panel='';$('#overlay').classList.remove('craft-mode');$('#overlay').hidden=true;resetInput();$('#world').focus({preventScroll:true});save();}
 function run(result){if(result?.ok)audio.success();if(result?.reason)notice(result.reason);if(result?.panel)show(result.panel,result.trialId||result.buildingId);if(result?.teleported)view.camera={...state.player};if(result?.promoted){show('promotion');save();}else if(result?.won){deathShown=true;show('won');save();}else if(panel)renderPanel();updateHUD();return result;}
 function buildControls(){
@@ -29,7 +30,7 @@ function requirementList(){return'<div class="requirements">'+G.promotionRequire
 function renderPanel(){
  $('#boot')?.remove();
  const overlay=$('#overlay');overlay.hidden=!panel;overlay.classList.toggle('craft-mode',panel==='craft');if(!panel)return;const oldScroll=overlay.querySelector('.dialog-body')?.scrollTop||0;let html='';
- if(panel==='welcome')html=`<section class="dialog welcome" role="dialog" aria-modal="true" aria-label="九级荒野初醒"><div class="crest">✧</div><h1>九级</h1><div class="chapter">从荒野，到星海</div><p class="intro">你在一片陌生的土地上醒来。<br>拾起第一根树枝，在长夜前点燃营火。<br>活下去，然后让文明生长。</p><div class="start-steps"><span>${icon('axe')}采集与合成</span><span>${icon('campfire')}建造与生存</span><span>${icon('resonator')}研究与晋升</span></div><button class="primary" data-do="start">${hasSave?'继续旅程':'踏入荒野'} →</button><p class="minor">WASD 移动 / 点击资源自动采集 / C 合成<br>荒野生存 0.4 · 雨天 / 诱捕 / 炖煮 · 自动存档${saveError?'<br>'+saveError:''}</p></section>`;
+ if(panel==='welcome')html=`<section class="dialog welcome" role="dialog" aria-modal="true" aria-label="九级荒野初醒"><div class="crest">✧</div><h1>九级</h1><div class="chapter">从荒野，到星海</div><p class="intro">你在一片陌生的土地上醒来。<br>拾起第一根树枝，在长夜前点燃营火。<br>活下去，然后让文明生长。</p><div class="start-steps"><span>${icon('axe')}采集与合成</span><span>${icon('campfire')}建造与生存</span><span>${icon('resonator')}研究与晋升</span></div><button class="primary" data-do="start">${hasSave?'继续旅程':'踏入荒野'} →</button><p class="minor">WASD 移动 / 点击资源自动采集 / C 合成<br>1.0 · 四季 / 钓鱼 / 生存手册 · 双份存档${saveError?'<br>'+saveError:''}</p></section>`;
  if(panel==='craft'){
   const cats={tools:'工具',survival:'生存',camp:'营地',materials:'材料',advanced:'文明设施'};
   const tabs='<div class="tabs">'+Object.entries(cats).map(([id,name])=>`<button data-category="${id}" class="${id===category?'selected':''}">${name}</button>`).join('')+'</div>';
@@ -51,13 +52,15 @@ function renderPanel(){
   if(b.type==='beacon')body+=`<p class="subtle" style="margin-bottom:18px">需要建成晶能采矿机，并投入 10 共鸣。<br>当前共鸣 ${Math.floor(state.resonance)} · 采矿机 ${state.buildings.some(b=>b.type==='drill')?'已建成':'尚未建成'}</p><button class="primary" data-station="beacon" ${state.chapterCompleted?'disabled':''}>${state.chapterCompleted?'星火已经亮起':'点亮信标'}</button>`;
   body+=stationExtension(b);html=dialog(G.BUILDING_NAMES[b.type],'营地生活',body);
  }
+ if(panel==='handbook')html=handbookPanel();
+ if(panel==='restore')html=dialog('恢复上一份备份','存档恢复',`<p class="subtle">将当前进度回退到上一次成功保存的状态。恢复前可先导出当前存档。</p><div class="menu-grid"><button data-do="export">导出当前进度</button><button class="primary" data-do="confirm-restore">确认恢复备份</button></div>`);
  if(panel==='journey')html=journeyPanel();
  if(panel==='trial')html=trialPanel();
  if(panel==='dismantle')html=dialog('拆除设施','营地整理',`<p class="subtle">返还一半基础材料（向下取整）。箱子与生产设施必须先取空，炖煮和诱捕完成前不能拆除。</p><div class="menu-grid"><button class="secondary" data-do="close">保留设施</button><button class="danger" data-do="confirm-dismantle">确认拆除</button></div>`);
  if(panel==='map'){
-  html=dialog('脚步之外，仍是未知','EXPLORE',`<canvas id="large-map" class="map-large" width="900" height="650" aria-label="已探索区域与营地位置"></canvas><div class="map-legend"><span><i style="background:#f3e2af"></i>营地 / 遗迹</span><span><i style="background:#d5945d"></i>铜矿</span><span><i style="background:#b4eddb"></i>原晶</span><span>◇ 遗迹试炼 · 灰暗区域需要探索</span></div><div class="journal">${state.journal.slice(0,7).map(j=>`<p><b>第 ${j.day} 天</b>${escape(j.text)}</p>`).join('')}</div>`,'东部丘陵有铜矿，南部草甸生长荧光花。二级解锁东北方的星陨高地。');
+  html=dialog('脚步之外，仍是未知','EXPLORE',`<canvas id="large-map" class="map-large" width="900" height="650" aria-label="已探索区域与营地位置"></canvas><div class="map-legend"><span><i style="background:#f3e2af"></i>营地 / 遗迹</span><span><i style="background:#78cbd6"></i>鱼塘</span><span><i style="background:#d5945d"></i>铜矿</span><span><i style="background:#b4eddb"></i>原晶</span><span>◇ 遗迹试炼 · 灰暗区域需要探索</span></div><div class="journal">${state.journal.slice(0,7).map(j=>`<p><b>第 ${j.day} 天</b>${escape(j.text)}</p>`).join('')}</div>`,'东部丘陵有铜矿，南部草甸生长荧光花。二级解锁东北方的星陨高地。');
  }
- if(panel==='pause')html=dialog('在这里，歇一会儿','J I U J I · MENU',`<p class="subtle">第 ${G.day(state)} 天 · ${state.level+'级 · '+G.LEVEL_NAMES[state.level]} · ${G.biome(state.player.x,state.player.y).name}<br>世界已暂停。离开页面后不会离线消耗资源。</p><div class="menu-grid"><button class="primary" data-do="close">继续旅程</button><button class="secondary" data-do="export">导出存档</button><button class="secondary" data-do="import">导入存档</button><button class="danger" data-do="new">重新出发</button></div><div class="key-guide"><kbd>W A S D</kbd> / 方向键移动，<kbd>Shift</kbd> 奔跑<br><kbd>E</kbd> 采集或使用设施，<kbd>Space</kbd> 攻击<br><kbd>C</kbd> 合成，<kbd>T</kbd> 科技，<kbd>B</kbd> 背包，<kbd>M</kbd> 地图<br><kbd>F</kbd> 营火添柴，建造时 <kbd>G</kbd> 网格、<kbd>Shift</kbd> 连续放置<br><kbd>J</kbd> 九级历程，<kbd>Q</kbd> 闪步（三级），<kbd>R</kbd> 归途（四级建成折跃门）<br>点击资源会自动走近并连续采集；点击地面移动。<br>数字 <kbd>1—8</kbd> 使用快捷栏；<kbd>Esc</kbd> 关闭面板或暂停。<br>夜晚留在光里。砍树后播种，可以修复生态。</div>`,'荒野生存 0.4 · 一级至九级', '当前进度自动保存在本浏览器，建议定期导出备份。');
+ if(panel==='pause')html=dialog('在这里，歇一会儿','J I U J I · MENU',`<p class="subtle">第 ${G.day(state)} 天 · ${state.level+'级 · '+G.LEVEL_NAMES[state.level]} · ${G.biome(state.player.x,state.player.y).name}<br>世界已暂停。离开页面后不会离线消耗资源。</p><div class="menu-grid"><button class="primary" data-do="close">继续旅程</button><button class="secondary" data-do="export">导出存档</button><button class="secondary" data-do="import">导入存档</button><button class="secondary" data-do="restore">恢复上一份备份</button><button class="secondary" data-do="handbook">生存手册与四季</button><button class="danger" data-do="new">重新出发</button></div><div class="key-guide"><kbd>W A S D</kbd> / 方向键移动，<kbd>Shift</kbd> 奔跑<br><kbd>E</kbd> 采集或使用设施，<kbd>Space</kbd> 攻击<br><kbd>C</kbd> 合成，<kbd>T</kbd> 科技，<kbd>B</kbd> 背包，<kbd>M</kbd> 地图<br><kbd>F</kbd> 营火添柴，建造时 <kbd>G</kbd> 网格、<kbd>Shift</kbd> 连续放置<br><kbd>J</kbd> 九级历程，<kbd>Q</kbd> 闪步（三级），<kbd>R</kbd> 归途（四级建成折跃门）<br>点击资源会自动走近并连续采集；点击地面移动。<br>数字 <kbd>1—8</kbd> 使用快捷栏；<kbd>Esc</kbd> 关闭面板或暂停。<br>夜晚留在光里。砍树后播种，可以修复生态。</div>`,'1.0 · 从荒野到星海', '当前进度自动保存在本浏览器，建议定期导出备份。');
  if(panel==='new')html=dialog('重新走进这片荒野','NEW JOURNEY',`<p class="subtle">重新出发会替换当前生存进度。你可以先导出存档。</p><div class="menu-grid"><button class="secondary" data-do="export">先导出存档</button><button class="danger" data-do="confirm-new">确认重新出发</button></div>`);
  if(panel==='promotion'||panel==='won'||panel==='dead'){
   const won=panel==='won',dead=panel==='dead';html=`<section class="dialog ending" role="dialog" aria-modal="true" aria-label="${dead?'旅程结束':won?'九级结局':'文明晋升'}"><div class="ending-level">${dead?'☾':won?'✧':G.LEVEL_ROMAN[state.level]}</div><h2>${dead?'脚步暂止于此':won?(state.expansion.ending==='stay'?'留下，守护星火。':'归源，让故事延续。'):state.level+'级 · '+G.LEVEL_NAMES[state.level]}</h2><p class="subtle">${dead?'荒野记住了你的足迹。<br>下次，在夜晚来临前带上光与食物。':won?'从第一根树枝，到九级的最后一道门。<br>六处遗迹记住了你的选择。':G.LEVEL_BENEFITS[state.level]+'。<br>'+ (state.level===9?'回到归一星环，完成最终的选择。':'打开九级历程，查看下一段旅程。')}</p><div class="result-stats"><span><b>${G.day(state)}</b>生存天数</span><span><b>${state.stats.gathered}</b>采集次数</span><span><b>${state.tech.length}</b>科技研究</span></div>${dead?'<button class="primary" data-do="confirm-new">重新出发</button><button class="secondary" data-do="import">导入备份</button>':`<button class="primary" data-do="${won?'freeplay':'close'}">${won?'继续自由生存':'走向新的荒野'} →</button>`}<p class="minor" style="font-size:10px;color:#9cb392;margin-top:16px">${won?'九级主线已经完成。你的营地与探索记录仍会保留。':'世界已暂停，准备好后再出发。'}</p></section>`;
@@ -67,7 +70,7 @@ function renderPanel(){
 }
 const htmlCache=new Map();
 function setHTML(selector,html){if(htmlCache.get(selector)!==html){$(selector).innerHTML=html;htmlCache.set(selector,html);}}
-function hotItem(id){return id==='cooked'?['feast','stew','roast','ration','cooked'].find(k=>state.inventory[k])||id:id==='spear'&&state.inventory.copperSpear?'copperSpear':id;}
+function hotItem(id){return id==='cooked'?['feast','fishsoup','stew','roast','ration','cooked'].find(k=>state.inventory[k])||id:id==='spear'&&state.inventory.copperSpear?'copperSpear':id;}
 const hotIds=['axe','pickaxe','spear','torch','berry','cooked','seed','flower'];
 function updateHUD(){
  updateWildernessHUD();
@@ -80,24 +83,27 @@ function updateHUD(){
  const n=G.nearest(state);const contextHTML=placing?'':n?`<button data-do="interact"><kbd>E</kbd> ${NODESAction(n)} · ${(n.type==='trial'?G.TRIALS.find(t=>t.id===n.trialId)?.name:G.NODES[n.type]?.name)||G.BUILDING_NAMES[n.type]}</button>${n.type==='campfire'?`<button data-do="fuel" class="quick-fuel"><kbd>F</kbd> 添柴 · ${Math.ceil(n.fuel)}s</button>`:''}`:G.phase(state)==='night'&&!G.lightAt(state,p.x,p.y)?'黑暗正在侵蚀意识 · 快点亮火炬或回到营火':state.torchOn?`火炬剩余 ${Math.ceil(state.torchFuel)} 秒 · 点击火炬可熄灭`:'';setHTML('#context',contextHTML);
  updateAbilities();view.map($('#mini'),state);if(state.message&&state.message.id!==lastMessage){lastMessage=state.message.id;notice(state.message.text);}
 }
-function NODESAction(n){if(n.type==='burrow')return'查看';return G.NODES[n.type]?(['ruin','trial'].includes(n.type)?'调查':['tree'].includes(n.type)?'砍伐':['rock','ore','crystal'].includes(n.type)?'开采':'采集'):n.type==='farm'?'收获':n.type==='drill'?'取出矿石':'使用';}
-function exportSave(){save();const url=URL.createObjectURL(new Blob([G.serialize(state)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`九级-生存-第${G.day(state)}天.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);notice('存档已导出。');}
+function NODESAction(n){if(n.type==='pond')return'钓鱼';if(n.type==='burrow')return'查看';return G.NODES[n.type]?(['ruin','trial'].includes(n.type)?'调查':['tree'].includes(n.type)?'砍伐':['rock','ore','crystal'].includes(n.type)?'开采':'采集'):n.type==='farm'?'收获':n.type==='drill'?'取出矿石':'使用';}
+function exportSave(){const url=URL.createObjectURL(new Blob([G.serialize(state)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`九级-生存-第${G.day(state)}天.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);notice('存档已导出。');}
 function perform(action){
  if(action==='sound'){audio.toggle();updateWildernessHUD();return;}if(action==='fuel'){run(G.quickFuel(state));save();return;}
  if(action==='toggle-repeat'){continuous=!continuous;buildControls();return;}if(action==='toggle-snap'){view.snap=!view.snap;if(placing)buildControls();return;}
  if(action==='unpin'){state.wilderness.pinned=null;save();updateWildernessHUD();return;}
  if(action==='close'){close();return;}if(action==='start'){close();if(state.status==='dead')show('dead');else if(state.status==='won')show('won');return;}
- if(action==='pause'){if(!panel)show('pause');else close();return;}if(['craft','tech','bag','map','journey'].includes(action)){if(panel===action)close();else show(action);return;}
+ if(action==='pause'){if(!panel)show('pause');else close();return;}if(['craft','tech','bag','map','journey','handbook'].includes(action)){if(panel===action)close();else show(action);return;}
  if(action==='interact'){if(!panel)run(G.interact(state));return;}if(action==='attack'){if(!panel)run(G.attack(state));return;}
  if(action==='cancel-build'){cancelBuilding();return;}if(action==='place-near'){const p=G.placementNearPlayer(state,placing);if(p)buildAt(p);else notice('附近没有合适的空地，移动后再试。');return;}
  if(action==='dash'){run(G.dash(state,(keys.has('KeyD')?1:0)-(keys.has('KeyA')?1:0),(keys.has('KeyS')?1:0)-(keys.has('KeyW')?1:0)));return;}if(action==='return'){run(G.returnHome(state));save();return;}
  if(action==='dismantle'){show('dismantle');return;}if(action==='confirm-dismantle'){const r=G.dismantle(state,stationId);run(r);if(r.ok)close();return;}
+ if(action==='restore'){show('restore');return;}
+ if(action==='confirm-restore'){try{const raw=localStorage.getItem(SAVE_KEY+'.backup');if(!raw)throw new Error('尚无备份');const recovered=G.parseSave(raw);state=recovered;deathShown=false;cancelBuilding();view.camera={...state.player};close();notice('已恢复上一份备份。');}catch(e){notice('无法恢复：'+e.message);}return;}
  if(action==='export'){exportSave();return;}if(action==='import'){$('#import-file').click();return;}if(action==='new'){show('new');return;}
  if(action==='confirm-new'){state=G.createGame();deathShown=false;lastMessage=-1;cancelBuilding();view.camera={...state.player};save();close();notice('先拾取身边的树枝和燧石，合成石斧。');return;}
  if(action==='freeplay'){state.status='playing';deathShown=false;close();save();}
 }
 document.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b||b.disabled)return;audio.unlock();
+ if(b.dataset.claim){run(G.claimHandbook(state,b.dataset.claim));save();return;}
  if(b.dataset.pin){state.wilderness.pinned=state.wilderness.pinned===b.dataset.pin?null:b.dataset.pin;save();renderPanel();updateWildernessHUD();return;}
  if(b.dataset.batch){run(G.craftBatch(state,b.dataset.batch,5));save();return;}
  if(b.dataset.do){perform(b.dataset.do);return;}
@@ -154,8 +160,10 @@ function updateAbilities(){const el=$('#abilities');if(!el)return;el.hidden=stat
 function nearbyFacilities(){const list=state.buildings.filter(b=>G.distance(b,state.player)<=180);return '<h3 class="section-title">附近设施管理</h3><div class="manifest-grid">'+(list.map(b=>`<button class="secondary" data-manage="${b.id}">${G.BUILDING_NAMES[b.type]}</button>`).join('')||'<p class="subtle">靠近设施后可在这里管理与拆除。</p>')+'</div>';}
 
 function updateWildernessHUD(){
+ const season=G.season(state),temperature=Math.round(state.living.temperature);
  const w=G.weather(state),wet=Math.round(state.wilderness.wetness),covered=G.shelterAt(state),warm=G.nearby(state,'campfire',165);
- setHTML('#weather',`<span>${w.raining?'☂ 林间阵雨':w.warning?'☁ 雨云将至':'☼ 天气晴朗'}</span><b class="${wet>65?'soaked':''}">${covered?'庇护中'+(wet?' · 湿度 '+wet+'%':''):warm&&wet?'烘干中 · '+wet+'%':wet?'湿度 '+wet+'%':'衣物干燥'}</b>${w.raining?`<small>约 ${Math.ceil(w.remaining)} 秒后停雨</small>`:w.warning?'<small>备好柴火，回到庇护所</small>':''}`);
+ setHTML('#weather',`<span style="color:${season.color}">${season.name} ${season.day}/4 · ${temperature}℃</span><span>${w.raining?'☂ 林间阵雨':w.warning?'☁ 雨云将至':'☼ 天气晴朗'}</span><b class="${wet>65?'soaked':''}">${covered?'庇护中'+(wet?' · 湿度 '+wet+'%':''):warm&&wet?'烘干中 · '+wet+'%':wet?'湿度 '+wet+'%':'衣物干燥'}</b>${w.raining?`<small>约 ${Math.ceil(w.remaining)} 秒后停雨</small>`:w.warning?'<small>备好柴火，回到庇护所</small>':''}`);
+ const handbook=$('[data-do="handbook"]');if(handbook)handbook.title='生存手册 · '+G.HANDBOOK.filter(h=>!state.living.claimed.includes(h.id)&&h.progress(state)>=h.goal).length+' 项奖励待领取';
  const button=$('[data-do="sound"]');button.textContent=audio.muted?'音效 关':'音效 开';button.setAttribute('aria-pressed',String(!audio.muted));
  const r=G.RECIPES.find(r=>r.id===state.wilderness.pinned),el=$('#pinned');el.hidden=!r;
  if(r)setHTML('#pinned',`<div><strong>制作清单 · ${r.name}</strong><button data-do="unpin" aria-label="取消材料追踪">×</button></div>${costs(r.cost)}<button class="secondary" data-craft="${r.id}" ${G.recipeReason(state,r)?'disabled':''}>${r.building?'选择位置':'制作'}</button>`);
@@ -169,4 +177,9 @@ function wildStation(b){
  else if(b.type==='trap')html+=`<p class="subtle">投入一颗浆果，60 秒后获得 2 生肉、1 毛皮。<br>诱捕在后台进行，离开营地仍会继续。</p>${costs({berry:1})}<button class="primary" data-station="bait" ${state.inventory.berry?'':'disabled'}>放置诱饵</button>`;
  else html+='<div class="dish-grid">'+G.DISHES.map(d=>`<article class="recipe">${icon(d.id,'recipe-image')}<div><h3>${d.name}</h3><p>${d.text}</p>${costs(d.cost)}<button class="primary" data-station="cook:${d.id}" ${G.affordable(state,d.cost)?'':'disabled'}>炖煮 · ${d.seconds} 秒</button></div></article>`).join('')+'</div>';
  return html;
+}
+
+function handbookPanel(){
+ const season=G.season(state),temp=Math.round(state.living.temperature);
+ return dialog('荒野生存手册','1.0 · 把每一件小事，变成旅程',`<section class="season-card" style="--season:${season.color}"><h3>${season.name} · 第 ${season.day} / 4 天</h3><p>${season.tip}</p><p>体感 ${temp}℃ · ${temp<6?'寒冷：寻找营火、披肩或喝鱼汤':temp>33?'炎热：前往庇护所避暑':'体感舒适'}<br>约 ${Math.ceil(season.remaining/60)} 分钟后进入${season.next}，世界暂停时不计时。</p><div class="season-strip">${['新芽春','长昼夏','丰收秋','静雪冬'].map((n,i)=>`<span class="${i===season.index?'active':''}">${n}</span>`).join('')}</div></section><div class="handbook-grid">${G.HANDBOOK.map(h=>{const value=Math.min(h.goal,h.progress(state)),claimed=state.living.claimed.includes(h.id);return `<article class="handbook-card ${claimed?'completed':''}"><h3>${claimed?'✓ ':''}${h.name}<small>${value} / ${h.goal}</small></h3><p>${h.text}</p><progress value="${value}" max="${h.goal}" aria-label="${h.name}进度"></progress><p class="reward">奖励：${Object.entries(h.reward).map(([id,n])=>G.RESOURCE_NAMES[id]+' ×'+n).join('、')}</p><button class="${value>=h.goal&&!claimed?'primary':'secondary'}" data-claim="${h.id}" ${claimed||value<h.goal?'disabled':''}>${claimed?'已领取':value<h.goal?'继续探索':'领取奖励'}</button></article>`;}).join('')}</div><p class="subtle">钓鱼：合成枝编钓竿，地图蓝色标记处寻找鱼塘，靠近点击或按 E。移动会中断等待。低于 6℃ 或高于 33℃ 会额外消耗饱食与意识；八级后不再受体温影响。</p>`,'每季四个游戏日。每条手册奖励只可领取一次。');
 }

@@ -1,5 +1,8 @@
 // 荒野生活扩展：天气、营地烹饪与诱捕；不依赖绘图和浏览器。
 export const WILD_ITEMS = {
+  rod:{name:'枝编钓竿',icon:'rod',durability:40},
+  fish:{name:'溪鱼',icon:'fish',food:12,clarity:-3},
+  fishsoup:{name:'暖身鱼汤',icon:'stew',food:62,health:20,clarity:14},
   mushroom:{name:'林地菌菇',icon:'mushroom',food:8,clarity:-4},
   meat:{name:'生肉',icon:'meat',food:9,clarity:-6},
   fur:{name:'柔软毛皮',icon:'fur'},
@@ -9,10 +12,12 @@ export const WILD_ITEMS = {
   coat:{name:'毛皮披肩',icon:'fur',unique:true}
 };
 export const WILD_NODES = {
+  pond:{name:'涟漪鱼塘',tool:'rod',hp:1,time:6,drop:{fish:2},regrow:55},
   mushroom:{name:'林地菌菇',hp:1,time:.7,drop:{mushroom:3},regrow:180},
   burrow:{name:'野兔洞',hp:1,time:1,drop:{}}
 };
 export const WILD_RECIPES = [
+  {id:'rod',name:'枝编钓竿',category:'tools',cost:{twig:5,grass:6,flint:1},item:'rod',desc:'在涟漪鱼塘钓鱼，每次等待 6 秒。鱼塘 55 秒恢复，移动会中断。'},
   {id:'shelter',name:'枝叶庇护所',category:'camp',cost:{wood:8,grass:10,twig:4},building:'shelter',desc:'附近 125 步内阻挡雨水，缓慢晾干衣物。可在营火旁搭建。'},
   {id:'cookpot',name:'营地烹饪锅',category:'camp',cost:{stone:6,wood:4,twig:4},building:'cookpot',tech:'stonework',desc:'加入食材与木材，炖煮 12 秒。成品可留在锅内，之后再领取。'},
   {id:'trap',name:'诱捕笼',category:'survival',cost:{twig:4,grass:5},building:'trap',desc:'放在兔洞 180 步内。每次投入 1 浆果，60 秒后获得生肉和毛皮。'},
@@ -20,6 +25,7 @@ export const WILD_RECIPES = [
   {id:'coat',name:'毛皮披肩',category:'tools',cost:{fur:3,grass:6},item:'coat',desc:'自动穿戴，让淋雨速度降低 75%。不消耗耐久。'}
 ];
 export const DISHES = [
+  {id:'fishsoup',name:'暖身鱼汤',cost:{fish:2,mushroom:1,wood:1},seconds:12,text:'饱食 +62 · 生命 +20 · 意识 +14 · 湿度 −25 · 体温向舒适区恢复'},
   {id:'stew',name:'暖胃菌菇汤',cost:{mushroom:2,berry:2,wood:1},seconds:12,text:'饱食 +58 · 生命 +16 · 意识 +12 · 湿度 −25'},
   {id:'feast',name:'猎人炖肉',cost:{meat:2,mushroom:1,wood:1},seconds:12,text:'饱食 +78 · 生命 +25 · 意识 +15 · 湿度 −25'}
 ];
@@ -39,6 +45,7 @@ export function initWilderness(s){
     for(const [x,y] of [[1080,1520],[1430,1370],[940,1190],[1260,1040],[730,1350],[1600,1900],[1900,2240],[2180,1890],[950,1950],[1780,880]])add('mushroom',x,y);
     for(const [x,y] of [[1450,1900],[1040,1780],[1750,2060],[2250,2080],[1280,2210],[860,1460],[1640,1160]])add('burrow',x,y);
   }
+  for(const [x,y] of [[1550,1670],[1010,1410],[2040,2110]])if(!s.nodes.some(n=>n.id==='pond-'+x))s.nodes.push({id:'pond-'+x,type:'pond',x,y,hp:1,available:true,respawnAt:0});
   s.wilderness.particles=[];s.wilderness.impact=null;
   for(const b of s.buildings)if(['cookpot','trap'].includes(b.type))b.inventory||={};
 }
