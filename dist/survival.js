@@ -1,3 +1,5 @@
+import {season,initSeasons,stepSeasons,HANDBOOK,validateLiving} from './seasons.js';
+export {season,HANDBOOK};
 import {WILD_ITEMS,WILD_NODES,WILD_RECIPES,DISHES,weather,shelterAt,initWilderness,stepWilderness,impact} from './wilderness.js';
 export {DISHES,weather,shelterAt};
 import {LEVEL_NAMES,LEVEL_ROMAN,LEVEL_BENEFITS,EXTRA_ITEMS,EXTRA_NODES,EXTRA_TECHS,EXTRA_RECIPES,TRIALS,CHAPTERS} from './chapters.js';
@@ -78,7 +80,7 @@ export function createGame(seed=20261022){
   const scatter=(type,count,filter=()=>true)=>{for(let i=0;i<count;i++){let ok=false;for(let j=0;j<500&&!ok;j++){const x=300+random(s)*3000,y=350+random(s)*2150;if(!isLand(x,y)||!filter(x,y)||distance({x,y},WORLD.spawn)<220||s.nodes.some(n=>distance(n,{x,y})<55))continue;add(type,x,y);ok=true;}}};
   scatter('tree',70,(x,y)=>x<2300&&biome(x,y).id!=='ridge');scatter('rock',28);scatter('ore',25,(x,y)=>x>1850&&y<1750);scatter('crystal',15,(x,y)=>x>1900);scatter('bush',25,(x,y)=>y>1000);scatter('grass',35);scatter('twig',22,(x)=>x<2450);scatter('flint',22);scatter('flower',22,(x,y)=>y>1650);
   add('ruin',1690,1320);add('ruin',2120,1880);add('ruin',965,1000);add('ruin',2850,690);
-  initExpansion(s);initWilderness(s);reveal(s);return s;
+  initExpansion(s);initWilderness(s);initSeasons(s);reveal(s);return s;
 }
 export function nearby(s,type,radius=155){return s.buildings.find(b=>(!type||b.type===type)&&distance(s.player,b)<radius&&!(b.type==='campfire'&&b.fuel<=0));}
 export function nearest(s,range=90){
@@ -128,7 +130,7 @@ export function plant(s,x=s.player.x+35,y=s.player.y+35){
 export function useItem(s,id){
   if(s.status!=='playing')return fail(s,'当前旅程已经结束');
   if(!s.inventory[id])return fail(s,'背包中没有'+(ITEMS[id]?.name||'该物品'));
-  const item=ITEMS[id];if(item.food||item.health){s.inventory[id]--;s.player.hunger=clamp(s.player.hunger+(item.food||0));s.player.clarity=clamp(s.player.clarity+(item.clarity||0));if(['stew','feast'].includes(id))s.wilderness.wetness=Math.max(0,s.wilderness.wetness-25);s.player.hp=clamp(s.player.hp+(item.health||0),0,maxHealth(s));say(s,`使用${item.name}，${item.food?'饱食 +'+item.food:'生命 +'+item.health}。`);return{ok:true};}
+  const item=ITEMS[id];if(item.food||item.health){s.inventory[id]--;s.player.hunger=clamp(s.player.hunger+(item.food||0));s.player.clarity=clamp(s.player.clarity+(item.clarity||0));if(id==='fishsoup')s.living.temperature+=(25-s.living.temperature)*.5;if(['stew','feast','fishsoup'].includes(id))s.wilderness.wetness=Math.max(0,s.wilderness.wetness-25);s.player.hp=clamp(s.player.hp+(item.health||0),0,maxHealth(s));say(s,`使用${item.name}，${item.food?'饱食 +'+item.food:'生命 +'+item.health}。`);return{ok:true};}
   if(id==='coat')return fail(s,'毛皮披肩已自动穿戴，淋雨速度降低 75%。');
   if(id==='torch'){s.torchOn=!s.torchOn;s.torchFuel||=120;say(s,s.torchOn?'点亮火炬。':'熄灭火炬，保存燃料。');return{ok:true};}
   if(id==='seed')return plant(s);
@@ -198,6 +200,7 @@ export function interact(s,id){
 function finishHarvest(s){
   const n=s.nodes.find(n=>n.id===s.action?.id);s.action=null;if(!n?.available)return;
   const data=NODES[n.type];if(data.tool){if(!s.durability[data.tool])return;s.durability[data.tool]--;if(s.durability[data.tool]<=0){s.inventory[data.tool]=0;say(s,ITEMS[data.tool].name+'损坏了，可以重新制作。');}}
+  if(n.type==='pond')s.living.fishCaught++;
   impact(s,n);n.hp--;if(n.hp>0)return;
   n.felledAt=s.time;n.available=false;n.respawnAt=data.regrow?s.time+data.regrow:0;give(s,data.drop);s.stats.gathered++;s.ecology=clamp(s.ecology+(data.eco||0));discovered(s,'node:'+n.type);
   if(data.insight)s.insight+=data.insight;if(data.resonance)s.resonance=Math.min(100,s.resonance+data.resonance);
@@ -206,6 +209,7 @@ function finishHarvest(s){
 }
 function straight(s,a,b){const d=distance(a,b),steps=Math.max(1,Math.ceil(d/36));for(let i=1;i<=steps;i++)if(!walkable(s,a.x+(b.x-a.x)*i/steps,a.y+(b.y-a.y)*i/steps))return false;return true;}
 export function goTo(s,x,y,targetId=null){
+  const pond=s.nodes.find(n=>n.id===targetId&&n.type==='pond');if(pond&&!pond.available)return fail(s,'鱼群正在休息，还需 '+Math.ceil(Math.max(0,pond.respawnAt-s.time))+' 秒。');
   if(!walkable(s,x,y))return fail(s,biome(x,y).id==='highland'?'星陨高地尚未开放。先晋升二级文明。':'海水太深，沿岸寻找另一条路');
   s.action=null;s.channel=null;s.target=targetId?{id:targetId}:null;
   if(straight(s,s.player,{x,y})){s.path=[{x,y}];return{ok:true};}
@@ -245,7 +249,7 @@ export function step(s,dt,input={}){
   if(s.action){const n=s.nodes.find(n=>n.id===s.action.id);if(!n||distance(p,n)>105)s.action=null;else{s.action.elapsed+=dt;if(s.action.elapsed>=s.action.duration)finishHarvest(s);}}
   if(input.attack)attack(s);
   p.hunger=clamp(p.hunger-(s.level>=9?0:dt*(manual&&input.sprint?.12:.065)*(s.level>=7?.5:1)));
-  advanceExpansion(s,dt,manual||input.attack);stepWilderness(s,dt);
+  advanceExpansion(s,dt,manual||input.attack);stepWilderness(s,dt);stepSeasons(s,dt);
   if(s.level>=7)p.hp=clamp(p.hp+dt*.12,0,maxHealth(s));
   const ph=phase(s),lit=lightAt(s,p.x,p.y);
   if(ph==='night'&&!lit){s.darkTime+=dt;p.clarity=clamp(p.clarity-dt*.32);if(s.darkTime>7)p.hp-=dt*2.4;}else{s.darkTime=0;if(nearby(s,'campfire',180))p.clarity=clamp(p.clarity+dt*.26);}
@@ -277,7 +281,7 @@ export function getQuest(s){
 }
 export function serialize(s){return JSON.stringify(s);}
 export function parseSave(raw){
-  if(typeof raw!=='string'||raw.length>500000)throw new Error('存档大小无效');const s=JSON.parse(raw),num=(n,a=0,b=100000)=>typeof n==='number'&&Number.isFinite(n)&&n>=a&&n<=b;
+  if(typeof raw!=='string'||raw.length>500000)throw new Error('存档大小无效');const s=JSON.parse(raw),num=(n,a=0,b=1000000000)=>typeof n==='number'&&Number.isFinite(n)&&n>=a&&n<=b;
   if(!s||![2,3,VERSION].includes(s.version)||!Number.isInteger(s.level)||s.level<1||s.level>9||!['playing','dead','won'].includes(s.status)||!num(s.time)||!num(s.seed,0,4294967295)||!num(s.rng,0,4294967295))throw new Error('不是受支持的九级生存存档');
   if(!s.player||!num(s.player.x,0,WORLD.width)||!num(s.player.y,0,WORLD.height)||!num(s.player.hp,0,200)||!num(s.player.hunger,0,100)||!num(s.player.clarity,0,100))throw new Error('角色数据无效');
   if(!s.inventory||Array.isArray(s.inventory)||Object.entries(s.inventory).some(([k,v])=>!Object.hasOwn(ITEMS,k)||!Number.isInteger(v)||!num(v,0,9999)))throw new Error('背包数据无效');
@@ -292,7 +296,7 @@ export function parseSave(raw){
   if(!Array.isArray(s.journal)||s.journal.length>80||s.journal.some(j=>!j||!num(j.day)||typeof j.text!=='string'||j.text.length>500))throw new Error('日志数据无效');
   if(s.version>=3)validateExpansion(s,num);
   if(s.version===VERSION)validateWilderness(s,num);
-  initExpansion(s);initWilderness(s);
+  validateLiving(s);initExpansion(s);initWilderness(s);initSeasons(s);
   if(typeof s.torchOn!=='boolean'||typeof s.chapterCompleted!=='boolean')throw new Error('存档状态无效');
   s.enemies=[];s.channel=null;s.action=null;s.target=null;s.path=[];s.fx=[];s.request=null;s.player.walk=0;s.message=null;return s;
 }
@@ -362,7 +366,7 @@ function campAction(s,b,action){
   if(!['cookpot','trap'].includes(b.type))return fail(s,'这里不能进行这项操作');
   if(action==='collect'){
     const stock=Object.entries(b.inventory||{}).filter(([,n])=>n>0);if(!stock.length)return fail(s,'还没有可以领取的物品');
-    for(const[id,n]of stock){const take=Math.min(n,9999-(s.inventory[id]||0));give(s,{[id]:take});b.inventory[id]-=take;}
+    for(const[id,n]of stock){if(id==='fishsoup'&&n>0)discovered(s,'dish:fishsoup',0);const take=Math.min(n,9999-(s.inventory[id]||0));give(s,{[id]:take});b.inventory[id]-=take;}
     say(s,'已取出营地产物。');return{ok:true};
   }
   if(action==='bait'){
@@ -387,4 +391,13 @@ function validateWilderness(s,num){
     if(b.baitAt!==undefined&&(!num(b.baitAt)||b.type!=='trap'))throw new Error('诱捕进度无效');
     if(b.kitchen&& (b.type!=='cookpot'||!DISHES.some(d=>d.id===b.kitchen.dish)||!num(b.kitchen.readyAt)))throw new Error('烹饪进度无效');
   }
+}
+
+// 奖励只能领取一次，条件由实际操作记录计算。
+export function claimHandbook(s,id){
+ const h=HANDBOOK.find(h=>h.id===id);
+ if(s.status!=='playing'||!h||s.living.claimed.includes(id)||h.progress(s)<h.goal)return fail(s,'手册条件未完成或奖励已经领取');
+ if(Object.entries(h.reward).some(([key,n])=>amount(s,key)+n>(['insight','resonance'].includes(key)?100000:9999)))return fail(s,'请先腾出背包空间');
+ s.living.claimed.push(id);for(const[key,n]of Object.entries(h.reward)){if(['insight','resonance'].includes(key))s[key]+=n;else give(s,{[key]:n});}
+ say(s,'手册完成：'+h.name+'。奖励已放进行囊。',true);return{ok:true};
 }

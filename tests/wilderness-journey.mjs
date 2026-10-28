@@ -48,4 +48,10 @@ while(!G.weather(s).raining){if(camp.fuel<40)check(G.stationAction(s,'fuel',camp
 if(camp.fuel<150)check(G.stationAction(s,'fuel',camp.id));
 fs.writeFileSync('artifacts/wild-rain-camp.json',G.serialize(s));
 assert.equal(s.inventory.coat,1);assert.equal(s.inventory.feast,1);assert.equal(s.level,1);
+// 1.0：同一合法旅程继续钓鱼、炖汤、领取手册奖励。
+make('rod');
+for(let i=0;i<3;i++)harvest('pond');
+assert.equal(s.living.fishCaught,3);assert.equal(s.inventory.fish,6);
+check(G.claimHandbook(s,'fish'));walk(pot);check(G.stationAction(s,'cook:fishsoup',pot.id));while(pot.kitchen)advance();check(G.stationAction(s,'collect',pot.id));check(G.claimHandbook(s,'soup'));
+check(G.useItem(s,'fishsoup'));fs.writeFileSync('artifacts/v1-fishing-camp.json',G.serialize(s));
 console.log(JSON.stringify({passed:true,frames,day:G.day(s),seconds:s.time,buildings:s.buildings.map(b=>b.type),crafted:s.crafted,inventory:s.inventory},null,2));

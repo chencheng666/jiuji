@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#20362f"><meta name="description" content="九级：从一把石斧到一座星火信标。在荒野中采集、合成、建造，点亮物质与意识科技树。"><title>九级 · 从荒野到星海</title><link rel="icon" href="./favicon.svg"><link rel="stylesheet" href="./survival.css"><link rel="modulepreload" href="./play.js"><link rel="modulepreload" href="./survival.js"><link rel="modulepreload" href="./chapters.js"><link rel="modulepreload" href="./wilderness.js"><link rel="modulepreload" href="./world.js"><link rel="modulepreload" href="./atmosphere.js"><link rel="modulepreload" href="./audio.js"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#20362f"><meta name="description" content="九级：从一把石斧到一座星火信标。在荒野中采集、合成、建造，点亮物质与意识科技树。"><title>九级 · 从荒野到星海</title><link rel="icon" href="./favicon.svg"><link rel="stylesheet" href="./survival.css"><link rel="modulepreload" href="./play.js"><link rel="modulepreload" href="./survival.js"><link rel="modulepreload" href="./chapters.js"><link rel="modulepreload" href="./wilderness.js"><link rel="modulepreload" href="./world.js"><link rel="modulepreload" href="./atmosphere.js"><link rel="modulepreload" href="./audio.js"><link rel="modulepreload" href="./seasons.js"><link rel="modulepreload" href="./storage.js"></head>
 <body>
 <main id="game">
   <section id="boot" role="status"><h1>九级</h1><p>正在展开荒野地图…</p><small>首次进入需要加载游戏资源，请稍候。</small><button onclick="location.reload()">重新加载</button></section>
@@ -18,7 +18,7 @@
     <button data-do="tech" title="科技 T"><span>✧</span><b>科技</b><kbd>T</kbd></button>
     <button data-do="bag" title="背包 B"><span>▣</span><b>背包</b><kbd>B</kbd></button>
     <button data-do="map" title="地图 M"><span>⌖</span><b>地图</b><kbd>M</kbd></button><button data-do="journey" title="九级历程 J"><span>Ⅸ</span><b>历程</b><kbd>J</kbd></button>
-  </nav>
+  <button data-do="handbook" title="生存手册与四季"><span>❧</span><b>手册</b></button></nav>
   <aside class="quest" id="quest"></aside>
   <div class="location" id="location"></div>
   <button class="mini-map" data-do="map" aria-label="打开探索地图"><canvas id="mini" width="230" height="176"></canvas><span>探索地图 <kbd>M</kbd></span></button>
