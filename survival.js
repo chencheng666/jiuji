@@ -1,3 +1,5 @@
+import {REALMS,CREATURES,WEAPONS,EXPEDITION_ITEMS,EXPEDITION_NODES,EXPEDITION_RECIPES,realm,inHome,initExpedition,travel,equip,equippedWeapon,expeditionAttack,dodge,stepExpedition,validateExpedition,portalReason} from './expeditions.js';
+export {REALMS,CREATURES,WEAPONS,realm,inHome,equippedWeapon,portalReason};
 import {season,initSeasons,stepSeasons,HANDBOOK,validateLiving} from './seasons.js';
 export {season,HANDBOOK};
 import {WILD_ITEMS,WILD_NODES,WILD_RECIPES,DISHES,weather,shelterAt,initWilderness,stepWilderness,impact} from './wilderness.js';
@@ -5,12 +7,12 @@ export {DISHES,weather,shelterAt};
 import {LEVEL_NAMES,LEVEL_ROMAN,LEVEL_BENEFITS,EXTRA_ITEMS,EXTRA_NODES,EXTRA_TECHS,EXTRA_RECIPES,TRIALS,CHAPTERS} from './chapters.js';
 export {LEVEL_NAMES,LEVEL_ROMAN,LEVEL_BENEFITS,TRIALS,CHAPTERS};
 // 《九级》生存规则。世界、采集、制作与研究均可脱离画面独立验证。
-export const VERSION = 4;
+export const VERSION = 5;
 export const WORLD = { width: 3600, height: 2800, spawn: { x: 1260, y: 1640 }, dayLength: 300 };
 export const ITEMS = {
   wood:{name:'木材',icon:'wood'},twig:{name:'树枝',icon:'twig'},stone:{name:'石料',icon:'rock'},flint:{name:'燧石',icon:'flint'},grass:{name:'纤维',icon:'grass'},berry:{name:'浆果',icon:'bush',food:13,health:1},seed:{name:'种子',icon:'seed'},flower:{name:'荧光花',icon:'flower'},ore:{name:'铜矿',icon:'ore'},ingot:{name:'铜锭',icon:'ingot'},crystal:{name:'原晶',icon:'crystal'},board:{name:'木板',icon:'board'},cooked:{name:'烤浆果',icon:'food',food:30,health:7},ration:{name:'旅行口粮',icon:'food',food:48,health:12},axe:{name:'石斧',icon:'axe',durability:90},pickaxe:{name:'石镐',icon:'pickaxe',durability:110},spear:{name:'石矛',icon:'spear',durability:120},copperSpear:{name:'铜矛',icon:'spear',durability:180},torch:{name:'火炬',icon:'torch'},bedroll:{name:'草编睡袋',icon:'bedroll'}
 };
-Object.assign(ITEMS,EXTRA_ITEMS,WILD_ITEMS);
+Object.assign(ITEMS,EXTRA_ITEMS,WILD_ITEMS,EXPEDITION_ITEMS);
 export const RESOURCE_NAMES = {...Object.fromEntries(Object.entries(ITEMS).map(([k,v])=>[k,v.name])),insight:'洞见',resonance:'共鸣'};
 export const NODES = {
   tree:{name:'青杉',tool:'axe',hp:3,time:.65,drop:{wood:4,twig:1,seed:1},eco:-1.2},
@@ -24,7 +26,7 @@ export const NODES = {
   flower:{name:'荧光花',hp:1,time:.65,drop:{flower:3},regrow:170},
   ruin:{name:'先行者遗迹',hp:1,time:1.8,drop:{crystal:2},insight:9,resonance:3}
 };
-Object.assign(NODES,EXTRA_NODES,WILD_NODES);
+Object.assign(NODES,EXTRA_NODES,WILD_NODES,EXPEDITION_NODES);
 export const TECHS = [
   {id:'stonework',name:'石器精研',branch:'matter',cost:{insight:4,stone:6},requires:[],text:'解锁熔炉。更好地理解材料，开始建设稳定营地。'},
   {id:'smelting',name:'金属冶炼',branch:'matter',cost:{insight:7,ore:6},requires:['stonework'],text:'在熔炉旁冶炼铜锭，制作更耐用的铜矛。'},
@@ -56,13 +58,13 @@ export const RECIPES = [
   {id:'beacon',name:'星火信标',category:'advanced',cost:{ingot:7,crystal:5,board:5},building:'beacon',tech:'ward',level:2,desc:'在星陨高地建造。投入 10 共鸣，点亮信标，完成第二级试炼。'}
 ];
 TECHS.push(...EXTRA_TECHS);
-RECIPES.push(...EXTRA_RECIPES,...WILD_RECIPES);
+RECIPES.push(...EXTRA_RECIPES,...WILD_RECIPES,...EXPEDITION_RECIPES);
 export const BUILDING_NAMES = Object.fromEntries(RECIPES.filter(r=>r.building).map(r=>[r.building,r.name]));
 export function phase(s){const t=s.time%WORLD.dayLength;return t<190?'day':t<230?'dusk':'night';}
 export function day(s){return Math.floor(s.time/WORLD.dayLength)+1;}
 export function biome(x,y){if(x>2450&&y<1050)return{id:'highland',name:'星陨高地',color:'#769894'};if(x>1900&&y<1680)return{id:'ridge',name:'铜脊丘陵',color:'#a49c78'};if(y>1850)return{id:'meadow',name:'荧光草甸',color:'#809771'};if(x<1350&&y<1380)return{id:'forest',name:'青杉密林',color:'#4e7762'};return{id:'bay',name:'苔湾',color:'#739578'};}
 export function isLand(x,y){const dx=(x-1800)/1510,dy=(y-1390)/1100,a=Math.atan2(dy,dx),edge=1+.055*Math.sin(a*5)+.025*Math.sin(a*9);return dx*dx+dy*dy<edge*edge&&x>80&&y>80&&x<3520&&y<2720;}
-export function walkable(s,x,y){return isLand(x,y)&&!(s.level<2&&biome(x,y).id==='highland');}
+export function walkable(s,x,y){return isLand(x,y)&&!(inHome(s)&&s.level<2&&biome(x,y).id==='highland');}
 const clamp=(n,min=0,max=100)=>Math.max(min,Math.min(max,n));
 export const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 function random(s){let x=s.rng;x^=x<<13;x^=x>>>17;x^=x<<5;s.rng=x>>>0;return s.rng/4294967296;}
@@ -80,7 +82,7 @@ export function createGame(seed=20261022){
   const scatter=(type,count,filter=()=>true)=>{for(let i=0;i<count;i++){let ok=false;for(let j=0;j<500&&!ok;j++){const x=300+random(s)*3000,y=350+random(s)*2150;if(!isLand(x,y)||!filter(x,y)||distance({x,y},WORLD.spawn)<220||s.nodes.some(n=>distance(n,{x,y})<55))continue;add(type,x,y);ok=true;}}};
   scatter('tree',70,(x,y)=>x<2300&&biome(x,y).id!=='ridge');scatter('rock',28);scatter('ore',25,(x,y)=>x>1850&&y<1750);scatter('crystal',15,(x,y)=>x>1900);scatter('bush',25,(x,y)=>y>1000);scatter('grass',35);scatter('twig',22,(x)=>x<2450);scatter('flint',22);scatter('flower',22,(x,y)=>y>1650);
   add('ruin',1690,1320);add('ruin',2120,1880);add('ruin',965,1000);add('ruin',2850,690);
-  initExpansion(s);initWilderness(s);initSeasons(s);reveal(s);return s;
+  initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);reveal(s);return s;
 }
 export function nearby(s,type,radius=155){return s.buildings.find(b=>(!type||b.type===type)&&distance(s.player,b)<radius&&!(b.type==='campfire'&&b.fuel<=0));}
 export function nearest(s,range=90){
@@ -98,8 +100,9 @@ export function recipeReason(s,r){
 export function craft(s,id){
   const r=RECIPES.find(r=>r.id===id),reason=recipeReason(s,r);if(reason)return fail(s,reason);
   if(r.building)return{ok:true,placing:r.building};
-  pay(s,r.cost);give(s,{[r.item]:1});
+  pay(s,r.cost);give(s,{[r.item]:r.count||1});
   if(ITEMS[r.item].durability){s.inventory[r.item]=1;s.durability[r.item]=ITEMS[r.item].durability;}
+  if(WEAPONS[r.item])s.expedition.equipped=r.item;
   if(r.item==='torch'){if(!s.torchFuel)s.torchFuel=120;s.torchOn=true;}
   if(r.station==='furnace')nearby(s,'furnace').workingUntil=s.time+12;
   if(!s.crafted.includes(id)){s.crafted.push(id);s.insight+=2;}s.stats.crafted++;
@@ -108,7 +111,7 @@ export function craft(s,id){
 export function placementReason(s,type,x,y){
   if(!Number.isFinite(x)||!Number.isFinite(y)||!walkable(s,x,y))return'这里无法建造';if(distance(s.player,{x,y})>210)return'请走近再建造';
   if(s.buildings.some(b=>distance(b,{x,y})<88))return'离其他建筑太近';
-  if(s.nodes.some(n=>n.available&&['tree','rock','ore','crystal','ruin','trial','meteor','burrow'].includes(n.type)&&distance(n,{x,y})<54))return'需要一片空地';
+  if(s.nodes.some(n=>n.available&&['tree','rock','ore','crystal','ruin','trial','meteor','burrow','wormhole','emberstone','froststone'].includes(n.type)&&distance(n,{x,y})<54))return'需要一片空地';
   if(type==='trap'&&!s.nodes.some(n=>n.type==='burrow'&&distance(n,{x,y})<180))return'诱捕笼需要放在兔洞 180 步内';
   if(type==='drill'&&!s.nodes.some(n=>n.type==='ore'&&distance(n,{x,y})<240))return'采矿机需要放在铜矿脉附近';
   if(type==='beacon'&&biome(x,y).id!=='highland')return'星火信标需要建在星陨高地';return'';
@@ -131,6 +134,7 @@ export function useItem(s,id){
   if(s.status!=='playing')return fail(s,'当前旅程已经结束');
   if(!s.inventory[id])return fail(s,'背包中没有'+(ITEMS[id]?.name||'该物品'));
   const item=ITEMS[id];if(item.food||item.health){s.inventory[id]--;s.player.hunger=clamp(s.player.hunger+(item.food||0));s.player.clarity=clamp(s.player.clarity+(item.clarity||0));if(id==='fishsoup')s.living.temperature+=(25-s.living.temperature)*.5;if(['stew','feast','fishsoup'].includes(id))s.wilderness.wetness=Math.max(0,s.wilderness.wetness-25);s.player.hp=clamp(s.player.hp+(item.health||0),0,maxHealth(s));say(s,`使用${item.name}，${item.food?'饱食 +'+item.food:'生命 +'+item.health}。`);return{ok:true};}
+  if(WEAPONS[id]){const result=equip(s,id);if(result.ok)say(s,'已装备'+item.name+'。');return result;}
   if(id==='coat')return fail(s,'毛皮披肩已自动穿戴，淋雨速度降低 75%。');
   if(id==='torch'){s.torchOn=!s.torchOn;s.torchFuel||=120;say(s,s.torchOn?'点亮火炬。':'熄灭火炬，保存燃料。');return{ok:true};}
   if(id==='seed')return plant(s);
@@ -166,8 +170,8 @@ export function stationAction(s,action,id){
     if(b.type!=='campfire'||b.fuel<=0)return fail(s,'需要一处燃烧的营火');if(!s.tech.includes('observe'))return fail(s,'先研究「万物观察」');if(s.meditationCooldown>0)return fail(s,`心绪尚未平复，还需 ${Math.ceil(s.meditationCooldown)} 秒`);if(!s.inventory.flower)return fail(s,'需要 1 朵荧光花');s.inventory.flower--;s.resonance=Math.min(100,s.resonance+4);s.player.clarity=clamp(s.player.clarity+18);s.meditationCooldown=12;say(s,'你听见了风与树林的回应。共鸣 +4，意识 +18。',true);return{ok:true};
   }
   if(action==='sleep'){
-    if(b.type!=='campfire'||b.fuel<65)return fail(s,'营火至少需要 65 秒燃料');if(!s.inventory.bedroll)return fail(s,'需要草编睡袋');if(phase(s)==='day')return fail(s,'黄昏与夜晚才能休息');if(s.player.hunger<30)return fail(s,'饱食不足 30，先吃些食物');if(s.enemies.some(e=>distance(e,s.player)<200))return fail(s,'附近有夜影，暂时无法安睡');
-    b.fuel-=65;s.player.hunger-=24;s.player.hp=clamp(s.player.hp+25,0,maxHealth(s));s.player.clarity=clamp(s.player.clarity+25);s.time=(Math.floor(s.time/WORLD.dayLength)+1)*WORLD.dayLength+8;s.stats.nights++;s.enemies=[];s.darkTime=0;s.action=null;s.target=null;s.path=[];s.meditationCooldown=0;say(s,'你在营火旁醒来。新的一天开始了。',true);return{ok:true};
+    if(b.type!=='campfire'||b.fuel<65)return fail(s,'营火至少需要 65 秒燃料');if(!s.inventory.bedroll)return fail(s,'需要草编睡袋');if(phase(s)==='day')return fail(s,'黄昏与夜晚才能休息');if(s.player.hunger<30)return fail(s,'饱食不足 30，先吃些食物');if([...s.enemies,...s.expedition.creatures.filter(m=>m.hp>0)].some(e=>distance(e,s.player)<280))return fail(s,'附近有夜影，暂时无法安睡');
+    b.fuel-=65;s.player.hunger-=24;s.player.hp=clamp(s.player.hp+25,0,maxHealth(s));s.player.clarity=clamp(s.player.clarity+25);s.time=(Math.floor(s.time/WORLD.dayLength)+1)*WORLD.dayLength+8;s.stats.nights++;s.enemies=[];for(const m of s.expedition.creatures)m.warning=null;s.darkTime=0;s.action=null;s.target=null;s.path=[];s.meditationCooldown=0;say(s,'你在营火旁醒来。新的一天开始了。',true);return{ok:true};
   }
   if(action==='promote'){
     if(b.type!=='resonator')return fail(s,'需要一座共鸣台');if(s.level>=2)return fail(s,'初醒试炼已经完成');if(!promotionRequirements(s).every(r=>r.ok))return fail(s,'文明试炼条件尚未满足');s.resonance-=8;s.level=2;s.player.hp=120;s.player.clarity=100;say(s,'晋升二级 · 协同。星陨高地的屏障为你打开。',true);return{ok:true,promoted:true};
@@ -184,6 +188,7 @@ export function interact(s,id){
   if(n?.building)n=s.buildings.find(b=>b.id===n.id);
   if(!n)return fail(s,'走近资源后按 E，或点击资源自动走近采集');
   if(distance(s.player,n)>95)return fail(s,'再走近一些');
+  if(n.type==='wormhole')return{ok:true,panel:'rift',buildingId:n.id};
   if(n.type==='burrow')return fail(s,'在兔洞 180 步内放置诱捕笼，加入浆果，等待野兔来访。');
   if(n.type==='trial')return{ok:true,panel:'trial',trialId:n.trialId};
   if(NODES[n.type]?.level>s.level)return fail(s,'需要'+NODES[n.type].level+'级文明才能采集');
@@ -227,13 +232,9 @@ export function lightAt(s,x,y){
   if(s.torchOn&&s.torchFuel>0&&distance(s.player,{x,y})<145)return true;
   return s.buildings.some(b=>((b.type==='campfire'&&b.fuel>0)||b.type==='lantern'||(b.type==='beacon'&&s.chapterCompleted))&&distance(b,{x,y})<(b.type==='lantern'?215:b.type==='beacon'?260:190));
 }
-export function attack(s){
-  if(s.status!=='playing')return{ok:false};if(s.attackCooldown>0)return{ok:false};s.attackCooldown=.55;s.swingUntil=s.time+.22;
-  const weapon=s.inventory.copperSpear?'copperSpear':s.inventory.spear?'spear':null,damage=weapon==='copperSpear'?30:weapon==='spear'?20:5;
-  const targets=s.enemies.filter(e=>distance(e,s.player)<105);for(const e of targets){e.hp-=damage;e.x+=(e.x-s.player.x)*.2;e.y+=(e.y-s.player.y)*.2;}
-  if(weapon&&targets.length){s.durability[weapon]--;if(s.durability[weapon]<=0){s.inventory[weapon]=0;say(s,ITEMS[weapon].name+'损坏了。');}}
-  for(const e of s.enemies.filter(e=>e.hp<=0)){s.stats.defeated++;s.insight+=2;s.fx.push({x:e.x,y:e.y,at:s.time,text:'夜影消散 · 洞见 +2'});}s.enemies=s.enemies.filter(e=>e.hp>0);return{ok:true};
-}
+export function attack(s){return expeditionAttack(s,{give,say});}
+export function enterWormhole(s,id){return travel(s,id,{nodes:NODES,isLand,say});}
+export function dodgeRoll(s,dx=0,dy=0){return dodge(s,dx,dy,walkable);}
 function reveal(s){const cx=Math.floor(s.player.x/160),cy=Math.floor(s.player.y/160);for(let x=cx-2;x<=cx+2;x++)for(let y=cy-2;y<=cy+2;y++){const k=x+','+y;if(x>=0&&y>=0&&x<23&&y<18&&!s.explored.includes(k))s.explored.push(k);}}
 export function step(s,dt,input={}){
   if(s.status!=='playing'||!Number.isFinite(dt)||dt<=0)return;dt=Math.min(dt,.12);
@@ -241,7 +242,7 @@ export function step(s,dt,input={}){
   const p=s.player;let dx=input.x||0,dy=input.y||0,manual=!!(dx||dy);
   if(manual){s.channel=null;s.target=null;s.path=[];s.action=null;}else if(s.path.length&&!s.action){const point=s.path[0],d=distance(p,point);if(d<7)s.path.shift();else{dx=(point.x-p.x)/d;dy=(point.y-p.y)/d;}}
   if(s.target&&!s.channel){const n=s.nodes.find(n=>n.id===s.target.id&&n.available)||s.buildings.find(b=>b.id===s.target.id);if(!n){s.target=null;s.path=[];}else if(distance(p,n)<82){s.path=[];dx=dy=0;if(!s.action&&s.interactCooldown<=0){const result=interact(s,n.id);if(result.panel){s.request={...result};s.target=null;}else if(!result.ok){s.target=null;s.interactCooldown=.7;}}}}
-  const length=Math.hypot(dx,dy);if(length&&!s.action){const speed=(input.sprint?260:195)*(p.hunger<=0?.65:1);let mx=dx/Math.max(1,length)*speed*dt,my=dy/Math.max(1,length)*speed*dt;
+  const length=Math.hypot(dx,dy);if(length&&!s.action){const speed=(input.sprint?260:195)*(p.hunger<=0?.65:1)*(s.expedition.slowed>0?.6:1);let mx=dx/Math.max(1,length)*speed*dt,my=dy/Math.max(1,length)*speed*dt;
     // 到达落点时截断本帧位移，避免低帧率下跨过目标来回抖动。
     if(!manual&&s.path.length&&distance(p,s.path[0])<speed*dt){mx=s.path[0].x-p.x;my=s.path[0].y-p.y;}if(walkable(s,p.x+mx,p.y))p.x+=mx;if(walkable(s,p.x,p.y+my))p.y+=my;p.face=dy<-.2?-1:dy>.2?1:p.face;p.walk+=dt*(input.sprint?13:9);}
   else p.walk=0;
@@ -249,7 +250,7 @@ export function step(s,dt,input={}){
   if(s.action){const n=s.nodes.find(n=>n.id===s.action.id);if(!n||distance(p,n)>105)s.action=null;else{s.action.elapsed+=dt;if(s.action.elapsed>=s.action.duration)finishHarvest(s);}}
   if(input.attack)attack(s);
   p.hunger=clamp(p.hunger-(s.level>=9?0:dt*(manual&&input.sprint?.12:.065)*(s.level>=7?.5:1)));
-  advanceExpansion(s,dt,manual||input.attack);stepWilderness(s,dt);stepSeasons(s,dt);
+  advanceExpansion(s,dt,manual||input.attack);stepWilderness(s,dt);stepSeasons(s,dt);stepExpedition(s,dt,walkable);
   if(s.level>=7)p.hp=clamp(p.hp+dt*.12,0,maxHealth(s));
   const ph=phase(s),lit=lightAt(s,p.x,p.y);
   if(ph==='night'&&!lit){s.darkTime+=dt;p.clarity=clamp(p.clarity-dt*.32);if(s.darkTime>7)p.hp-=dt*2.4;}else{s.darkTime=0;if(nearby(s,'campfire',180))p.clarity=clamp(p.clarity+dt*.26);}
@@ -260,11 +261,11 @@ export function step(s,dt,input={}){
   for(const n of s.nodes)if(!n.available&&n.respawnAt&&s.time>=n.respawnAt){n.available=true;n.hp=NODES[n.type].hp;n.respawnAt=0;if(n.sapling){n.sapling=false;s.resonance=Math.min(100,s.resonance+1);}}
   if(ph==='night'){
     s.enemyClock+=dt;if(s.enemyClock>19&&s.enemies.length<4){s.enemyClock=0;const a=random(s)*Math.PI*2,x=p.x+Math.cos(a)*430,y=p.y+Math.sin(a)*430;if(walkable(s,x,y))s.enemies.push({id:'e'+s.time,x,y,hp:35,cooldown:0});}
-    for(const e of s.enemies){const d=distance(e,p),inLight=lightAt(s,e.x,e.y);let vx=(p.x-e.x)/Math.max(d,1),vy=(p.y-e.y)/Math.max(d,1);if(inLight){vx=-vx;vy=-vy;}const nx=e.x+vx*(inLight?120:80)*dt,ny=e.y+vy*(inLight?120:80)*dt;if(walkable(s,nx,ny)){e.x=nx;e.y=ny;}e.cooldown=Math.max(0,e.cooldown-dt);if(d<40&&!lit&&!e.cooldown){const armored=s.inventory.armor&&s.durability.armor>0;p.hp-=armored?6:11;if(armored){s.durability.armor=Math.max(0,s.durability.armor-8);if(!s.durability.armor)s.inventory.armor=0;}p.clarity=clamp(p.clarity-4);e.cooldown=1.5;s.hurtUntil=s.time+.3;}}
+    for(const e of s.enemies){const d=distance(e,p),inLight=lightAt(s,e.x,e.y);let vx=(p.x-e.x)/Math.max(d,1),vy=(p.y-e.y)/Math.max(d,1);if(inLight){vx=-vx;vy=-vy;}const nx=e.x+vx*(inLight?120:80)*dt,ny=e.y+vy*(inLight?120:80)*dt;if(walkable(s,nx,ny)){e.x=nx;e.y=ny;}e.cooldown=Math.max(0,e.cooldown-dt);if(d<40&&!lit&&!e.cooldown&&!s.expedition.invulnerable){const armored=s.inventory.armor&&s.durability.armor>0;p.hp-=armored?6:11;if(armored){s.durability.armor=Math.max(0,s.durability.armor-8);if(!s.durability.armor)s.inventory.armor=0;}p.clarity=clamp(p.clarity-4);e.cooldown=1.5;s.hurtUntil=s.time+.3;}}
   }else{s.enemies=[];s.enemyClock=0;}
   if(day(s)>oldDay){s.stats.nights++;say(s,'第 '+day(s)+' 天。你平安度过了一个夜晚。',true);}
   if(ph!==oldPhase){if(ph==='dusk')say(s,'天色渐暗。准备营火、火炬和食物。',true);if(ph==='night')say(s,'夜晚降临。留在光里，夜影惧怕火光。',true);}
-  const area=biome(p.x,p.y);if(!s.visited.includes(area.id)){s.visited.push(area.id);s.insight+=4;say(s,'发现「'+area.name+'」· 洞见 +4。',true);}reveal(s);
+  const area=inHome(s)?biome(p.x,p.y):{id:s.expedition.current,name:realm(s).name};if(!s.visited.includes(area.id)){s.visited.push(area.id);s.insight+=4;say(s,'发现「'+area.name+'」· 洞见 +4。',true);}reveal(s);
   s.fx=s.fx.filter(f=>s.time-f.at<2.2);
   if(p.hp<=0){p.hp=0;s.status='dead';s.action=null;s.path=[];s.target=null;say(s,'旅程在这里停下。你的脚步仍留在这片土地上。',true);}
 }
@@ -281,22 +282,22 @@ export function getQuest(s){
 }
 export function serialize(s){return JSON.stringify(s);}
 export function parseSave(raw){
-  if(typeof raw!=='string'||raw.length>500000)throw new Error('存档大小无效');const s=JSON.parse(raw),num=(n,a=0,b=1000000000)=>typeof n==='number'&&Number.isFinite(n)&&n>=a&&n<=b;
-  if(!s||![2,3,VERSION].includes(s.version)||!Number.isInteger(s.level)||s.level<1||s.level>9||!['playing','dead','won'].includes(s.status)||!num(s.time)||!num(s.seed,0,4294967295)||!num(s.rng,0,4294967295))throw new Error('不是受支持的九级生存存档');
+  if(typeof raw!=='string'||raw.length>2000000)throw new Error('存档大小无效');const s=JSON.parse(raw),num=(n,a=0,b=1000000000)=>typeof n==='number'&&Number.isFinite(n)&&n>=a&&n<=b;
+  if(!s||![2,3,4,VERSION].includes(s.version)||!Number.isInteger(s.level)||s.level<1||s.level>9||!['playing','dead','won'].includes(s.status)||!num(s.time)||!num(s.seed,0,4294967295)||!num(s.rng,0,4294967295))throw new Error('不是受支持的九级生存存档');
   if(!s.player||!num(s.player.x,0,WORLD.width)||!num(s.player.y,0,WORLD.height)||!num(s.player.hp,0,200)||!num(s.player.hunger,0,100)||!num(s.player.clarity,0,100))throw new Error('角色数据无效');
   if(!s.inventory||Array.isArray(s.inventory)||Object.entries(s.inventory).some(([k,v])=>!Object.hasOwn(ITEMS,k)||!Number.isInteger(v)||!num(v,0,9999)))throw new Error('背包数据无效');
   if(!s.durability||Object.entries(s.durability).some(([k,v])=>!ITEMS[k]?.durability||!num(v,0,ITEMS[k].durability)))throw new Error('工具数据无效');
   if(!Array.isArray(s.tech)||s.tech.some(id=>!TECHS.some(t=>t.id===id))||new Set(s.tech).size!==s.tech.length)throw new Error('科技数据无效');
-  if(!Array.isArray(s.nodes)||s.nodes.length>1500||s.nodes.some(n=>!n||!Object.hasOwn(NODES,n.type)||typeof n.id!=='string'||!num(n.x,0,WORLD.width)||!num(n.y,0,WORLD.height)||!num(n.hp,0,10)||!num(n.respawnAt)||typeof n.available!=='boolean'))throw new Error('资源地图数据无效');
-  if(!Array.isArray(s.buildings)||s.buildings.length>300||s.buildings.some(b=>!b||!Object.hasOwn(BUILDING_NAMES,b.type)||typeof b.id!=='string'||!num(b.x,0,WORLD.width)||!num(b.y,0,WORLD.height)||!num(b.fuel,0,300)||!num(b.readyAt)||!num(b.stored,0,30)||!num(b.productionAt)))throw new Error('营地数据无效');
-  if(new Set(s.nodes.map(n=>n.id)).size!==s.nodes.length||new Set(s.buildings.map(b=>b.id)).size!==s.buildings.length)throw new Error('地图对象编号重复');
+  validateMapState(s,num);
   for(const key of['insight','resonance','ecology','messageSeq','torchFuel','darkTime','enemyClock','attackCooldown','interactCooldown','meditationCooldown'])if(!num(s[key]))throw new Error('生存状态无效');
   if(!s.stats||['gathered','crafted','planted','nights','defeated'].some(k=>!num(s.stats[k])))throw new Error('旅程数据无效');
   for(const key of['discoveries','visited','explored','crafted'])if(!Array.isArray(s[key])||s[key].length>3000||s[key].some(v=>typeof v!=='string'||v.length>80))throw new Error('探索数据无效');
   if(!Array.isArray(s.journal)||s.journal.length>80||s.journal.some(j=>!j||!num(j.day)||typeof j.text!=='string'||j.text.length>500))throw new Error('日志数据无效');
   if(s.version>=3)validateExpansion(s,num);
-  if(s.version===VERSION)validateWilderness(s,num);
-  validateLiving(s);initExpansion(s);initWilderness(s);initSeasons(s);
+  if(s.version>=4)validateWilderness(s,num);
+  if(s.version>=5&&!s.expedition)throw new Error('缺少远征进度');
+  validateExpedition(s,num,map=>{validateMapState(map,num);validateExpansion(map,num);validateWilderness(map,num);if(!Array.isArray(map.explored)||map.explored.length>3000||map.explored.some(x=>typeof x!=='string'||x.length>80))throw new Error('区域迷雾数据无效');});
+  validateLiving(s);initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);
   if(typeof s.torchOn!=='boolean'||typeof s.chapterCompleted!=='boolean')throw new Error('存档状态无效');
   s.enemies=[];s.channel=null;s.action=null;s.target=null;s.path=[];s.fx=[];s.request=null;s.player.walk=0;s.message=null;return s;
 }
@@ -347,13 +348,13 @@ export function dash(s,x=0,y=0){
   if(s.status!=='playing'||s.level<3)return fail(s,'三级解锁闪步');if(s.expansion.dashCooldown>0)return fail(s,'闪步冷却 '+Math.ceil(s.expansion.dashCooldown)+' 秒');if(s.player.clarity<4)return fail(s,'意识不足 4');if(!x&&!y)y=s.player.face===-1?-1:1;const len=Math.hypot(x,y);let last={...s.player};for(let i=1;i<=9;i++){const p={x:s.player.x+x/len*i*20,y:s.player.y+y/len*i*20};if(!walkable(s,p.x,p.y))break;last=p;}if(distance(last,s.player)<20)return fail(s,'前方没有足够空间');s.player.x=last.x;s.player.y=last.y;s.player.clarity-=4;s.expansion.dashCooldown=5;s.channel=null;s.action=null;s.target=null;s.path=[];reveal(s);say(s,'闪步 · 意识 −4');return{ok:true};
 }
 export function returnHome(s){
-  if(s.status!=='playing'||s.level<4||!s.buildings.some(b=>b.type==='gate'))return fail(s,'四级建成折跃门后可使用');if(s.expansion.returnCooldown>0)return fail(s,'归途冷却 '+Math.ceil(s.expansion.returnCooldown)+' 秒');if(s.resonance<2)return fail(s,'需要 2 共鸣');const camp=s.buildings.find(b=>b.type==='campfire');if(!camp)return fail(s,'需要保留一座营火作为归途坐标');s.resonance-=2;s.player.x=camp.x;s.player.y=camp.y+25;s.action=null;s.channel=null;s.path=[];s.target=null;s.enemies=[];s.expansion.returnCooldown=45;s.expansion.shifts++;reveal(s);say(s,'你回到了最初的营火旁。');return{ok:true,teleported:true};
+  if(s.status!=='playing'||s.level<4||!s.buildings.some(b=>b.type==='gate'))return fail(s,'四级建成折跃门后可使用');if(s.expansion.returnCooldown>0)return fail(s,'归途冷却 '+Math.ceil(s.expansion.returnCooldown)+' 秒');if(s.resonance<2)return fail(s,'需要 2 共鸣');const camp=s.buildings.find(b=>b.type==='campfire');if(!camp)return fail(s,'需要保留一座营火作为归途坐标');s.resonance-=2;s.player.x=camp.x;s.player.y=camp.y+25;s.action=null;s.channel=null;s.path=[];s.target=null;s.enemies=[];s.expansion.returnCooldown=45;s.expansion.shifts++;reveal(s);say(s,'你回到了当前地图的营火旁。');return{ok:true,teleported:true};
 }
 export function transfer(s,id,item,direction,count=1){
   const b=s.buildings.find(b=>b.id===id);if(s.status!=='playing'||!b||!['chest','synthesizer'].includes(b.type)||distance(b,s.player)>180)return fail(s,'请先走近储物设施');if(!Object.hasOwn(ITEMS,item)||ITEMS[item].durability||!Number.isInteger(count)||count<1||count>9999||!['in','out'].includes(direction))return fail(s,'转移参数无效');if(direction==='in'&&b.type!=='chest')return fail(s,'生产设施只可取出');b.inventory||={};const from=direction==='in'?s.inventory:b.inventory,to=direction==='in'?b.inventory:s.inventory;const n=Math.min(count,from[item]||0,9999-(to[item]||0));if(n<=0)return fail(s,'没有可转移的物品或空间不足');from[item]-=n;to[item]=(to[item]||0)+n;say(s,(direction==='in'?'存入':'取出')+ITEMS[item].name+' ×'+n);return{ok:true};
 }
 export function repair(s,item){
-  if(s.status!=='playing'||!nearby(s,'table',185))return fail(s,'在研究台附近修理工具');if(!ITEMS[item]?.durability||!s.inventory[item])return fail(s,'没有这件装备');if(s.durability[item]>=ITEMS[item].durability)return fail(s,'耐久已经充足');const cost=item==='copperSpear'?{ingot:1,wood:1}:item==='armor'?{grass:3,wood:1}:{flint:1,twig:1};if(!affordable(s,cost))return fail(s,'修理材料不足');pay(s,cost);s.durability[item]=ITEMS[item].durability;say(s,ITEMS[item].name+' 已修复。');return{ok:true};
+  if(s.status!=='playing'||!nearby(s,'table',185))return fail(s,'在研究台附近修理工具');if(!ITEMS[item]?.durability||!s.inventory[item])return fail(s,'没有这件装备');if(s.durability[item]>=ITEMS[item].durability)return fail(s,'耐久已经充足');const cost=({bow:{silk:1,twig:2},hammer:{stone:3,fang:1},frostSpear:{frostshard:2,ingot:1},emberStaff:{ember:3,wood:2}})[item]||(item==='copperSpear'?{ingot:1,wood:1}:item==='armor'?{grass:3,wood:1}:{flint:1,twig:1});if(!affordable(s,cost))return fail(s,'修理材料不足');pay(s,cost);s.durability[item]=ITEMS[item].durability;say(s,ITEMS[item].name+' 已修复。');return{ok:true};
 }
 export function dismantle(s,id){
   const b=s.buildings.find(b=>b.id===id);if(s.status!=='playing'||!b||distance(s.player,b)>180)return fail(s,'走近设施后才能拆除');if(b.kitchen||b.baitAt)return fail(s,'请等待炖煮或诱捕完成');if(Object.values(b.inventory||{}).some(n=>n>0)||b.stored>0)return fail(s,'请先取空设施中的物品');const r=RECIPES.find(r=>r.building===b.type);const refund=Object.fromEntries(Object.entries(r.cost).filter(([k])=>Object.hasOwn(ITEMS,k)).map(([k,n])=>[k,Math.floor(n/2)]));give(s,refund);s.buildings=s.buildings.filter(x=>x.id!==id);say(s,'已拆除'+r.name+'，返还一半基础材料（向下取整）。',true);return{ok:true};
@@ -400,4 +401,10 @@ export function claimHandbook(s,id){
  if(Object.entries(h.reward).some(([key,n])=>amount(s,key)+n>(['insight','resonance'].includes(key)?100000:9999)))return fail(s,'请先腾出背包空间');
  s.living.claimed.push(id);for(const[key,n]of Object.entries(h.reward)){if(['insight','resonance'].includes(key))s[key]+=n;else give(s,{[key]:n});}
  say(s,'手册完成：'+h.name+'。奖励已放进行囊。',true);return{ok:true};
+}
+
+function validateMapState(s,num){
+  if(!Array.isArray(s.nodes)||s.nodes.length>1500||s.nodes.some(n=>!n||!Object.hasOwn(NODES,n.type)||typeof n.id!=='string'||!num(n.x,0,WORLD.width)||!num(n.y,0,WORLD.height)||!num(n.hp,0,10)||!num(n.respawnAt)||typeof n.available!=='boolean'))throw new Error('资源地图数据无效');
+  if(!Array.isArray(s.buildings)||s.buildings.length>300||s.buildings.some(b=>!b||!Object.hasOwn(BUILDING_NAMES,b.type)||typeof b.id!=='string'||!num(b.x,0,WORLD.width)||!num(b.y,0,WORLD.height)||!num(b.fuel,0,300)||!num(b.readyAt)||!num(b.stored,0,30)||!num(b.productionAt)))throw new Error('营地数据无效');
+  if(new Set(s.nodes.map(n=>n.id)).size!==s.nodes.length||new Set(s.buildings.map(b=>b.id)).size!==s.buildings.length)throw new Error('地图对象编号重复');
 }
