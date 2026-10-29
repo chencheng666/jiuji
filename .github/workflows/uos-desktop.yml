@@ -1,0 +1,38 @@
+name: 九级统信桌面包
+on:
+  workflow_dispatch:
+  push:
+    branches: ['codex/rift-expedition-1.1.0']
+    tags: ['v1.*']
+permissions:
+  contents: read
+jobs:
+  linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+      - name: 安装构建依赖
+        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf libxdo-dev
+      - run: npm ci --registry=https://registry.npmjs.org
+      - run: npm test && npm run check
+      - run: npm run desktop:build -- --bundles deb -- --locked
+      - name: 整理统信包
+        shell: bash
+        run: |
+          mapfile -t packages < <(find src-tauri/target/release/bundle/deb -maxdepth 1 -name '*.deb')
+          test "${#packages[@]}" -eq 1
+          scripts/package-uos-store.sh "${packages[0]}" "$RUNNER_TEMP/jiuji-uos"
+          for file in "$RUNNER_TEMP"/jiuji-uos/*.deb; do dpkg-deb -c "$file"; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jiuji-uos-amd64
+          path: ${{ runner.temp }}/jiuji-uos/
+          retention-days: 14
+          if-no-files-found: error

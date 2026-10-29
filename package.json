@@ -1,6 +1,6 @@
 {
   "name": "jiuji-survival",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": false,
   "type": "module",
   "description": "《九级》采集、合成、建造与文明晋升生存游戏",
@@ -9,7 +9,12 @@
     "test": "node --test tests/*.test.mjs",
     "test:wilderness": "node tests/wilderness-journey.mjs",
     "test:journey": "node tests/nine-level-journey.mjs",
-    "check": "node --check dist/seasons.js && node --check dist/storage.js && node --check dist/wilderness.js && node --check dist/atmosphere.js && node --check dist/audio.js && node --check dist/chapters.js && node --check dist/survival.js && node --check dist/world.js && node --check dist/play.js"
+    "check": "node --check dist/telemetry.js && node --check dist/expedition-view.js && node --check dist/expeditions.js && node --check dist/seasons.js && node --check dist/storage.js && node --check dist/wilderness.js && node --check dist/atmosphere.js && node --check dist/audio.js && node --check dist/chapters.js && node --check dist/survival.js && node --check dist/world.js && node --check dist/play.js",
+    "desktop:build": "tauri build",
+    "test:expedition": "node tests/expedition-journey.mjs"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.1"
+  }
 }
