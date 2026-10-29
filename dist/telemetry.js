@@ -16,5 +16,6 @@ export function browserTelemetry(){
  const desktop=location.protocol==='tauri:'||location.hostname==='tauri.localhost';
  const official=location.origin==='https://www.daguojueqi.site',pages=location.origin==='https://chencheng666.github.io';
  const enabledHost=official||pages||desktop;
- return new GameTelemetry({storage:localStorage,enabledHost,entry:desktop?'desktop':'game',send:async body=>{const response=await fetch('https://www.daguojueqi.site/api/jiuji/telemetry',{method:'POST',headers:{'Content-Type':'text/plain'},credentials:'omit',body:JSON.stringify(body),signal:AbortSignal.timeout(8000)});if(!response.ok)throw Error('统计暂时不可用');return response.json();}});
+ let storage;try{storage=localStorage;}catch{storage={getItem:()=>null,setItem:()=>{},removeItem:()=>{}};}
+ return new GameTelemetry({storage,enabledHost,entry:desktop?'desktop':'game',send:async body=>{const response=await fetch('https://www.daguojueqi.site/api/jiuji/telemetry',{method:'POST',headers:{'Content-Type':'text/plain'},credentials:'omit',body:JSON.stringify(body),signal:AbortSignal.timeout(8000)});if(!response.ok)throw Error('统计暂时不可用');return response.json();}});
 }
