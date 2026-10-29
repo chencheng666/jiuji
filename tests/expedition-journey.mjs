@@ -16,11 +16,12 @@ function advance(input={}){
 function move(point){assert.ok(G.goTo(s,point.x,point.y).ok);while(s.path.length)advance({attack:true});}
 function cross(to){const n=s.nodes.find(n=>n.type==='wormhole'&&n.destination===to);assert.ok(n);move(n);while(s.expedition.cooldown)advance();assert.ok(G.enterWormhole(s,n.id).ok);}
 function fight(m){
- let count=0;
+ let count=0, captured=false;
  while(m.hp>0){const d=G.distance(m,s.player),w=G.WEAPONS[G.equippedWeapon(s)];let dx=0,dy=0;
   if(m.warning&&G.distance(s.player,m.warning)<m.warning.radius+45){dx=s.player.x-m.warning.x;dy=s.player.y-m.warning.y;if(Math.hypot(dx,dy)<1){dx=1;dy=1;}if(!s.expedition.dodgeCooldown)G.dodgeRoll(s,dx,dy);}
   else if(d>w.range-35){dx=m.x-s.player.x;dy=m.y-s.player.y;}
   else if(d<170&&w.range>200){dx=s.player.x-m.x;dy=s.player.y-m.y;}
+  if(!captured&&d<250){fs.writeFileSync('artifacts/v1.1-qa/combat-'+m.kind+'.json',G.serialize(s));captured=true;}
   const length=Math.hypot(dx,dy)||1;advance({x:dx/length,y:dy/length,attack:true});
   if(++count>4000)throw Error('战斗无法完成 '+m.kind+' '+JSON.stringify({hp:s.player.hp,arrow:s.inventory.arrow,durability:s.durability.bow}));
  }
