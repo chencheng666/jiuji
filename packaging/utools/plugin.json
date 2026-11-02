@@ -1,0 +1,12 @@
+{
+  "main": "index.html",
+  "logo": "logo.png",
+  "pluginSetting": { "height": 540 },
+  "features": [
+    {
+      "code": "jiuji-survival",
+      "description": "九级 · 原创单人生存，采集、合成、建造与文明成长",
+      "cmds": ["饥荒升级版-九级", "九级", "九级生存"]
+    }
+  ]
+}

@@ -5,3 +5,4 @@ artifacts/
 .openai/*.local.*
 
 src-tauri/target/
+releases/utools/

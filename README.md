@@ -59,6 +59,19 @@ npm ci
 npm run desktop:build
 ```
 
+### uTools 离线版
+
+应用名称为「饥荒升级版-九级」，也可通过「九级」「九级生存」搜索。应用内注明原创项目与玩法灵感来源，并非《饥荒》官方版本。
+
+```sh
+npm ci
+npm run package:utools
+```
+
+在 uTools 开发者工具中导入 `releases/utools/饥荒升级版-九级/plugin.json`。构建时将游戏模块和样式合并为本地文件，关闭匿名统计，保留本地素材、独立游戏窗口与存档导入导出。网页版与 uTools 存档不自动同步，迁移或更新前请手动备份。外部试玩、官网与 GitHub 仅在点击入口按钮后打开。
+
+目录 ZIP 用于开发导入与备份，正式 `.upxs` 必须由 uTools 开发者工具生成。打包与送审状态见 [uTools 发行记录](docs/releases/utools-20261102/README.md)。
+
 ## 操作
 
 WASD / 方向键移动，点击资源自动走近采集，E 交互，空格攻击，V 闪避。C 合成、T 科技、B 背包、M 地图、H 图鉴、J 历程、L 远征委托、F 添柴。Q 闪步和 R 归途随等级解锁。
