@@ -66,10 +66,10 @@ export function homeStation(s,b,action){
   return taken?{ok:true,reason:'营地产物已放入行囊。'}:fail('尚无产物或背包空间不足');
  }
  if(action==='dry'){
-  const cost={berry:4,meat:1};if(b.type!=='dryingrack'||b.crop||Object.values(b.inventory||{}).some(n=>n))return fail('先等待晾晒完成并取走产物');if(!craftAffordable(s,cost))return fail('需要 4 浆果、1 生肉（可用附近箱子）');payCraft(s,cost);b.crop={kind:'trailmeal',readyAt:s.time+70};return{ok:true,reason:'开始晾晒，70 秒后可领取行粮。'};
+  const cost={berry:4,meat:1};if(b.type!=='dryingrack'||b.crop||Object.values(b.inventory||{}).some(n=>n))return fail('先等待晾晒完成并取走产物');if(!craftAffordable(s,cost))return fail('需要 4 浆果、1 生肉（可用附近箱子）');payCraft(s,cost);b.crop={kind:'trailmeal',readyAt:s.time+70*(b.improved?.8:1)};return{ok:true,reason:'开始晾晒，70 秒后可领取行粮。'};
  }
  if(action.startsWith('sow:')){
-  const id=action.split(':')[1],crop=Object.hasOwn(CROPS,id)?CROPS[id]:null;if(b.type!=='nursery'||!crop||b.crop||Object.values(b.inventory||{}).some(n=>n))return fail('请先收获这一床作物');if(!craftAffordable(s,crop.cost))return fail('播种材料不足');payCraft(s,crop.cost);b.crop={kind:id,readyAt:s.time+crop.seconds*(G.season(s).index===crop.season?1:1.5)};return{ok:true,reason:'播下'+crop.name+'，离开面板后继续生长。'};
+  const id=action.split(':')[1],crop=Object.hasOwn(CROPS,id)?CROPS[id]:null;if(b.type!=='nursery'||!crop||b.crop||Object.values(b.inventory||{}).some(n=>n))return fail('请先收获这一床作物');if(!craftAffordable(s,crop.cost))return fail('播种材料不足');payCraft(s,crop.cost);b.crop={kind:id,readyAt:s.time+crop.seconds*(G.season(s).index===crop.season?1:1.5)*(b.improved?.8:1)};return{ok:true,reason:'播下'+crop.name+'，离开面板后继续生长。'};
  }
  return fail('未知营地操作');
 }

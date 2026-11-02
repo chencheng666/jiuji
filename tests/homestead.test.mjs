@@ -63,7 +63,7 @@ test('探索死亡回营保留装备和食物，跨图遗落包守恒且只能�
 });
 test('求生模式与无营火不会出现免费复活，旧版迁移默认求生',()=>{
  const s=G.createGame();s.status='dead';assert.equal(G.recoverAtCamp(s).ok,false);s.homestead.mode='explore';assert.equal(G.recoverAtCamp(s).ok,false);
- const old=G.createGame();old.version=5;delete old.homestead;const loaded=G.parseSave(G.serialize(old));assert.equal(loaded.version,6);assert.equal(loaded.homestead.mode,'survival');assert.equal(G.parseSave(G.serialize(loaded)).nodes.length,loaded.nodes.length);
+ const old=G.createGame();old.version=5;delete old.homestead;const loaded=G.parseSave(G.serialize(old));assert.equal(loaded.version,G.VERSION);assert.equal(loaded.homestead.mode,'survival');assert.equal(G.parseSave(G.serialize(loaded)).nodes.length,loaded.nodes.length);
 });
 test('拒绝篡改委托、专长、作物和遗落包，不能导入未知奖励',()=>{
  const s=G.createGame();cross(s,'verdant');const raw=G.serialize(s);

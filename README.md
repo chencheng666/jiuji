@@ -1,4 +1,4 @@
-# 九级 · 裂隙远征
+# 九级 · 归途新生
 
 原创俯视角单人生存游戏。采集、合成、建造、四季生活与双轨科技，从一根树枝成长到九级文明。
 
@@ -7,6 +7,16 @@
 - [GitHub](https://github.com/chencheng666/jiuji)
 - [项目官网](https://www.daguojueqi.site/)
 - 公众号：**数字机器莱西奥**
+
+## 1.3 归途新生
+
+- 营地经营总览、堆肥生产与追肥、五类设施改良，让带回的材料改变下一趟远行。
+- 三片远征地图新增九段遭遇、十八种选择；即时回报与延迟回信各有投入，到原岛手记台领取后续物资。
+- 四级共振工坊、五级构件修缮、六级循环织造、七级远方援助，晋升后持续解锁新的生产与选择。
+- 一批或三批生产订单，材料整份投入；当前地图活动时计时，暂停、后台、离线与跨图均不推进。
+- v7 存档迁移旧版 v6/v5/v4/v3/v2，保留原槽位；旧旅程继续沿用原难度。
+
+[1.3 版本记录](docs/releases/1.3.0.md)。
 
 ## 1.2 林海回声
 
@@ -64,6 +74,7 @@ npm run test:journey
 npm run test:wilderness
 npm run test:expedition
 npm run test:homestead
+npm run test:frontier
 ```
 
 规则、地图和战斗分别位于 `survival.js`、`expeditions.js`；四季和手册在 `seasons.js`，Canvas 画面在 `world.js`、`expedition-view.js`，界面在 `play.js`。素材为原创 SVG。

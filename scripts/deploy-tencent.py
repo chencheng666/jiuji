@@ -49,7 +49,7 @@ def service_state():
             health = json.load(r)
         if pid == '0' or not health.get('ok'):
             raise RuntimeError('原游戏服务未通过预检，停止部署')
-        values.append({'service': service, 'pid': pid, 'version': health['version']})
+        values.append({'service': service, 'pid': pid, 'version': health['version'], 'build': health.get('build')})
     return values
 
 
@@ -121,12 +121,15 @@ def deploy(args):
         if name not in manifest:
             raise RuntimeError('缺少必要文件：' + name)
     changed = False
+    config_changed = old_config != CONFIG.encode()
     try:
         switch(release / 'site')
         changed = True
-        atomic_write(EXT, CONFIG.encode())
+        if config_changed:
+            atomic_write(EXT, CONFIG.encode())
         run(NGINX, '-t')
-        run(NGINX, '-s', 'reload')
+        if config_changed:
+            run(NGINX, '-s', 'reload')
         # 通过本机 HTTPS 虚拟主机验证路由与证书；允许旧工作进程短暂退出。
         for attempt in range(10):
             try:
@@ -143,7 +146,7 @@ def deploy(args):
         if after != before or any(digest(p.read_bytes()) != h for p, h in protected.items()):
             raise RuntimeError('原站配置或服务状态发生变化，回退本次路由')
         report = {**info, 'url': ORIGIN + '/jiuji/', 'release': str(release), 'backup': str(backup),
-                  'sha256': args.sha256, 'services_before': before, 'services_after': after, 'files': len(manifest)}
+                  'sha256': args.sha256, 'services_before': before, 'services_after': after, 'files': len(manifest), 'nginx_reloaded': config_changed}
         atomic_write(BASE / 'deployment.json', json.dumps(report, ensure_ascii=False, indent=2).encode())
         print(json.dumps(report, ensure_ascii=False), flush=True)
     except Exception:
@@ -152,12 +155,13 @@ def deploy(args):
                 switch(previous)
             else:
                 current.unlink()
-            if old_config is not None:
-                atomic_write(EXT, old_config)
-            elif EXT.exists():
-                EXT.unlink()
-            run(NGINX, '-t')
-            run(NGINX, '-s', 'reload')
+            if config_changed:
+                if old_config is not None:
+                    atomic_write(EXT, old_config)
+                elif EXT.exists():
+                    EXT.unlink()
+                run(NGINX, '-t')
+                run(NGINX, '-s', 'reload')
         raise
 
 
