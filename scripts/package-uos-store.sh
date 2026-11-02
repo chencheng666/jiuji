@@ -4,7 +4,12 @@ set -euo pipefail
 source_deb=${1:?需要源 DEB 路径}
 output_dir=${2:?需要输出目录}
 appid=site.daguojueqi.jiuji
-version=1.1.0
+version=$(dpkg-deb -f "$source_deb" Version)
+expected_version=$(python3 -c 'import json;print(json.load(open("package.json"))["version"])')
+if [[ "$version" != "$expected_version" ]]; then
+  echo "源安装包版本 $version 与项目版本 $expected_version 不一致，停止打包" >&2
+  exit 1
+fi
 arch=$(dpkg-deb -f "$source_deb" Architecture)
 case "$arch" in amd64|arm64) ;; *) exit 1;; esac
 scratch_dir=$(mktemp -d)
@@ -51,3 +56,5 @@ CONTROL
 dpkg-deb -Zgzip --root-owner-group --build "$scratch_dir/pack" "$output_dir/${appid}_${version}_${arch}.deb"
 sha256sum "$output_dir/${appid}_${version}_${arch}.deb" > "$output_dir/${appid}_${version}_${arch}.sha256"
 dpkg-deb -f "$output_dir/${appid}_${version}_${arch}.deb" Package Version Architecture Depends
+
+test "$(dpkg-deb -f "$output_dir/${appid}_${version}_${arch}.deb" Version)" = "$expected_version"
