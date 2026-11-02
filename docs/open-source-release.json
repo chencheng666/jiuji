@@ -1,0 +1,22 @@
+{
+  "repository": "https://github.com/chencheng666/jiuji",
+  "visibility": "public",
+  "license": "MIT",
+  "version": "1.2.0",
+  "release": "https://github.com/chencheng666/jiuji/releases/tag/v1.2.0",
+  "play": "https://chencheng666.github.io/jiuji/",
+  "domestic_play": "https://www.daguojueqi.site/jiuji/",
+  "main_commit": "2ec8fa24dbdb3e0f55fdc32537f7bedbf7ecf77c",
+  "main_commit_note": "该字段标识游戏源码发布提交；后续另有打包脚本和验收文档提交。",
+  "runtime_commit": "af6be89fc1c75cf7a5442c6328d07671cc4fafb4",
+  "pages_commit": "9e2974bdbfe300871c555763ccac666d067c5382",
+  "packaging_fix_commit": "6901131",
+  "notes": "两站每站105个发布文件及运行包核验通过；源码与Pages CI成功，粉丝问题已分别回复并回读。",
+  "linux_package": {
+    "file": "site.daguojueqi.jiuji_1.2.0_amd64.deb",
+    "sha256": "82a3758b3cd7fa36437e2d1cd40fa9d37f892a949952e748eb49521e30cbbf16",
+    "workflow": "https://github.com/chencheng666/jiuji/actions/runs/41386892502",
+    "store_submitted": false,
+    "real_device_verified": false
+  }
+}
