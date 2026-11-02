@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as G from '../dist/survival.js';
-const s=G.createGame();let frames=0,nightSaved=false;const notes=[];fs.mkdirSync('artifacts',{recursive:true});
+const s=G.createGame(20261022,process.env.JIUJI_JOURNEY_MODE||'survival');let frames=0,nightSaved=false;const notes=[];fs.mkdirSync('artifacts',{recursive:true});
 const check=r=>{assert.ok(r.ok,r.reason);return r;};
 function advance(){
   if(s.player.hunger<60){for(const id of ['ration','cooked','berry'])if(s.inventory[id]){G.useItem(s,id);break;}}

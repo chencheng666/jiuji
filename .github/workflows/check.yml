@@ -12,3 +12,5 @@ jobs:
       - run: npm test
       - run: npm run test:journey
       - run: npm run test:wilderness
+      - run: npm run test:expedition
+      - run: npm run test:homestead

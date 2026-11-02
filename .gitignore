@@ -1,3 +1,7 @@
 node_modules/
 .DS_Store
 artifacts/
+*.tar.gz
+.openai/*.local.*
+
+src-tauri/target/
