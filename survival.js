@@ -1,5 +1,7 @@
-import {REALMS,CREATURES,WEAPONS,EXPEDITION_ITEMS,EXPEDITION_NODES,EXPEDITION_RECIPES,realm,inHome,initExpedition,travel,equip,equippedWeapon,expeditionAttack,dodge,stepExpedition,validateExpedition,portalReason} from './expeditions.js';
-export {REALMS,CREATURES,WEAPONS,realm,inHome,equippedWeapon,portalReason};
+import {REALMS,CREATURES,WEAPONS,EXPEDITION_ITEMS,EXPEDITION_NODES,EXPEDITION_RECIPES,realm,inHome,initExpedition,travel,equip,equippedWeapon,expeditionAttack,dodge,stepExpedition,validateExpedition,portalReason,switchRealm,effectiveWeapon} from './expeditions.js';
+export {REALMS,CREATURES,WEAPONS,realm,inHome,equippedWeapon,portalReason,effectiveWeapon};
+import {HOME_ITEMS,HOME_RECIPES,HOME_DISHES,initHomestead,stepHomestead,validateHomestead,craftAmount,craftAffordable,payCraft,acceptContract,claimContract,beginSite,homeStation,chooseSpecialty,recover,reclaimPack,placeLure} from './homestead.js';
+export {craftAmount,craftAffordable,acceptContract,claimContract,beginSite,chooseSpecialty};
 import {season,initSeasons,stepSeasons,HANDBOOK,validateLiving} from './seasons.js';
 export {season,HANDBOOK};
 import {WILD_ITEMS,WILD_NODES,WILD_RECIPES,DISHES,weather,shelterAt,initWilderness,stepWilderness,impact} from './wilderness.js';
@@ -7,12 +9,13 @@ export {DISHES,weather,shelterAt};
 import {LEVEL_NAMES,LEVEL_ROMAN,LEVEL_BENEFITS,EXTRA_ITEMS,EXTRA_NODES,EXTRA_TECHS,EXTRA_RECIPES,TRIALS,CHAPTERS} from './chapters.js';
 export {LEVEL_NAMES,LEVEL_ROMAN,LEVEL_BENEFITS,TRIALS,CHAPTERS};
 // 《九级》生存规则。世界、采集、制作与研究均可脱离画面独立验证。
-export const VERSION = 5;
+export const VERSION = 6;
 export const WORLD = { width: 3600, height: 2800, spawn: { x: 1260, y: 1640 }, dayLength: 300 };
 export const ITEMS = {
   wood:{name:'木材',icon:'wood'},twig:{name:'树枝',icon:'twig'},stone:{name:'石料',icon:'rock'},flint:{name:'燧石',icon:'flint'},grass:{name:'纤维',icon:'grass'},berry:{name:'浆果',icon:'bush',food:13,health:1},seed:{name:'种子',icon:'seed'},flower:{name:'荧光花',icon:'flower'},ore:{name:'铜矿',icon:'ore'},ingot:{name:'铜锭',icon:'ingot'},crystal:{name:'原晶',icon:'crystal'},board:{name:'木板',icon:'board'},cooked:{name:'烤浆果',icon:'food',food:30,health:7},ration:{name:'旅行口粮',icon:'food',food:48,health:12},axe:{name:'石斧',icon:'axe',durability:90},pickaxe:{name:'石镐',icon:'pickaxe',durability:110},spear:{name:'石矛',icon:'spear',durability:120},copperSpear:{name:'铜矛',icon:'spear',durability:180},torch:{name:'火炬',icon:'torch'},bedroll:{name:'草编睡袋',icon:'bedroll'}
 };
-Object.assign(ITEMS,EXTRA_ITEMS,WILD_ITEMS,EXPEDITION_ITEMS);
+Object.assign(ITEMS,EXTRA_ITEMS,WILD_ITEMS,EXPEDITION_ITEMS,HOME_ITEMS);
+DISHES.push(...HOME_DISHES);
 export const RESOURCE_NAMES = {...Object.fromEntries(Object.entries(ITEMS).map(([k,v])=>[k,v.name])),insight:'洞见',resonance:'共鸣'};
 export const NODES = {
   tree:{name:'青杉',tool:'axe',hp:3,time:.65,drop:{wood:4,twig:1,seed:1},eco:-1.2},
@@ -26,14 +29,14 @@ export const NODES = {
   flower:{name:'荧光花',hp:1,time:.65,drop:{flower:3},regrow:170},
   ruin:{name:'先行者遗迹',hp:1,time:1.8,drop:{crystal:2},insight:9,resonance:3}
 };
-Object.assign(NODES,EXTRA_NODES,WILD_NODES,EXPEDITION_NODES);
+Object.assign(NODES,EXTRA_NODES,WILD_NODES,EXPEDITION_NODES,{fieldsite:{name:'荒野探索点',hp:1,time:0,drop:{}},lostpack:{name:'遗落包',hp:1,time:0,drop:{}}});
 export const TECHS = [
   {id:'stonework',name:'石器精研',branch:'matter',cost:{insight:4,stone:6},requires:[],text:'解锁熔炉。更好地理解材料，开始建设稳定营地。'},
   {id:'smelting',name:'金属冶炼',branch:'matter',cost:{insight:7,ore:6},requires:['stonework'],text:'在熔炉旁冶炼铜锭，制作更耐用的铜矛。'},
   {id:'crystal',name:'晶体导能',branch:'matter',cost:{insight:9,ingot:3,crystal:2},requires:['smelting'],text:'解锁共鸣台，将物质工程与意识研究连接起来。'},
   {id:'drilling',name:'地脉采集',branch:'matter',cost:{insight:8,ingot:3},requires:['smelting'],level:2,text:'解锁晶能采矿机，在矿脉附近持续采集铜矿。'},
   {id:'observe',name:'万物观察',branch:'mind',cost:{insight:3,flower:2},requires:[],text:'解锁营火冥想，用荧光花获得共鸣并恢复意识。'},
-  {id:'steward',name:'共生实践',branch:'mind',cost:{insight:5,resonance:4},requires:['observe'],planted:3,text:'亲手播种三次。解锁循环农圃，学会归还土地。'},
+  {id:'steward',name:'共生实践',branch:'mind',cost:{insight:5,resonance:4},requires:['observe'],planted:3,text:'先用种子播种三株青杉，再研究循环农圃。播种从开局即可进行，不需要本科技。'},
   {id:'resonate',name:'意识共振',branch:'mind',cost:{insight:8,resonance:8},requires:['steward'],text:'能够启动共鸣台，完成一级文明的晋升仪式。'},
   {id:'ward',name:'心光庇护',branch:'mind',cost:{insight:8,resonance:6},requires:['resonate'],level:2,text:'解锁长明灯与星火信标。以稳定的光守护远行。'}
 ];
@@ -51,14 +54,14 @@ export const RECIPES = [
   {id:'campfire',name:'营火',category:'camp',cost:{wood:5,stone:4,grass:2},building:'campfire',desc:'温暖、安全与烹饪的起点。初始燃料 150 秒，可添柴。'},
   {id:'table',name:'研究台',category:'camp',cost:{wood:10,stone:6,grass:4},building:'table',desc:'在附近研究物质与意识科技。首次建成获得洞见。'},
   {id:'furnace',name:'熔炉',category:'camp',cost:{stone:10,wood:6},building:'furnace',tech:'stonework',desc:'在附近将铜矿与木材冶炼成铜锭。'},
-  {id:'farm',name:'循环农圃',category:'camp',cost:{wood:5,grass:5,seed:3},building:'farm',tech:'steward',desc:'每 75 秒成熟，收获浆果与种子，逐步修复生态。'},
+  {id:'farm',name:'循环农圃',category:'camp',cost:{wood:5,grass:5,seed:3},building:'farm',tech:'steward',desc:'研究共生实践后建造，每 75 秒产出浆果与种子。研究前先用「播种青杉」完成三次播种。'},
   {id:'resonator',name:'共鸣台',category:'camp',cost:{stone:8,ingot:6,crystal:5,resonance:4},building:'resonator',tech:'crystal',desc:'科技与意识在此交汇。完成试炼后晋升二级。'},
   {id:'drill',name:'晶能采矿机',category:'advanced',cost:{stone:6,ingot:5,crystal:3},building:'drill',tech:'drilling',level:2,desc:'放在铜矿附近，每 15 秒产出 1 铜矿。进入附近按 E 取出。'},
   {id:'lantern',name:'长明灯',category:'advanced',cost:{ingot:2,crystal:3,resonance:5},building:'lantern',tech:'ward',level:2,desc:'持续照明，驱离夜影。帮助你建立远行路线。'},
   {id:'beacon',name:'星火信标',category:'advanced',cost:{ingot:7,crystal:5,board:5},building:'beacon',tech:'ward',level:2,desc:'在星陨高地建造。投入 10 共鸣，点亮信标，完成第二级试炼。'}
 ];
 TECHS.push(...EXTRA_TECHS);
-RECIPES.push(...EXTRA_RECIPES,...WILD_RECIPES,...EXPEDITION_RECIPES);
+RECIPES.push(...EXTRA_RECIPES,...WILD_RECIPES,...EXPEDITION_RECIPES,...HOME_RECIPES);
 export const BUILDING_NAMES = Object.fromEntries(RECIPES.filter(r=>r.building).map(r=>[r.building,r.name]));
 export function phase(s){const t=s.time%WORLD.dayLength;return t<190?'day':t<230?'dusk':'night';}
 export function day(s){return Math.floor(s.time/WORLD.dayLength)+1;}
@@ -75,14 +78,14 @@ export function affordable(s,cost={}){return Object.entries(cost).every(([id,n])
 function pay(s,cost={}){for(const[id,n]of Object.entries(cost)){if(id==='insight'||id==='resonance')s[id]-=n;else s.inventory[id]-=n;}}
 function give(s,items){for(const[id,n]of Object.entries(items))s.inventory[id]=Math.min(9999,(s.inventory[id]||0)+n);}
 function discovered(s,key,reward=3){if(s.discoveries.includes(key))return;s.discoveries.push(key);s.insight+=reward;}
-export function createGame(seed=20261022){
+export function createGame(seed=20261022,mode='survival'){
   const s={version:VERSION,seed,rng:seed>>>0,time:28,level:1,status:'playing',player:{...WORLD.spawn,hp:100,hunger:100,clarity:100,face:1,walk:0},inventory:{berry:2,grass:2},durability:{},insight:0,resonance:0,ecology:78,tech:[],nodes:[],buildings:[],enemies:[],discoveries:[],visited:['bay'],explored:[],journal:[{day:1,text:'你在苔湾醒来。远处的古老信标仍然沉默。'}],stats:{gathered:0,crafted:0,planted:0,nights:0,defeated:0},crafted:[],target:null,path:[],action:null,attackCooldown:0,interactCooldown:0,meditationCooldown:0,torchOn:false,torchFuel:0,darkTime:0,enemyClock:0,messageSeq:0,message:null,fx:[],chapterCompleted:false};
   const add=(type,x,y)=>s.nodes.push({id:'n'+s.nodes.length,type,x,y,hp:NODES[type].hp,available:true,respawnAt:0});
   for(const[type,dx,dy]of[['twig',-65,20],['twig',95,-30],['flint',45,75],['flint',-100,-75],['grass',-20,105],['grass',90,105],['tree',-155,-105],['tree',-220,35],['tree',-145,150],['rock',190,-80],['bush',160,90],['flower',-200,210]])add(type,WORLD.spawn.x+dx,WORLD.spawn.y+dy);
   const scatter=(type,count,filter=()=>true)=>{for(let i=0;i<count;i++){let ok=false;for(let j=0;j<500&&!ok;j++){const x=300+random(s)*3000,y=350+random(s)*2150;if(!isLand(x,y)||!filter(x,y)||distance({x,y},WORLD.spawn)<220||s.nodes.some(n=>distance(n,{x,y})<55))continue;add(type,x,y);ok=true;}}};
   scatter('tree',70,(x,y)=>x<2300&&biome(x,y).id!=='ridge');scatter('rock',28);scatter('ore',25,(x,y)=>x>1850&&y<1750);scatter('crystal',15,(x,y)=>x>1900);scatter('bush',25,(x,y)=>y>1000);scatter('grass',35);scatter('twig',22,(x)=>x<2450);scatter('flint',22);scatter('flower',22,(x,y)=>y>1650);
   add('ruin',1690,1320);add('ruin',2120,1880);add('ruin',965,1000);add('ruin',2850,690);
-  initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);reveal(s);return s;
+  initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);initHomestead(s);s.homestead.mode=mode==='explore'?'explore':'survival';reveal(s);return s;
 }
 export function nearby(s,type,radius=155){return s.buildings.find(b=>(!type||b.type===type)&&distance(s.player,b)<radius&&!(b.type==='campfire'&&b.fuel<=0));}
 export function nearest(s,range=90){
@@ -93,14 +96,16 @@ export function recipeReason(s,r){
   if(!r)return'未知配方';if(s.status!=='playing')return'当前旅程已结束';
   if(r.item&&ITEMS[r.item]?.unique&&s.inventory[r.item])return'已经拥有';
   if(r.level&&s.level<r.level)return'需要'+r.level+'级文明';
+  if(r.item&&!ITEMS[r.item]?.durability&&!ITEMS[r.item]?.unique&&amount(s,r.item)+(r.count||1)>9999)return'背包容量不足';
+  if(r.contract&&!s.homestead.completed.length)return'完成第一项远征委托后解锁';
   if(r.tech&&!s.tech.includes(r.tech))return'需要研究「'+TECHS.find(t=>t.id===r.tech).name+'」';
   if(r.station&&!nearby(s,r.station))return'需要靠近'+(r.station==='campfire'?'燃烧的营火':BUILDING_NAMES[r.station]);
-  if(!affordable(s,r.cost))return'材料不足';return'';
+  if(!craftAffordable(s,r.cost))return'材料不足（可用身边 180 步内储物箱）';return'';
 }
 export function craft(s,id){
   const r=RECIPES.find(r=>r.id===id),reason=recipeReason(s,r);if(reason)return fail(s,reason);
   if(r.building)return{ok:true,placing:r.building};
-  pay(s,r.cost);give(s,{[r.item]:r.count||1});
+  payCraft(s,r.cost);give(s,{[r.item]:r.count||1});
   if(ITEMS[r.item].durability){s.inventory[r.item]=1;s.durability[r.item]=ITEMS[r.item].durability;}
   if(WEAPONS[r.item])s.expedition.equipped=r.item;
   if(r.item==='torch'){if(!s.torchFuel)s.torchFuel=120;s.torchOn=true;}
@@ -111,30 +116,46 @@ export function craft(s,id){
 export function placementReason(s,type,x,y){
   if(!Number.isFinite(x)||!Number.isFinite(y)||!walkable(s,x,y))return'这里无法建造';if(distance(s.player,{x,y})>210)return'请走近再建造';
   if(s.buildings.some(b=>distance(b,{x,y})<88))return'离其他建筑太近';
-  if(s.nodes.some(n=>n.available&&['tree','rock','ore','crystal','ruin','trial','meteor','burrow','wormhole','emberstone','froststone'].includes(n.type)&&distance(n,{x,y})<54))return'需要一片空地';
+  if(s.nodes.some(n=>n.available&&['tree','rock','ore','crystal','ruin','trial','meteor','burrow','wormhole','emberstone','froststone','fieldsite','lostpack'].includes(n.type)&&distance(n,{x,y})<54))return'需要一片空地';
   if(type==='trap'&&!s.nodes.some(n=>n.type==='burrow'&&distance(n,{x,y})<180))return'诱捕笼需要放在兔洞 180 步内';
   if(type==='drill'&&!s.nodes.some(n=>n.type==='ore'&&distance(n,{x,y})<240))return'采矿机需要放在铜矿脉附近';
   if(type==='beacon'&&biome(x,y).id!=='highland')return'星火信标需要建在星陨高地';return'';
 }
 export function place(s,id,x,y){
   const r=RECIPES.find(r=>r.building===id),reason=recipeReason(s,r)||placementReason(s,id,x,y);if(reason)return fail(s,reason);
-  pay(s,r.cost);s.buildings.push({id:'b'+s.stats.crafted+'-'+Math.floor(s.time*100),type:id,x,y,fuel:id==='campfire'?150:0,readyAt:s.time+75,stored:0,productionAt:s.time,workingUntil:0,...(['cookpot','trap'].includes(id)?{inventory:{}}:{})});
+  payCraft(s,r.cost);s.buildings.push({id:'b'+s.stats.crafted+'-'+Math.floor(s.time*100),type:id,x,y,fuel:id==='campfire'?150:0,readyAt:s.time+75,stored:0,productionAt:s.time,workingUntil:0,...(['cookpot','trap','nursery','dryingrack'].includes(id)?{inventory:{}}:{})});
   if(!s.crafted.includes(id)){s.crafted.push(id);s.insight+=3;}s.stats.crafted++;say(s,'建成「'+r.name+'」。',true);return{ok:true};
 }
 export function placementNearPlayer(s,type){
   for(const r of[95,135,180])for(let a=0;a<Math.PI*2;a+=Math.PI/8){const x=s.player.x+Math.cos(a)*r,y=s.player.y+Math.sin(a)*r;if(!placementReason(s,type,x,y))return{x,y};}return null;
 }
-export function plant(s,x=s.player.x+35,y=s.player.y+35){
+export function plantingReason(s,x,y){
+  if(s.status!=='playing')return'当前旅程已经结束';
+  if(!s.inventory.seed)return'需要 1 颗种子；采集浆果丛或砍伐青杉可获得';
+  if(!Number.isFinite(x)||!Number.isFinite(y)||!walkable(s,x,y))return'请在陆地空地上播种';
+  if(distance(s.player,{x,y})>160)return'请走近一些，在身边 160 步内播种';
+  if(s.nodes.some(n=>(n.available||n.sapling)&&distance(n,{x,y})<36)||s.buildings.some(b=>distance(b,{x,y})<55))return'离资源或设施太近，请换一片空地';
+  return'';
+}
+export function plantingNearPlayer(s){
+  for(const r of[50,85,120,150])for(let i=0;i<16;i++){
+    const x=s.player.x+Math.cos(i*Math.PI/8)*r,y=s.player.y+Math.sin(i*Math.PI/8)*r;
+    if(!plantingReason(s,x,y))return{x,y};
+  }
+  return null;
+}
+export function plant(s,x,y){
   if(s.status!=='playing')return fail(s,'当前旅程已经结束');
-  if(!s.inventory.seed)return fail(s,'需要 1 颗种子');
-  if(!walkable(s,x,y)||distance(s.player,{x,y})>160||s.nodes.some(n=>(n.available||n.sapling)&&distance(n,{x,y})<36)||s.buildings.some(b=>distance(b,{x,y})<55))return fail(s,'请在空地上播种');
+  if(x===undefined&&y===undefined){const p=plantingNearPlayer(s);if(!p)return fail(s,!s.inventory.seed?'需要 1 颗种子；采集浆果丛或砍伐青杉可获得':'身边没有可播种的空地，移动后再试');({x,y}=p);}
+  const reason=plantingReason(s,x,y);if(reason)return fail(s,reason);
   s.inventory.seed--;s.stats.planted++;s.ecology=clamp(s.ecology+3);s.nodes.push({id:'p'+s.stats.planted,type:'tree',x,y,hp:3,available:false,respawnAt:s.time+85,sapling:true});say(s,'种下一株青杉。生态 +3；成长后共鸣 +1。');return{ok:true};
 }
 export function useItem(s,id){
   if(s.status!=='playing')return fail(s,'当前旅程已经结束');
   if(!s.inventory[id])return fail(s,'背包中没有'+(ITEMS[id]?.name||'该物品'));
-  const item=ITEMS[id];if(item.food||item.health){s.inventory[id]--;s.player.hunger=clamp(s.player.hunger+(item.food||0));s.player.clarity=clamp(s.player.clarity+(item.clarity||0));if(id==='fishsoup')s.living.temperature+=(25-s.living.temperature)*.5;if(['stew','feast','fishsoup'].includes(id))s.wilderness.wetness=Math.max(0,s.wilderness.wetness-25);s.player.hp=clamp(s.player.hp+(item.health||0),0,maxHealth(s));say(s,`使用${item.name}，${item.food?'饱食 +'+item.food:'生命 +'+item.health}。`);return{ok:true};}
+  const item=ITEMS[id];if(item.food||item.health){if(item.satiety)s.homestead.satiety=item.satiety;if(item.warmth)s.living.temperature+=(25-s.living.temperature)*.5;s.inventory[id]--;s.player.hunger=clamp(s.player.hunger+(item.food||0));s.player.clarity=clamp(s.player.clarity+(item.clarity||0));if(id==='fishsoup')s.living.temperature+=(25-s.living.temperature)*.5;if(['stew','feast','fishsoup'].includes(id))s.wilderness.wetness=Math.max(0,s.wilderness.wetness-25);s.player.hp=clamp(s.player.hp+(item.health||0),0,maxHealth(s));say(s,`使用${item.name}，${item.food?'饱食 +'+item.food:'生命 +'+item.health}。`);return{ok:true};}
   if(WEAPONS[id]){const result=equip(s,id);if(result.ok)say(s,'已装备'+item.name+'。');return result;}
+  if(id==='lure')return placeLure(s);
   if(id==='coat')return fail(s,'毛皮披肩已自动穿戴，淋雨速度降低 75%。');
   if(id==='torch'){s.torchOn=!s.torchOn;s.torchFuel||=120;say(s,s.torchOn?'点亮火炬。':'熄灭火炬，保存燃料。');return{ok:true};}
   if(id==='seed')return plant(s);
@@ -148,6 +169,15 @@ export function researchReason(s,t){
   if(!affordable(s,t.cost))return'研究资源不足';return'';
 }
 export function research(s,id){const t=TECHS.find(t=>t.id===id);if(!t)return fail(s,'未知研究');const reason=researchReason(s,t);if(reason)return fail(s,reason);pay(s,t.cost);s.tech.push(id);say(s,'点亮科技：「'+t.name+'」。',true);return{ok:true};}
+export function meditationReason(s,b){
+  if(s.status!=='playing')return'当前旅程已经结束';
+  if(!b||b.type!=='campfire'||b.fuel<=0)return'需要一处燃烧的营火';
+  if(distance(s.player,b)>180)return'请先走近营火';
+  if(!s.tech.includes('observe'))return'先研究「万物观察」';
+  if(s.meditationCooldown>0)return`心绪尚未平复，还需 ${Math.ceil(s.meditationCooldown)} 秒`;
+  if(!s.inventory.flower)return'需要 1 朵荧光花';
+  return'';
+}
 export function promotionRequirements(s){return[
   {ok:s.tech.includes('crystal'),text:'完成物质研究「晶体导能」'},
   {ok:s.tech.includes('resonate'),text:'完成意识研究「意识共振」'},
@@ -159,6 +189,7 @@ export function promotionRequirements(s){return[
 export function stationAction(s,action,id){
   if(s.status!=='playing')return fail(s,'当前旅程已经结束');
   const b=s.buildings.find(b=>b.id===id);if(!b||distance(s.player,b)>180)return fail(s,'请先走近设施');
+  if(action==='dry'||action==='home-collect'||action.startsWith('sow:'))return homeStation(s,b,action);
   if(action==='collect'||action==='bait'||action.startsWith('cook:'))return campAction(s,b,action);
   if(action==='ascend')return ascend(s,b);
   if(action.startsWith('manifest:'))return manifest(s,b,action.split(':')[1]);
@@ -167,7 +198,7 @@ export function stationAction(s,action,id){
     if(b.type!=='campfire')return fail(s,'这里不能添柴');if(!s.inventory.wood)return fail(s,'需要 1 木材');if(b.fuel>=280)return fail(s,'燃料已经充足');s.inventory.wood--;b.fuel=Math.min(300,b.fuel+70);say(s,'为营火添柴，增加 70 秒燃料。');return{ok:true};
   }
   if(action==='meditate'){
-    if(b.type!=='campfire'||b.fuel<=0)return fail(s,'需要一处燃烧的营火');if(!s.tech.includes('observe'))return fail(s,'先研究「万物观察」');if(s.meditationCooldown>0)return fail(s,`心绪尚未平复，还需 ${Math.ceil(s.meditationCooldown)} 秒`);if(!s.inventory.flower)return fail(s,'需要 1 朵荧光花');s.inventory.flower--;s.resonance=Math.min(100,s.resonance+4);s.player.clarity=clamp(s.player.clarity+18);s.meditationCooldown=12;say(s,'你听见了风与树林的回应。共鸣 +4，意识 +18。',true);return{ok:true};
+    const reason=meditationReason(s,b);if(reason)return fail(s,reason);s.inventory.flower--;s.resonance=Math.min(100,s.resonance+4);s.player.clarity=clamp(s.player.clarity+18);s.meditationCooldown=12;say(s,'你听见了风与树林的回应。共鸣 +4，意识 +18。',true);return{ok:true};
   }
   if(action==='sleep'){
     if(b.type!=='campfire'||b.fuel<65)return fail(s,'营火至少需要 65 秒燃料');if(!s.inventory.bedroll)return fail(s,'需要草编睡袋');if(phase(s)==='day')return fail(s,'黄昏与夜晚才能休息');if(s.player.hunger<30)return fail(s,'饱食不足 30，先吃些食物');if([...s.enemies,...s.expedition.creatures.filter(m=>m.hp>0)].some(e=>distance(e,s.player)<280))return fail(s,'附近有夜影，暂时无法安睡');
@@ -188,6 +219,9 @@ export function interact(s,id){
   if(n?.building)n=s.buildings.find(b=>b.id===n.id);
   if(!n)return fail(s,'走近资源后按 E，或点击资源自动走近采集');
   if(distance(s.player,n)>95)return fail(s,'再走近一些');
+  if(n.type==='lostpack')return reclaimPack(s,n.id);
+  if(n.type==='fieldsite')return{ok:true,panel:'fieldsite',buildingId:n.id};
+  if(n.type==='fielddesk')return{ok:true,panel:'missions'};
   if(n.type==='wormhole')return{ok:true,panel:'rift',buildingId:n.id};
   if(n.type==='burrow')return fail(s,'在兔洞 180 步内放置诱捕笼，加入浆果，等待野兔来访。');
   if(n.type==='trial')return{ok:true,panel:'trial',trialId:n.trialId};
@@ -233,7 +267,8 @@ export function lightAt(s,x,y){
   return s.buildings.some(b=>((b.type==='campfire'&&b.fuel>0)||b.type==='lantern'||(b.type==='beacon'&&s.chapterCompleted))&&distance(b,{x,y})<(b.type==='lantern'?215:b.type==='beacon'?260:190));
 }
 export function attack(s){return expeditionAttack(s,{give,say});}
-export function enterWormhole(s,id){return travel(s,id,{nodes:NODES,isLand,say});}
+export function enterWormhole(s,id){const result=travel(s,id,{nodes:NODES,isLand,say});if(result.ok)initHomestead(s);return result;}
+export function recoverAtCamp(s){return recover(s,(state,to)=>switchRealm(state,to,{nodes:NODES,isLand,say}));}
 export function dodgeRoll(s,dx=0,dy=0){return dodge(s,dx,dy,walkable);}
 function reveal(s){const cx=Math.floor(s.player.x/160),cy=Math.floor(s.player.y/160);for(let x=cx-2;x<=cx+2;x++)for(let y=cy-2;y<=cy+2;y++){const k=x+','+y;if(x>=0&&y>=0&&x<23&&y<18&&!s.explored.includes(k))s.explored.push(k);}}
 export function step(s,dt,input={}){
@@ -249,8 +284,8 @@ export function step(s,dt,input={}){
   if(input.interact&&!s.channel&&!s.action&&s.interactCooldown<=0){const n=nearest(s);if(n&&NODES[n.type]){interact(s,n.id);s.interactCooldown=.65;}}
   if(s.action){const n=s.nodes.find(n=>n.id===s.action.id);if(!n||distance(p,n)>105)s.action=null;else{s.action.elapsed+=dt;if(s.action.elapsed>=s.action.duration)finishHarvest(s);}}
   if(input.attack)attack(s);
-  p.hunger=clamp(p.hunger-(s.level>=9?0:dt*(manual&&input.sprint?.12:.065)*(s.level>=7?.5:1)));
-  advanceExpansion(s,dt,manual||input.attack);stepWilderness(s,dt);stepSeasons(s,dt);stepExpedition(s,dt,walkable);
+  p.hunger=clamp(p.hunger-(s.level>=9?0:dt*(s.homestead.satiety>0?.6:1)*(manual&&input.sprint?.12:.065)*(s.level>=7?.5:1)));
+  advanceExpansion(s,dt,manual||input.attack);stepWilderness(s,dt);stepSeasons(s,dt);stepExpedition(s,dt,walkable);stepHomestead(s,dt,manual||input.attack);
   if(s.level>=7)p.hp=clamp(p.hp+dt*.12,0,maxHealth(s));
   const ph=phase(s),lit=lightAt(s,p.x,p.y);
   if(ph==='night'&&!lit){s.darkTime+=dt;p.clarity=clamp(p.clarity-dt*.32);if(s.darkTime>7)p.hp-=dt*2.4;}else{s.darkTime=0;if(nearby(s,'campfire',180))p.clarity=clamp(p.clarity+dt*.26);}
@@ -275,6 +310,8 @@ export function getQuest(s){
   if(!s.buildings.some(b=>b.type==='campfire'))return{index:2,title:'在天黑前，留下一束光',text:'砍树、采石，建造你的第一堆营火。',progress:`木材 ${Math.min(5,amount(s,'wood'))}/5 · 石料 ${Math.min(4,amount(s,'stone'))}/4 · 纤维 ${Math.min(2,amount(s,'grass'))}/2`,hint:'先合成石镐开采岩石。营火建造后记得添柴。'};
   if(!s.buildings.some(b=>b.type==='table'))return{index:3,title:'把好奇变成知识',text:'建造研究台，开始探索物质与意识科技。',progress:`木材 ${Math.min(10,amount(s,'wood'))}/10 · 石料 ${Math.min(6,amount(s,'stone'))}/6`,hint:'探索新资源、制作新物品，都能获得洞见。'};
   if(!s.tech.includes('observe')||!s.tech.includes('stonework'))return{index:4,title:'两条成长的道路',text:'在研究台旁点亮「石器精研」和「万物观察」。',progress:`物质 ${s.tech.includes('stonework')?'✓':'待研究'} · 意识 ${s.tech.includes('observe')?'✓':'待研究'}`,hint:'按 T 打开科技树。营火冥想可以产生共鸣。'};
+  if(s.level===1&&!s.tech.includes('steward')&&s.stats.planted<3)return{index:5,title:'先播种，再学共生',text:'合成页选择「播种青杉」，用种子在空地种下三株树苗。无需科技。',progress:`已播种 ${s.stats.planted}/3 · 生态 ${Math.round(s.ecology)}`,hint:'种子来自浆果丛和青杉。每株生态 +3，85 秒成长后共鸣 +1；无需先建农圃。'};
+  if(s.level===1&&s.resonance<4)return{index:5,title:'听见营火的回应',text:'走近燃烧的营火，选择冥想。1 朵荧光花换 4 共鸣。',progress:`共鸣 ${Math.floor(s.resonance)}/4 · 荧光花 ${amount(s,'flower')}`,hint:'共鸣用于研究与晋升；意识是角色的生存状态。点击顶部共鸣可查看获取方式。'};
   if(s.level===1)return{index:5,title:'文明的第一次跃迁',text:'研究晶体导能与意识共振，建造并启动共鸣台。',progress:`已完成 ${promotionRequirements(s).filter(r=>r.ok).length}/6 项试炼条件`,hint:'铜矿在东部丘陵。种下种子、照料土地，度过第一个夜晚。'};
   if(!s.buildings.some(b=>b.type==='drill'))return{index:6,title:'让营地学会自持',text:'研究地脉采集，在铜矿旁建造晶能采矿机。',progress:'二级文明 · 自动采集已解锁',hint:'采矿机每 15 秒产出铜矿。靠近按 E 取出。'};
   if(!s.chapterCompleted)return{index:7,title:'把星火带到远方',text:'研究心光庇护，前往东北方星陨高地建造信标。',progress:`共鸣储备 ${Math.min(10,Math.floor(s.resonance))}/10`,hint:'带上口粮与火炬。完成信标后，在旁边按 E 启动。'};
@@ -283,7 +320,7 @@ export function getQuest(s){
 export function serialize(s){return JSON.stringify(s);}
 export function parseSave(raw){
   if(typeof raw!=='string'||raw.length>2000000)throw new Error('存档大小无效');const s=JSON.parse(raw),num=(n,a=0,b=1000000000)=>typeof n==='number'&&Number.isFinite(n)&&n>=a&&n<=b;
-  if(!s||![2,3,4,VERSION].includes(s.version)||!Number.isInteger(s.level)||s.level<1||s.level>9||!['playing','dead','won'].includes(s.status)||!num(s.time)||!num(s.seed,0,4294967295)||!num(s.rng,0,4294967295))throw new Error('不是受支持的九级生存存档');
+  if(!s||![2,3,4,5,VERSION].includes(s.version)||!Number.isInteger(s.level)||s.level<1||s.level>9||!['playing','dead','won'].includes(s.status)||!num(s.time)||!num(s.seed,0,4294967295)||!num(s.rng,0,4294967295))throw new Error('不是受支持的九级生存存档');
   if(!s.player||!num(s.player.x,0,WORLD.width)||!num(s.player.y,0,WORLD.height)||!num(s.player.hp,0,200)||!num(s.player.hunger,0,100)||!num(s.player.clarity,0,100))throw new Error('角色数据无效');
   if(!s.inventory||Array.isArray(s.inventory)||Object.entries(s.inventory).some(([k,v])=>!Object.hasOwn(ITEMS,k)||!Number.isInteger(v)||!num(v,0,9999)))throw new Error('背包数据无效');
   if(!s.durability||Object.entries(s.durability).some(([k,v])=>!ITEMS[k]?.durability||!num(v,0,ITEMS[k].durability)))throw new Error('工具数据无效');
@@ -297,7 +334,7 @@ export function parseSave(raw){
   if(s.version>=4)validateWilderness(s,num);
   if(s.version>=5&&!s.expedition)throw new Error('缺少远征进度');
   validateExpedition(s,num,map=>{validateMapState(map,num);validateExpansion(map,num);validateWilderness(map,num);if(!Array.isArray(map.explored)||map.explored.length>3000||map.explored.some(x=>typeof x!=='string'||x.length>80))throw new Error('区域迷雾数据无效');});
-  validateLiving(s);initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);
+  validateLiving(s);if(s.version>=6&&!s.homestead)throw new Error('缺少营地远征进度');validateHomestead(s,num);initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);initHomestead(s);
   if(typeof s.torchOn!=='boolean'||typeof s.chapterCompleted!=='boolean')throw new Error('存档状态无效');
   s.enemies=[];s.channel=null;s.action=null;s.target=null;s.path=[];s.fx=[];s.request=null;s.player.walk=0;s.message=null;return s;
 }
@@ -357,7 +394,7 @@ export function repair(s,item){
   if(s.status!=='playing'||!nearby(s,'table',185))return fail(s,'在研究台附近修理工具');if(!ITEMS[item]?.durability||!s.inventory[item])return fail(s,'没有这件装备');if(s.durability[item]>=ITEMS[item].durability)return fail(s,'耐久已经充足');const cost=({bow:{silk:1,twig:2},hammer:{stone:3,fang:1},frostSpear:{frostshard:2,ingot:1},emberStaff:{ember:3,wood:2}})[item]||(item==='copperSpear'?{ingot:1,wood:1}:item==='armor'?{grass:3,wood:1}:{flint:1,twig:1});if(!affordable(s,cost))return fail(s,'修理材料不足');pay(s,cost);s.durability[item]=ITEMS[item].durability;say(s,ITEMS[item].name+' 已修复。');return{ok:true};
 }
 export function dismantle(s,id){
-  const b=s.buildings.find(b=>b.id===id);if(s.status!=='playing'||!b||distance(s.player,b)>180)return fail(s,'走近设施后才能拆除');if(b.kitchen||b.baitAt)return fail(s,'请等待炖煮或诱捕完成');if(Object.values(b.inventory||{}).some(n=>n>0)||b.stored>0)return fail(s,'请先取空设施中的物品');const r=RECIPES.find(r=>r.building===b.type);const refund=Object.fromEntries(Object.entries(r.cost).filter(([k])=>Object.hasOwn(ITEMS,k)).map(([k,n])=>[k,Math.floor(n/2)]));give(s,refund);s.buildings=s.buildings.filter(x=>x.id!==id);say(s,'已拆除'+r.name+'，返还一半基础材料（向下取整）。',true);return{ok:true};
+  const b=s.buildings.find(b=>b.id===id);if(s.status!=='playing'||!b||distance(s.player,b)>180)return fail(s,'走近设施后才能拆除');if(b.kitchen||b.baitAt||b.crop)return fail(s,'请等待炖煮、诱捕或种植完成');if(Object.values(b.inventory||{}).some(n=>n>0)||b.stored>0)return fail(s,'请先取空设施中的物品');const r=RECIPES.find(r=>r.building===b.type);const refund=Object.fromEntries(Object.entries(r.cost).filter(([k])=>Object.hasOwn(ITEMS,k)).map(([k,n])=>[k,Math.floor(n/2)]));give(s,refund);s.buildings=s.buildings.filter(x=>x.id!==id);say(s,'已拆除'+r.name+'，返还一半基础材料（向下取整）。',true);return{ok:true};
 }
 function manifest(s,b,item){const packs={wood:12,stone:10,ore:8,crystal:4,berry:8,grass:10,seed:6};if(s.level<6||b.type!=='forge'||!Object.hasOwn(packs,item))return fail(s,'需要塑能台');if(s.expansion.manifestCooldown>0)return fail(s,'塑能台还需 '+Math.ceil(s.expansion.manifestCooldown)+' 秒恢复');if(s.resonance<3)return fail(s,'需要 3 共鸣');s.resonance-=3;give(s,{[item]:packs[item]});s.expansion.manifestCooldown=5;say(s,'显化'+ITEMS[item].name+' ×'+packs[item]+'。');return{ok:true};}
 export function chooseEnding(s,choice){if(s.status!=='playing'||s.level!==9||!['stay','return'].includes(choice)||s.expansion.ending)return fail(s,'尚未到达最终抉择');s.expansion.ending=choice;s.status='won';say(s,choice==='stay'?'你选择留下，做这片世界安静的守护者。':'你将经历归还星海，新的故事在远方醒来。',true);return{ok:true,won:true};}
@@ -376,13 +413,14 @@ function campAction(s,b,action){
   }
   const dish=DISHES.find(d=>d.id===action.split(':')[1]);if(b.type!=='cookpot'||!dish)return fail(s,'未知烹饪配方');
   if(b.kitchen||Object.values(b.inventory).some(n=>n>0))return fail(s,'请等待当前炖煮完成并领取成品');
-  if(!affordable(s,dish.cost))return fail(s,'烹饪材料不足');pay(s,dish.cost);b.kitchen={dish:dish.id,readyAt:s.time+dish.seconds};say(s,'开始炖煮，12 秒后即可领取。');return{ok:true};
+  if(!craftAffordable(s,dish.cost))return fail(s,'烹饪材料不足');payCraft(s,dish.cost);b.kitchen={dish:dish.id,readyAt:s.time+dish.seconds};say(s,'开始炖煮，12 秒后即可领取。');return{ok:true};
 }
 export function craftBatch(s,id,count=1){
   if(!Number.isInteger(count)||count<1||count>5)return fail(s,'制作数量无效');
   const r=RECIPES.find(r=>r.id===id);if(!r||r.building||ITEMS[r.item]?.durability||ITEMS[r.item]?.unique)return fail(s,'这项配方不支持批量制作');
   const reason=recipeReason(s,r);if(reason)return fail(s,reason);
-  if(!affordable(s,Object.fromEntries(Object.entries(r.cost).map(([k,n])=>[k,n*count]))))return fail(s,'批量制作材料不足');
+  if(amount(s,r.item)+(r.count||1)*count>9999)return fail(s,'背包容量不足，未消耗材料');
+  if(!craftAffordable(s,Object.fromEntries(Object.entries(r.cost).map(([k,n])=>[k,n*count]))))return fail(s,'批量制作材料不足');
   for(let i=0;i<count;i++)craft(s,id);say(s,'制作完成：'+r.name+' ×'+count);return{ok:true};
 }
 export function quickFuel(s){const b=s.buildings.filter(b=>b.type==='campfire'&&distance(b,s.player)<180).sort((a,b)=>distance(a,s.player)-distance(b,s.player))[0];return b?stationAction(s,'fuel',b.id):fail(s,'靠近营火后按 F 添柴');}

@@ -1,4 +1,4 @@
-import {weather,placementReason,BUILDING_NAMES} from './survival.js';
+import {weather,placementReason,plantingReason,BUILDING_NAMES} from './survival.js';
 // 绘图只读取世界状态，天气伤害与生产计时由生存规则计算。
 export function paintTerrain(view,id='home'){
   const canvas=document.createElement('canvas');canvas.width=3600;canvas.height=2800;
@@ -70,6 +70,13 @@ export function buildingPreview(view,c,s){
   c.setLineDash([6,7]);c.strokeStyle='#e8d7a670';c.beginPath();c.arc(s.player.x,s.player.y,210,0,7);c.stroke();c.setLineDash([]);
   c.fillStyle=bad?'#b74d3c44':'#d0d69244';c.strokeStyle=bad?'#f0a18a':'#efe4b1';c.beginPath();c.ellipse(p.x,p.y,48,25,0,0,7);c.fill();c.stroke();
   view.sprite(c,view.building,p.x,p.y,118,.7);label(c,bad||'点击建造 · '+BUILDING_NAMES[view.building],p.x,p.y-140,bad?'#f4baa3':'#f5e6bc');c.restore();
+}
+export function plantingPreview(view,c,s){
+  const p=view.pointer?view.toWorld(view.pointer.x,view.pointer.y):{x:s.player.x+65,y:s.player.y+45};
+  const bad=plantingReason(s,p.x,p.y);
+  c.save();c.setLineDash([5,8]);c.strokeStyle='#d5dc9b80';c.lineWidth=2;c.beginPath();c.arc(s.player.x,s.player.y,160,0,7);c.stroke();c.setLineDash([]);
+  c.fillStyle=bad?'#b74d3c55':'#a6d99466';c.strokeStyle=bad?'#f0a18a':'#e1efaa';c.beginPath();c.ellipse(p.x,p.y,25,14,0,0,7);c.fill();c.stroke();
+  view.sprite(c,'tree',p.x,p.y,48,.7);label(c,bad||'点击播种 · 1 种子 · 生态 +3',p.x,p.y-72,bad?'#f4baa3':'#f5e6bc');c.restore();
 }
 export function screenWeather(c,s,w,h){
   const rain=weather(s);if(rain.raining){
