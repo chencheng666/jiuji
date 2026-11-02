@@ -1,3 +1,6 @@
+import {FRONTIER_ITEMS,FRONTIER_RECIPES} from './frontier-data.js';
+import {initFrontier,stepFrontier,validateFrontier,frontierAction,chooseEncounter,claimDelivery} from './frontier.js';
+export {chooseEncounter,claimDelivery};
 import {REALMS,CREATURES,WEAPONS,EXPEDITION_ITEMS,EXPEDITION_NODES,EXPEDITION_RECIPES,realm,inHome,initExpedition,travel,equip,equippedWeapon,expeditionAttack,dodge,stepExpedition,validateExpedition,portalReason,switchRealm,effectiveWeapon} from './expeditions.js';
 export {REALMS,CREATURES,WEAPONS,realm,inHome,equippedWeapon,portalReason,effectiveWeapon};
 import {HOME_ITEMS,HOME_RECIPES,HOME_DISHES,initHomestead,stepHomestead,validateHomestead,craftAmount,craftAffordable,payCraft,acceptContract,claimContract,beginSite,homeStation,chooseSpecialty,recover,reclaimPack,placeLure} from './homestead.js';
@@ -9,12 +12,12 @@ export {DISHES,weather,shelterAt};
 import {LEVEL_NAMES,LEVEL_ROMAN,LEVEL_BENEFITS,EXTRA_ITEMS,EXTRA_NODES,EXTRA_TECHS,EXTRA_RECIPES,TRIALS,CHAPTERS} from './chapters.js';
 export {LEVEL_NAMES,LEVEL_ROMAN,LEVEL_BENEFITS,TRIALS,CHAPTERS};
 // 《九级》生存规则。世界、采集、制作与研究均可脱离画面独立验证。
-export const VERSION = 6;
+export const VERSION = 7;
 export const WORLD = { width: 3600, height: 2800, spawn: { x: 1260, y: 1640 }, dayLength: 300 };
 export const ITEMS = {
   wood:{name:'木材',icon:'wood'},twig:{name:'树枝',icon:'twig'},stone:{name:'石料',icon:'rock'},flint:{name:'燧石',icon:'flint'},grass:{name:'纤维',icon:'grass'},berry:{name:'浆果',icon:'bush',food:13,health:1},seed:{name:'种子',icon:'seed'},flower:{name:'荧光花',icon:'flower'},ore:{name:'铜矿',icon:'ore'},ingot:{name:'铜锭',icon:'ingot'},crystal:{name:'原晶',icon:'crystal'},board:{name:'木板',icon:'board'},cooked:{name:'烤浆果',icon:'food',food:30,health:7},ration:{name:'旅行口粮',icon:'food',food:48,health:12},axe:{name:'石斧',icon:'axe',durability:90},pickaxe:{name:'石镐',icon:'pickaxe',durability:110},spear:{name:'石矛',icon:'spear',durability:120},copperSpear:{name:'铜矛',icon:'spear',durability:180},torch:{name:'火炬',icon:'torch'},bedroll:{name:'草编睡袋',icon:'bedroll'}
 };
-Object.assign(ITEMS,EXTRA_ITEMS,WILD_ITEMS,EXPEDITION_ITEMS,HOME_ITEMS);
+Object.assign(ITEMS,EXTRA_ITEMS,WILD_ITEMS,EXPEDITION_ITEMS,HOME_ITEMS,FRONTIER_ITEMS);
 DISHES.push(...HOME_DISHES);
 export const RESOURCE_NAMES = {...Object.fromEntries(Object.entries(ITEMS).map(([k,v])=>[k,v.name])),insight:'洞见',resonance:'共鸣'};
 export const NODES = {
@@ -29,7 +32,7 @@ export const NODES = {
   flower:{name:'荧光花',hp:1,time:.65,drop:{flower:3},regrow:170},
   ruin:{name:'先行者遗迹',hp:1,time:1.8,drop:{crystal:2},insight:9,resonance:3}
 };
-Object.assign(NODES,EXTRA_NODES,WILD_NODES,EXPEDITION_NODES,{fieldsite:{name:'荒野探索点',hp:1,time:0,drop:{}},lostpack:{name:'遗落包',hp:1,time:0,drop:{}}});
+Object.assign(NODES,EXTRA_NODES,WILD_NODES,EXPEDITION_NODES,{fieldsite:{name:'荒野探索点',hp:1,time:0,drop:{}},lostpack:{name:'遗落包',hp:1,time:0,drop:{}},encounter:{name:'远征遭遇',hp:1,time:0,drop:{}}});
 export const TECHS = [
   {id:'stonework',name:'石器精研',branch:'matter',cost:{insight:4,stone:6},requires:[],text:'解锁熔炉。更好地理解材料，开始建设稳定营地。'},
   {id:'smelting',name:'金属冶炼',branch:'matter',cost:{insight:7,ore:6},requires:['stonework'],text:'在熔炉旁冶炼铜锭，制作更耐用的铜矛。'},
@@ -61,7 +64,7 @@ export const RECIPES = [
   {id:'beacon',name:'星火信标',category:'advanced',cost:{ingot:7,crystal:5,board:5},building:'beacon',tech:'ward',level:2,desc:'在星陨高地建造。投入 10 共鸣，点亮信标，完成第二级试炼。'}
 ];
 TECHS.push(...EXTRA_TECHS);
-RECIPES.push(...EXTRA_RECIPES,...WILD_RECIPES,...EXPEDITION_RECIPES,...HOME_RECIPES);
+RECIPES.push(...EXTRA_RECIPES,...WILD_RECIPES,...EXPEDITION_RECIPES,...HOME_RECIPES,...FRONTIER_RECIPES);
 export const BUILDING_NAMES = Object.fromEntries(RECIPES.filter(r=>r.building).map(r=>[r.building,r.name]));
 export function phase(s){const t=s.time%WORLD.dayLength;return t<190?'day':t<230?'dusk':'night';}
 export function day(s){return Math.floor(s.time/WORLD.dayLength)+1;}
@@ -85,7 +88,7 @@ export function createGame(seed=20261022,mode='survival'){
   const scatter=(type,count,filter=()=>true)=>{for(let i=0;i<count;i++){let ok=false;for(let j=0;j<500&&!ok;j++){const x=300+random(s)*3000,y=350+random(s)*2150;if(!isLand(x,y)||!filter(x,y)||distance({x,y},WORLD.spawn)<220||s.nodes.some(n=>distance(n,{x,y})<55))continue;add(type,x,y);ok=true;}}};
   scatter('tree',70,(x,y)=>x<2300&&biome(x,y).id!=='ridge');scatter('rock',28);scatter('ore',25,(x,y)=>x>1850&&y<1750);scatter('crystal',15,(x,y)=>x>1900);scatter('bush',25,(x,y)=>y>1000);scatter('grass',35);scatter('twig',22,(x)=>x<2450);scatter('flint',22);scatter('flower',22,(x,y)=>y>1650);
   add('ruin',1690,1320);add('ruin',2120,1880);add('ruin',965,1000);add('ruin',2850,690);
-  initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);initHomestead(s);s.homestead.mode=mode==='explore'?'explore':'survival';reveal(s);return s;
+  initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);initHomestead(s);initFrontier(s);s.homestead.mode=mode==='explore'?'explore':'survival';reveal(s);return s;
 }
 export function nearby(s,type,radius=155){return s.buildings.find(b=>(!type||b.type===type)&&distance(s.player,b)<radius&&!(b.type==='campfire'&&b.fuel<=0));}
 export function nearest(s,range=90){
@@ -116,14 +119,14 @@ export function craft(s,id){
 export function placementReason(s,type,x,y){
   if(!Number.isFinite(x)||!Number.isFinite(y)||!walkable(s,x,y))return'这里无法建造';if(distance(s.player,{x,y})>210)return'请走近再建造';
   if(s.buildings.some(b=>distance(b,{x,y})<88))return'离其他建筑太近';
-  if(s.nodes.some(n=>n.available&&['tree','rock','ore','crystal','ruin','trial','meteor','burrow','wormhole','emberstone','froststone','fieldsite','lostpack'].includes(n.type)&&distance(n,{x,y})<54))return'需要一片空地';
+  if(s.nodes.some(n=>n.available&&['tree','rock','ore','crystal','ruin','trial','meteor','burrow','wormhole','emberstone','froststone','fieldsite','lostpack','encounter'].includes(n.type)&&distance(n,{x,y})<54))return'需要一片空地';
   if(type==='trap'&&!s.nodes.some(n=>n.type==='burrow'&&distance(n,{x,y})<180))return'诱捕笼需要放在兔洞 180 步内';
   if(type==='drill'&&!s.nodes.some(n=>n.type==='ore'&&distance(n,{x,y})<240))return'采矿机需要放在铜矿脉附近';
   if(type==='beacon'&&biome(x,y).id!=='highland')return'星火信标需要建在星陨高地';return'';
 }
 export function place(s,id,x,y){
   const r=RECIPES.find(r=>r.building===id),reason=recipeReason(s,r)||placementReason(s,id,x,y);if(reason)return fail(s,reason);
-  payCraft(s,r.cost);s.buildings.push({id:'b'+s.stats.crafted+'-'+Math.floor(s.time*100),type:id,x,y,fuel:id==='campfire'?150:0,readyAt:s.time+75,stored:0,productionAt:s.time,workingUntil:0,...(['cookpot','trap','nursery','dryingrack'].includes(id)?{inventory:{}}:{})});
+  payCraft(s,r.cost);s.buildings.push({id:'b'+s.stats.crafted+'-'+Math.floor(s.time*100),type:id,x,y,fuel:id==='campfire'?150:0,readyAt:s.time+75,stored:0,productionAt:s.time,workingUntil:0,...(['cookpot','trap','nursery','dryingrack','composter','relaywork','matterloom','aidbeacon'].includes(id)?{inventory:{}}:{})});
   if(!s.crafted.includes(id)){s.crafted.push(id);s.insight+=3;}s.stats.crafted++;say(s,'建成「'+r.name+'」。',true);return{ok:true};
 }
 export function placementNearPlayer(s,type){
@@ -189,6 +192,7 @@ export function promotionRequirements(s){return[
 export function stationAction(s,action,id){
   if(s.status!=='playing')return fail(s,'当前旅程已经结束');
   const b=s.buildings.find(b=>b.id===id);if(!b||distance(s.player,b)>180)return fail(s,'请先走近设施');
+  if(['frontier-collect','improve','fertilize','soil'].includes(action)||action.startsWith('job:')||action.startsWith('aid:'))return frontierAction(s,b,action);
   if(action==='dry'||action==='home-collect'||action.startsWith('sow:'))return homeStation(s,b,action);
   if(action==='collect'||action==='bait'||action.startsWith('cook:'))return campAction(s,b,action);
   if(action==='ascend')return ascend(s,b);
@@ -220,6 +224,7 @@ export function interact(s,id){
   if(!n)return fail(s,'走近资源后按 E，或点击资源自动走近采集');
   if(distance(s.player,n)>95)return fail(s,'再走近一些');
   if(n.type==='lostpack')return reclaimPack(s,n.id);
+  if(n.type==='encounter')return{ok:true,panel:'encounter',buildingId:n.id};
   if(n.type==='fieldsite')return{ok:true,panel:'fieldsite',buildingId:n.id};
   if(n.type==='fielddesk')return{ok:true,panel:'missions'};
   if(n.type==='wormhole')return{ok:true,panel:'rift',buildingId:n.id};
@@ -267,7 +272,7 @@ export function lightAt(s,x,y){
   return s.buildings.some(b=>((b.type==='campfire'&&b.fuel>0)||b.type==='lantern'||(b.type==='beacon'&&s.chapterCompleted))&&distance(b,{x,y})<(b.type==='lantern'?215:b.type==='beacon'?260:190));
 }
 export function attack(s){return expeditionAttack(s,{give,say});}
-export function enterWormhole(s,id){const result=travel(s,id,{nodes:NODES,isLand,say});if(result.ok)initHomestead(s);return result;}
+export function enterWormhole(s,id){const result=travel(s,id,{nodes:NODES,isLand,say});if(result.ok){initHomestead(s);initFrontier(s);}return result;}
 export function recoverAtCamp(s){return recover(s,(state,to)=>switchRealm(state,to,{nodes:NODES,isLand,say}));}
 export function dodgeRoll(s,dx=0,dy=0){return dodge(s,dx,dy,walkable);}
 function reveal(s){const cx=Math.floor(s.player.x/160),cy=Math.floor(s.player.y/160);for(let x=cx-2;x<=cx+2;x++)for(let y=cy-2;y<=cy+2;y++){const k=x+','+y;if(x>=0&&y>=0&&x<23&&y<18&&!s.explored.includes(k))s.explored.push(k);}}
@@ -285,7 +290,7 @@ export function step(s,dt,input={}){
   if(s.action){const n=s.nodes.find(n=>n.id===s.action.id);if(!n||distance(p,n)>105)s.action=null;else{s.action.elapsed+=dt;if(s.action.elapsed>=s.action.duration)finishHarvest(s);}}
   if(input.attack)attack(s);
   p.hunger=clamp(p.hunger-(s.level>=9?0:dt*(s.homestead.satiety>0?.6:1)*(manual&&input.sprint?.12:.065)*(s.level>=7?.5:1)));
-  advanceExpansion(s,dt,manual||input.attack);stepWilderness(s,dt);stepSeasons(s,dt);stepExpedition(s,dt,walkable);stepHomestead(s,dt,manual||input.attack);
+  advanceExpansion(s,dt,manual||input.attack);stepWilderness(s,dt);stepSeasons(s,dt);stepExpedition(s,dt,walkable);stepHomestead(s,dt,manual||input.attack);stepFrontier(s,dt);
   if(s.level>=7)p.hp=clamp(p.hp+dt*.12,0,maxHealth(s));
   const ph=phase(s),lit=lightAt(s,p.x,p.y);
   if(ph==='night'&&!lit){s.darkTime+=dt;p.clarity=clamp(p.clarity-dt*.32);if(s.darkTime>7)p.hp-=dt*2.4;}else{s.darkTime=0;if(nearby(s,'campfire',180))p.clarity=clamp(p.clarity+dt*.26);}
@@ -320,7 +325,7 @@ export function getQuest(s){
 export function serialize(s){return JSON.stringify(s);}
 export function parseSave(raw){
   if(typeof raw!=='string'||raw.length>2000000)throw new Error('存档大小无效');const s=JSON.parse(raw),num=(n,a=0,b=1000000000)=>typeof n==='number'&&Number.isFinite(n)&&n>=a&&n<=b;
-  if(!s||![2,3,4,5,VERSION].includes(s.version)||!Number.isInteger(s.level)||s.level<1||s.level>9||!['playing','dead','won'].includes(s.status)||!num(s.time)||!num(s.seed,0,4294967295)||!num(s.rng,0,4294967295))throw new Error('不是受支持的九级生存存档');
+  if(!s||![2,3,4,5,6,VERSION].includes(s.version)||!Number.isInteger(s.level)||s.level<1||s.level>9||!['playing','dead','won'].includes(s.status)||!num(s.time)||!num(s.seed,0,4294967295)||!num(s.rng,0,4294967295))throw new Error('不是受支持的九级生存存档');
   if(!s.player||!num(s.player.x,0,WORLD.width)||!num(s.player.y,0,WORLD.height)||!num(s.player.hp,0,200)||!num(s.player.hunger,0,100)||!num(s.player.clarity,0,100))throw new Error('角色数据无效');
   if(!s.inventory||Array.isArray(s.inventory)||Object.entries(s.inventory).some(([k,v])=>!Object.hasOwn(ITEMS,k)||!Number.isInteger(v)||!num(v,0,9999)))throw new Error('背包数据无效');
   if(!s.durability||Object.entries(s.durability).some(([k,v])=>!ITEMS[k]?.durability||!num(v,0,ITEMS[k].durability)))throw new Error('工具数据无效');
@@ -334,7 +339,7 @@ export function parseSave(raw){
   if(s.version>=4)validateWilderness(s,num);
   if(s.version>=5&&!s.expedition)throw new Error('缺少远征进度');
   validateExpedition(s,num,map=>{validateMapState(map,num);validateExpansion(map,num);validateWilderness(map,num);if(!Array.isArray(map.explored)||map.explored.length>3000||map.explored.some(x=>typeof x!=='string'||x.length>80))throw new Error('区域迷雾数据无效');});
-  validateLiving(s);if(s.version>=6&&!s.homestead)throw new Error('缺少营地远征进度');validateHomestead(s,num);initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);initHomestead(s);
+  validateLiving(s);if(s.version>=6&&!s.homestead)throw new Error('缺少营地远征进度');validateHomestead(s,num);if(s.version>=7&&!s.frontier)throw Error('缺少营地经营进度');validateFrontier(s,num);initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);initHomestead(s);initFrontier(s);
   if(typeof s.torchOn!=='boolean'||typeof s.chapterCompleted!=='boolean')throw new Error('存档状态无效');
   s.enemies=[];s.channel=null;s.action=null;s.target=null;s.path=[];s.fx=[];s.request=null;s.player.walk=0;s.message=null;return s;
 }
