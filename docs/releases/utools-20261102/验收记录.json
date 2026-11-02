@@ -1,0 +1,48 @@
+{
+  "marketName": "饥荒升级版-九级",
+  "applicationId": "zlvyqyjb",
+  "version": "1.3.1",
+  "sourceCommit": "d58ec0d",
+  "directoryBackup": {
+    "name": "Jiuji-utools-v1.3.1-目录备份.zip",
+    "bytes": 167300,
+    "sha256": "3c739efa8fab6c343141fc6e1a78e976d40aabc5e9272e54d0dfaaa48ce3a14b",
+    "formalInstaller": false
+  },
+  "checks": {
+    "rulesPassed": 84,
+    "syntaxPassed": true,
+    "browserFileProtocol": true,
+    "svgAndCanvasVisible": true,
+    "gatherAndCraftAxe": true,
+    "automaticSaveAndReload": true,
+    "level6SaveImport": true,
+    "expeditionSaveImport": true,
+    "automaticHttpResourceRequests": 0
+  },
+  "privacy": {
+    "automaticTelemetry": false,
+    "gameNodeIntegration": false,
+    "contextIsolation": true,
+    "webSecurity": true,
+    "preload": false,
+    "connectSrc": "none"
+  },
+  "native": {
+    "system": "macOS",
+    "utools": "7.8.0",
+    "applicationCreated": true,
+    "sourceImported": false,
+    "nativeGameValidated": false,
+    "formalUpxsGenerated": false,
+    "windowsLinuxPhysicalValidation": false
+  },
+  "publication": {
+    "githubSourcePushed": true,
+    "marketSubmitted": false,
+    "marketReceiptConfirmed": false,
+    "screenshotsPrepared": 3,
+    "serverChanged": false
+  },
+  "blocker": "uTools 原生文件选择窗口反复收起，已请用户手动导入专用 plugin.json；等待后续原生验收、正式打包与市场提交。"
+}
