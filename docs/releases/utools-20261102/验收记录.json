@@ -57,8 +57,13 @@
     "screenshotsSubmitted": 3,
     "fieldsReadBack": true,
     "githubRelease": "https://github.com/chencheng666/jiuji/releases/tag/utools-v1.3.1",
-    "githubReleasePublished": false,
-    "githubAssetVerified": false
+    "githubReleasePublished": true,
+    "githubAssetVerified": true,
+    "githubReleasePrerelease": true,
+    "githubSourceReceiptCommit": "083601c",
+    "publicDownloadHttpStatus": 200,
+    "publicDownloadBytes": 131852,
+    "publicDownloadSha256": "63c49887ab06d277b904a6e2c414eaf635ec2bdca1d60d084818fb77caca8436"
   },
   "formalPackage": {
     "name": "Jiuji-v1.3.1-utools.upxs",
