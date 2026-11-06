@@ -1,7 +1,7 @@
 // 九级主线配置。每一阶同时改变探索目标与可用能力。
 export const LEVEL_NAMES=['','初醒','协同','觉醒','远航','同频','塑能','守序','信使','归一'];
 export const LEVEL_ROMAN=['','Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ'];
-export const LEVEL_BENEFITS={1:'采集、合成、建造营地',2:'进入星陨高地，建造自动采矿机',3:'Q 闪步，开采陨星矿与观测遗迹',4:'R 归途传送，快速返回营地',5:'自动合成基础资源，采集光蕴',6:'消耗共鸣显化材料，减少重复采集',7:'饱食消耗减半，生命缓慢恢复',8:'自身持续发光，不再惧怕黑暗',9:'不再饥饿，选择守护或归源'};
+export const LEVEL_BENEFITS={1:'采集、合成、种植与营地生存',2:'晶能供电、自动采矿与文明专注',3:'闪步、连锁灯阵与配电谜题',4:'镜沙遗境、跨图归途与折跃货栈',5:'配方自动化、晶能调度与跨图补给',6:'星环残骸、意识投影臂与能量武器',7:'多地图生态织网与土地修复',8:'取得六个营地同意，接续星海信号',9:'守护或归源；留下后可自由建造'};
 export const EXTRA_ITEMS={star:{name:'陨星碎片',icon:'meteor'},prism:{name:'导能棱镜',icon:'crystal'},alloy:{name:'星铜合金',icon:'ingot'},essence:{name:'光蕴',icon:'lumen'},echo:{name:'记忆回响',icon:'trial'},salve:{name:'草药膏',icon:'flower',health:35},armor:{name:'藤编护甲',icon:'armor',durability:120}};
 export const EXTRA_NODES={meteor:{name:'陨星矿',tool:'pickaxe',hp:4,time:.7,drop:{star:3,stone:1},eco:-.4,regrow:210,level:3},lumen:{name:'光蕴植株',hp:1,time:.9,drop:{essence:3},regrow:150,level:5},trial:{name:'遗迹试炼',hp:1,time:1,drop:{}}};
 export const EXTRA_TECHS=[

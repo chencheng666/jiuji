@@ -92,3 +92,21 @@ html,body{height:100%;overflow:hidden}
   .clock{max-width:59px;min-width:45px;padding:6px 4px}.clock small{font-size:8px}
   .sound-toggle{top:279px}
 }
+
+/* 营地入口可折叠；留出地图视野，偏好不写入旅程存档。 */
+.camp-toolbar{position:absolute;left:24px;top:104px;display:flex;flex-direction:column;align-items:flex-start;gap:7px;z-index:3;pointer-events:none}
+.camp-toolbar-toggle{pointer-events:auto;display:flex;align-items:center;justify-content:center;gap:5px;min-width:60px;min-height:44px;padding:8px;color:var(--paper);background:#343e2ff2;border:1px solid #b6a57b88;border-radius:12px 4px 12px 4px;box-shadow:0 3px 0 #252c2455}
+.camp-toolbar-toggle b{font-size:11px;font-weight:500}
+.camp-toolbar-toggle svg{display:block;width:15px;height:15px;fill:none;stroke:var(--gold);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;transform:rotate(180deg)}
+.camp-toolbar.is-collapsed .camp-toolbar-toggle svg{transform:none}
+.camp-toolbar .tool-rail{position:static;pointer-events:auto;max-height:calc(var(--game-height,100dvh) - 300px);max-width:none;overflow-y:auto;overflow-x:hidden;padding:4px 6px 7px;margin:-4px -6px -7px}
+.camp-toolbar .tool-rail button{flex-shrink:0}
+.dialog .close{display:grid;place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;line-height:1;align-self:flex-start}
+.dialog .close svg{display:block;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+@media(max-width:1000px){.camp-toolbar{left:16px}}
+@media(max-width:650px){.camp-toolbar{top:94px;left:auto;right:max(12px,env(safe-area-inset-right))}.camp-toolbar-toggle{min-width:52px}.camp-toolbar .tool-rail{max-height:calc(var(--game-height,100dvh) - 340px);align-self:center}}
+@media(max-width:650px) and (min-height:561px) and (max-height:680px){.camp-toolbar{top:94px;left:8px;right:auto;max-width:calc(100% - 16px)}.camp-toolbar .tool-rail{max-height:52px;flex-direction:row;align-self:flex-start;overflow-x:auto;overflow-y:hidden;width:max-content;max-width:100%}.camp-toolbar .tool-rail button{flex:0 0 40px}.camp-toolbar:not(.is-collapsed)~.quest{visibility:hidden}}
+@media(max-width:1280px) and (max-height:560px){.camp-toolbar{top:116px;left:max(12px,env(safe-area-inset-left));right:auto;max-width:calc(100% - 225px)}.camp-toolbar .tool-rail{flex-direction:row;max-height:56px;max-width:100%;overflow-x:auto;overflow-y:hidden;align-self:flex-start}.camp-toolbar-toggle{min-width:68px}.camp-toolbar .tool-rail button{flex:0 0 44px}}
+@media(max-width:650px) and (max-height:560px){.camp-toolbar .tool-rail button{flex-basis:40px}}
+
+@media(max-width:1280px) and (max-height:560px){.camp-toolbar~.abilities{left:auto;right:12px;top:176px;max-width:185px;max-height:calc(var(--game-height,100dvh) - 276px);overflow:auto;flex-wrap:wrap}}

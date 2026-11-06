@@ -5,7 +5,7 @@ import path from 'node:path';
 
 const root = path.resolve(fileURLToPath(new URL('../dist/', import.meta.url)));
 const port = Number(process.env.JIUJI_PORT || 4317);
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.json': 'application/json' };
+const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.json': 'application/json' };
 http.createServer(async (req, res) => {
   try {
     const route = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);

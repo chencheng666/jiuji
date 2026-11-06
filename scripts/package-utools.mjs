@@ -26,15 +26,15 @@ const result=await build({entryPoints:[join(root,'dist/play.js')],bundle:true,wr
 }}]});
 if(result.outputFiles.length!==1)throw Error('离线游戏必须只有一个完整 JavaScript 入口');
 const boot=(await readFile(join(root,'dist/boot.js'),'utf8')).replace(/<\/script/gi,'<\\/script');
-let html=await readFile(join(root,'dist/index.html'),'utf8'),css=await readFile(join(root,'dist/survival.css'),'utf8');
+let html=await readFile(join(root,'dist/index.html'),'utf8'),css=(await readFile(join(root,'dist/survival.css'),'utf8'))+'\n'+(await readFile(join(root,'dist/odyssey.css'),'utf8'));
 html=html.replace(/<link\b[^>]+rel="(?:stylesheet|modulepreload)"[^>]*>/g,'').replace('<script src="./boot.js"></script>',()=>'<script>'+boot+'</script>').replace('<script type="module" src="./play.js"></script>',()=>'<script>'+result.outputFiles[0].text.replace(/<\/script/gi,'<\\/script')+'</script>');
 const policy="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'";
 html=html.replace('<head>','<head><meta name="jiuji-runtime" content="utools"><meta http-equiv="Content-Security-Policy" content="'+policy+'"><style>'+css.replace(/<\/style/gi,'<\\/style')+'</style>');
 if(/<script\b[^>]+src=/.test(html)||/type="module"/.test(html))throw Error('游戏仍然依赖外置脚本或文件模块加载');
 await writeFile(join(out,'game.html'),html);
-for(const name of await readdir(join(root,'dist/assets')))if(name.endsWith('.svg'))await copyFile(join(root,'dist/assets',name),join(out,'assets',name));
+for(const name of await readdir(join(root,'dist/assets')))if(/\.(svg|png|webp)$/.test(name))await copyFile(join(root,'dist/assets',name),join(out,'assets',name));
 for(const name of ['plugin.json','index.html','launcher.js','privacy.html','使用说明.txt'])await copyFile(join(root,'packaging/utools',name),join(out,name));
-await copyFile(join(root,'src-tauri/icons/128x128@2x.png'),join(out,'logo.png'));
+await copyFile(join(root,'dist/assets/jiuji-logo-512.png'),join(out,'logo.png'));
 await copyFile(join(root,'dist/favicon.svg'),join(out,'favicon.svg'));
 await copyFile(join(root,'LICENSE'),join(out,'LICENSE'));
 const manifest={};async function collect(dir,prefix=''){for(const name of (await readdir(dir)).sort()){const file=join(dir,name),key=prefix+name;if((await stat(file)).isDirectory())await collect(file,key+'/');else manifest[key]=createHash('sha256').update(await readFile(file)).digest('hex');}}

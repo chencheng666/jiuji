@@ -1,0 +1,126 @@
+{
+  "日期": "2026-11-06",
+  "状态": "本地完成，未发布",
+  "范围": "可折叠营地菜单与关闭图标居中",
+  "规则测试": {
+    "通过": 92,
+    "失败": 0
+  },
+  "主线验证": {
+    "晋升九级": true,
+    "两种结局": true,
+    "游戏时间秒": 1668,
+    "说明": "自动化熟练路线，不代表新玩家现实通关时间"
+  },
+  "面板": [
+    {
+      "action": "craft",
+      "centerError": 0,
+      "clickWidth": 44,
+      "dialogHeight": 374,
+      "title": "把荒野，变成家",
+      "viewport": 390
+    },
+    {
+      "action": "tech",
+      "centerError": 0,
+      "clickWidth": 44,
+      "dialogHeight": 374,
+      "title": "两条成长的道路",
+      "viewport": 390
+    },
+    {
+      "action": "bag",
+      "centerError": 0,
+      "clickWidth": 44,
+      "dialogHeight": 374,
+      "title": "行囊里的世界",
+      "viewport": 390
+    },
+    {
+      "action": "map",
+      "centerError": 0,
+      "clickWidth": 44,
+      "dialogHeight": 374,
+      "title": "脚步之外，仍是未知",
+      "viewport": 390
+    },
+    {
+      "action": "journey",
+      "centerError": 0,
+      "clickWidth": 44,
+      "dialogHeight": 374,
+      "title": "九级 · 文明之路",
+      "viewport": 390
+    },
+    {
+      "action": "settlement",
+      "centerError": 0,
+      "clickWidth": 44,
+      "dialogHeight": 374,
+      "title": "营地有了新的生活",
+      "viewport": 390
+    },
+    {
+      "action": "handbook",
+      "centerError": 0,
+      "clickWidth": 44,
+      "dialogHeight": 374,
+      "title": "荒野生存手册",
+      "viewport": 390
+    }
+  ],
+  "屏幕": [
+    {
+      "width": 844,
+      "height": 390,
+      "页面宽度": 844,
+      "问题": []
+    },
+    {
+      "width": 720,
+      "height": 324,
+      "页面宽度": 720,
+      "问题": []
+    },
+    {
+      "width": 667,
+      "height": 375,
+      "页面宽度": 667,
+      "问题": []
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "页面宽度": 568,
+      "问题": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "页面宽度": 390,
+      "问题": []
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "页面宽度": 320,
+      "问题": []
+    },
+    {
+      "width": 1280,
+      "height": 820,
+      "页面宽度": 1280,
+      "问题": []
+    }
+  ],
+  "交互验证": [
+    "首次紧凑屏幕默认收起",
+    "真实触摸展开和收起",
+    "刷新保留收起偏好",
+    "收起后C键打开合成",
+    "七个面板可打开和关闭"
+  ],
+  "浏览器控制台错误": [],
+  "边界": "Chrome视口与触摸模拟；没有据此宣称iPhone真机全量兼容"
+}

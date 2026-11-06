@@ -87,7 +87,11 @@ def deploy(args):
     if shutil.disk_usage(BASE).free < 50_000_000:
         raise RuntimeError('服务器剩余空间不足')
     before = service_state()
-    protected = {p: digest(p.read_bytes()) for p in [SITE_CONF, GP_CONF]}
+    # 官网独立路由与指针同样受保护，不随游戏发布改变。
+    official_conf = EXT.with_name('31-jiuji-official.conf')
+    official_current = BASE / 'official/current'
+    official_before = str(official_current.resolve()) if official_current.is_symlink() else None
+    protected = {p: digest(p.read_bytes()) for p in [SITE_CONF, GP_CONF, *([official_conf] if official_conf.exists() else [])]}
     current = BASE / 'current'
     if current.exists() and not current.is_symlink():
         raise RuntimeError('当前目录不是受管理的链接，拒绝覆盖')
@@ -143,6 +147,8 @@ def deploy(args):
                     raise
                 time.sleep(1)
         after = service_state()
+        if (official_before is not None and str(official_current.resolve()) != official_before):
+            raise RuntimeError('官网目录发生变化，回退本次游戏发布')
         if after != before or any(digest(p.read_bytes()) != h for p, h in protected.items()):
             raise RuntimeError('原站配置或服务状态发生变化，回退本次路由')
         report = {**info, 'url': ORIGIN + '/jiuji/', 'release': str(release), 'backup': str(backup),

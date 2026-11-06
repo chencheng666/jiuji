@@ -25,8 +25,8 @@ try{
  let html=(await readFile(join(root,'dist/index.html'),'utf8')).replace(/<link\b[^>]+rel="modulepreload"[^>]*>/g,'').replace('<script type="module" src="./play.js"></script>','<script src="./game.js"></script>');
  if(/type="module"|modulepreload/.test(html))throw Error('离线包仍依赖模块加载');
  await writeFile(join(game,'index.html'),html);
- for(const name of ['boot.js','survival.css','favicon.svg','privacy.html'])await copyFile(join(root,'dist',name),join(game,name));
- for(const name of await readdir(join(root,'dist/assets')))if(name.endsWith('.svg'))await copyFile(join(root,'dist/assets',name),join(game,'assets',name));
+ for(const name of ['boot.js','survival.css','odyssey.css','favicon.svg','privacy.html'])await copyFile(join(root,'dist',name),join(game,name));
+ for(const name of await readdir(join(root,'dist/assets')))if(/\.(svg|png|webp)$/.test(name))await copyFile(join(root,'dist/assets',name),join(game,'assets',name));
  await copyFile(join(root,'LICENSE'),join(game,'LICENSE'));
  const zip=join(output,`Jiuji-v${version}-TapTap-H5.zip`);
  // 不覆盖历史包；同版本重建时仅替换本脚本生成的发行文件。
