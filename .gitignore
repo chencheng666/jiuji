@@ -6,3 +6,6 @@ artifacts/
 
 src-tauri/target/
 releases/utools/
+
+__pycache__/
+*.pyc

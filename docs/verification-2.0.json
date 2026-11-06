@@ -1,7 +1,7 @@
 {
   "日期": "2026-11-06",
   "版本": "2.0.0",
-  "状态": "本地完整主线、浏览器手机界面通过，生产发布准备中",
+  "状态": "腾讯云生产已发布并通过逐文件与浏览器验收",
   "规则测试": {
     "通过": 106,
     "失败": 0
@@ -37,5 +37,62 @@
     "云存档": false,
     "商店2.0已提交": false,
     "iPhone真机": false
-  }
+  },
+  "生产": {
+    "url": "https://www.daguojueqi.site/jiuji/",
+    "官网": "https://www.daguojueqi.site/jiuji/official/",
+    "commit": "1165d75b6889015dec0401ef5cb7c4bbe0f04ced",
+    "游戏逐文件核验": 145,
+    "官网逐文件核验": 71,
+    "下载包完整性": true,
+    "腾讯云服务进程部署前后一致": true,
+    "大国崛起主站与候选服务健康": true,
+    "规则CI": "https://github.com/chencheng666/jiuji/actions/runs/42178400824",
+    "发布回执截图": "本地 artifacts/2.0-部署回执.png",
+    "GitHub发行": "https://github.com/chencheng666/jiuji/releases/tag/v2.0.0"
+  },
+  "响应式": [
+    {
+      "width": 375,
+      "height": 667,
+      "overflow": false,
+      "centerError": 0,
+      "closeVisible": true
+    },
+    {
+      "width": 667,
+      "height": 375,
+      "overflow": false,
+      "centerError": 0,
+      "closeVisible": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "centerError": 0,
+      "closeVisible": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "overflow": false,
+      "centerError": 0,
+      "closeVisible": true
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "overflow": false,
+      "centerError": 0,
+      "closeVisible": true
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "overflow": false,
+      "centerError": 0,
+      "closeVisible": true
+    }
+  ]
 }

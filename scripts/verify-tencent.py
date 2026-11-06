@@ -26,8 +26,14 @@ with tarfile.open(package['archive']) as archive:
 
 
 def fetch(path):
-    return subprocess.check_output(['curl', '-fsSL', '--max-time', '15', '--retry', '2',
-                                    '--retry-all-errors', '--retry-delay', '1', ORIGIN + path])
+    # 每次重试使用新的输出缓冲；curl 向 stdout 重试会混入前次的残缺文件。
+    for attempt in range(3):
+        try:
+            return subprocess.check_output(['curl', '-fsSL', '--max-time', '90', ORIGIN + path])
+        except subprocess.CalledProcessError:
+            if attempt == 2:
+                raise
+            time.sleep(1)
 
 
 def verify(item):
