@@ -2,19 +2,29 @@
   "repository": "https://github.com/chencheng666/jiuji",
   "visibility": "public",
   "license": "MIT",
-  "version": "1.3.1",
-  "release": "https://github.com/chencheng666/jiuji/releases/tag/v1.3.1",
+  "version": "1.3.2",
+  "release": "https://github.com/chencheng666/jiuji/releases/tag/v1.3.2",
   "play": "https://chencheng666.github.io/jiuji/",
   "domestic_play": "https://www.daguojueqi.site/jiuji/",
-  "main_commit": "e1f37273b502dfc6b8198ce7d8a6da436d30714f",
-  "runtime_commit": "bede6390949720600d267f628655904543e498f3",
-  "pages_commit": "1d2c9cab0965b289757c5adfb8c12a47e6993f82",
-  "notes": "每站113个文件与运行包核验通过；81项规则测试和正常资源经营旅程通过；未改动同机大国崛起服务。提交字段标识发行代码，之后可以追加验收文档。",
+  "main_commit": "45b1ca5c6284550b432ac4ac4e4136d6c10f6ddd",
+  "runtime_commit": "45b1ca5c6284550b432ac4ac4e4136d6c10f6ddd",
+  "pages_commit": "0accb4a86ff2f973d5972ead7b5829203c01ecbd",
+  "notes": "腾讯云与GitHub Pages各113文件和下载包核验通过；90项测试与正常资源旅程通过；手机六尺寸、采集、合成、读档通过。九级独立目录切换，未重载Nginx；同机大国崛起两服务PID部署前后一致。TapTap三项资质审核中，整版更新尚未提审。",
   "linux_package": {
     "file": "site.daguojueqi.jiuji_1.3.1_amd64.deb",
     "sha256": "ac3b3cc74e6ec10d0c9e6bc4fcda8870d9c6cd381c06a83ad2832cd18d47f985",
     "workflow": "https://github.com/chencheng666/jiuji/actions/runs/41400951779",
     "store_submitted": false,
-    "real_device_verified": false
+    "real_device_verified": false,
+    "version": "1.3.1",
+    "notes": "历史已发布包；1.3.2桌面构建已通过CI，未作为本轮统信商店更新提交。"
+  },
+  "taptap_update": {
+    "version": "1.3.2",
+    "version_label": "V-20261106",
+    "qualification_status": "reviewing",
+    "submitted": false,
+    "published": false,
+    "notes": "AI声明、平台托管隐私合规、16周岁以上适龄分级均在审核中；先资质齐备再提审。"
   }
 }
