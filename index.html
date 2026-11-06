@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#20362f"><meta name="description" content="九级：从一把石斧到一座星火信标。在荒野中采集、合成、建造，点亮物质与意识科技树。1.3 归途新生：营地经营、远征事件与四级后的生产和守护。"><title>九级 · 从荒野到星海</title><link rel="icon" href="./favicon.svg"><link rel="stylesheet" href="./survival.css"><link rel="modulepreload" href="./play.js"><link rel="modulepreload" href="./homestead.js"><link rel="modulepreload" href="./frontier.js"><link rel="modulepreload" href="./survival.js"><link rel="modulepreload" href="./chapters.js"><link rel="modulepreload" href="./wilderness.js"><link rel="modulepreload" href="./world.js"><link rel="modulepreload" href="./atmosphere.js"><link rel="modulepreload" href="./audio.js"><link rel="modulepreload" href="./seasons.js"><link rel="modulepreload" href="./storage.js"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#20362f"><meta name="description" content="九级：从一把石斧到一座星火信标。在荒野中采集、合成、建造，点亮物质与意识科技树。2.0 星海回响：六地远征、晶能工业、折跃货运、意识投影臂与遗构解谜。"><title>九级 2.0 · 星海回响</title><link rel="apple-touch-icon" href="./assets/jiuji-logo-180.png"><link rel="icon" href="./assets/jiuji-logo-64.png"><link rel="stylesheet" href="./survival.css"><link rel="stylesheet" href="./odyssey.css"><link rel="modulepreload" href="./play.js"><link rel="modulepreload" href="./homestead.js"><link rel="modulepreload" href="./frontier.js"><link rel="modulepreload" href="./survival.js"><link rel="modulepreload" href="./chapters.js"><link rel="modulepreload" href="./wilderness.js"><link rel="modulepreload" href="./world.js"><link rel="modulepreload" href="./atmosphere.js"><link rel="modulepreload" href="./audio.js"><link rel="modulepreload" href="./seasons.js"><link rel="modulepreload" href="./storage.js"></head>
 <body>
 <main id="game">
   <section id="boot" role="status"><h1>九级</h1><p>正在展开荒野地图…</p><small>首次进入需要加载游戏资源，请稍候。</small><button id="reload-game">重新加载</button></section>
@@ -13,12 +13,15 @@
   </header>
   <div id="weather" class="weather"></div><aside id="pinned" class="pinned" hidden></aside><button class="sound-toggle" data-do="sound" aria-pressed="true">音效 开</button>
   <div class="knowledge" id="knowledge"></div>
-  <nav class="tool-rail" aria-label="营地操作">
+  <div class="camp-toolbar" id="camp-toolbar">
+  <button class="camp-toolbar-toggle" id="camp-toolbar-toggle" aria-controls="camp-tools" aria-expanded="true" aria-label="收起营地菜单"><b>营地</b><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></button>
+  <nav class="tool-rail" id="camp-tools" aria-label="营地操作">
     <button data-do="craft" title="合成 C"><span>⚒</span><b>合成</b><kbd>C</kbd></button>
     <button data-do="tech" title="科技 T"><span>✧</span><b>科技</b><kbd>T</kbd></button>
     <button data-do="bag" title="背包 B"><span>▣</span><b>背包</b><kbd>B</kbd></button>
     <button data-do="map" title="地图 M"><span>⌖</span><b>地图</b><kbd>M</kbd></button><button data-do="journey" title="九级历程 J"><span>Ⅸ</span><b>历程</b><kbd>J</kbd></button>
   <button data-do="settlement" title="营地经营与远征回信"><span>⌂</span><b>经营</b></button><button data-do="handbook" title="生存手册与四季"><span>❧</span><b>手册</b></button></nav>
+  </div>
   <aside class="quest" id="quest"></aside>
   <div class="location" id="location"></div>
   <button class="mini-map" data-do="map" aria-label="打开探索地图"><canvas id="mini" width="230" height="176"></canvas><span>探索地图 <kbd>M</kbd></span></button>
