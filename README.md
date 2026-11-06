@@ -1,5 +1,8 @@
 # 九级 · 归途新生
 
+当前版本：**1.3.2 · 手机兼容修复**。修复矮屏横屏底部操作被截断、旧内核缺少匿名编号接口导致启动中断；手机地形画布降低为原来四分之一像素面积，增加加载失败重试。
+
+
 原创俯视角单人生存游戏。采集、合成、建造、四季生活与双轨科技，从一根树枝成长到九级文明。
 
 - [国内试玩](https://www.daguojueqi.site/jiuji/)
@@ -93,3 +96,7 @@ npm run test:frontier
 规则、地图和战斗分别位于 `survival.js`、`expeditions.js`；四季和手册在 `seasons.js`，Canvas 画面在 `world.js`、`expedition-view.js`，界面在 `play.js`。素材为原创 SVG。
 
 自动流程不等同于所有设备的人工全程体验。欢迎在 Issue 提供设备、游戏版本、复现过程和截图。MIT 许可证，参见 [共建指南](CONTRIBUTING.md)。
+
+### TapTap 离线包
+
+运行 `npm run package:taptap`，生成 `artifacts/taptap-v版本号/` 下的 ZIP 与构建报告。包内采用单脚本加载，包含旧内核接口兼容与横屏布局；不自动上传统计。此命令仅构建，不执行上传、提审或上线。

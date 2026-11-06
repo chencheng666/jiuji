@@ -1,8 +1,8 @@
 import {weather,placementReason,plantingReason,BUILDING_NAMES} from './survival.js';
 // 绘图只读取世界状态，天气伤害与生产计时由生存规则计算。
 export function paintTerrain(view,id='home'){
-  const canvas=document.createElement('canvas');canvas.width=3600;canvas.height=2800;
-  const c=canvas.getContext('2d');let seed=17;
+  const canvas=document.createElement('canvas'),scale=view.terrainScale||1;canvas.width=Math.round(3600*scale);canvas.height=Math.round(2800*scale);
+  const c=canvas.getContext('2d');if(!c)throw Error('设备无法创建地形画布');c.scale(scale,scale);let seed=17;
   const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
   const palette={home:['#365956','#929575','#6a8067','#ac9c79','#929b68','#879b91'],verdant:['#294a49','#658774','#446e5c','#879776','#739775','#507e7a'],cinder:['#483d37','#9e8666','#82725b','#b69b72','#8d795b','#ad8a6d'],frost:['#3e606b','#b5c8c1','#93b1b0','#bacac9','#9db9b5','#c4d4d2']}[id];c.fillStyle=palette[0];c.fillRect(0,0,3600,2800);
   c.strokeStyle='#adc1a426';c.lineWidth=2;
