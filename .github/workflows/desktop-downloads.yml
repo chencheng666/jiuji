@@ -18,7 +18,7 @@ jobs:
           - os: macos-15
             label: macOS 通用安装包
             target: universal-apple-darwin
-            bundles: dmg
+            bundles: app,dmg
             artifact: jiuji-macos-universal
     runs-on: ${{ matrix.os }}
     timeout-minutes: 45
@@ -32,6 +32,7 @@ jobs:
         with:
           workspaces: './src-tauri -> target'
           key: ${{ matrix.target }}
+          cache-on-failure: true
       - name: 安装 macOS 通用架构
         if: runner.os == 'macOS'
         run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
