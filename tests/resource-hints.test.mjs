@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {trackedResourceHints} from '../dist/resource-hints.js';
+import {resourceCandidates} from '../dist/resource-hints.js';
 const recipes=[{id:'axe',cost:{wood:2,stone:3}}],types={tree:{drop:{wood:2}},rock:{drop:{stone:1}}};
 const setup=()=>({wilderness:{pinned:'axe'},player:{x:100,y:100},inventory:{wood:0,stone:0},explored:['0,0','1,0'],nodes:[{id:'a',type:'tree',x:130,y:100,available:true},{id:'b',type:'tree',x:200,y:100,available:true},{id:'c',type:'rock',x:500,y:100,available:true},{id:'d',type:'rock',x:150,y:100,available:false}]});
 const amount=(s,id)=>s.inventory[id]||0;
 test('追踪标记只选最近可采、已探索材料，不透露迷雾和枯竭资源',()=>{const s=setup();assert.deepEqual(trackedResourceHints(s,recipes,types,amount),[{id:'a',item:'wood'}]);s.explored.push('3,0');assert.equal(trackedResourceHints(s,recipes,types,amount).length,2);assert.equal(trackedResourceHints(s,recipes,types,amount,1).length,1);});
 test('材料齐备或取消追踪后标记消失，不修改背包和采集状态',()=>{const s=setup();s.inventory.wood=2;const before=JSON.stringify(s);assert.deepEqual(trackedResourceHints(s,recipes,types,amount),[]);assert.equal(JSON.stringify(s),before);s.wilderness.pinned=null;assert.deepEqual(trackedResourceHints(s,recipes,types,amount),[]);});
+test('没有石斧时不引导新手砍树找树枝，工具损坏后也不继续推荐',()=>{const s=setup(),defs={tree:{tool:'axe',drop:{wood:2}},twig:{drop:{wood:1}}};s.nodes.push({id:'loose',type:'twig',x:210,y:100,available:true});assert.equal(resourceCandidates(s,'wood',defs)[0].id,'loose');s.inventory.axe=1;s.durability={axe:10};assert.equal(resourceCandidates(s,'wood',defs)[0].id,'a');s.durability.axe=0;assert.equal(resourceCandidates(s,'wood',defs)[0].id,'loose');});
