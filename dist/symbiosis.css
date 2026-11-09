@@ -26,4 +26,8 @@
 .compact-hud .camp-toolbar{left:12px;right:auto;top:174px;max-width:calc(100% - 24px);flex-direction:row;align-items:flex-start;gap:6px}.compact-hud .camp-toolbar-toggle{min-width:68px;min-height:44px}.compact-hud .camp-toolbar .tool-rail{flex-direction:row;gap:4px;align-self:flex-start;max-height:48px;width:calc(100vw - 112px);max-width:calc(100vw - 112px);overflow-x:auto;overflow-y:hidden;padding:0 0 3px;margin:0}.compact-hud .camp-toolbar .tool-rail button{height:44px;min-height:44px;width:48px;min-width:48px;flex:0 0 48px;padding:3px}.compact-hud .camp-toolbar .tool-rail button span{font-size:18px}.compact-hud .camp-toolbar .tool-rail button b{font-size:9px}.compact-hud .camp-toolbar .tool-rail kbd{display:none}.compact-hud.camp-open #pinned{visibility:hidden}.compact-hud #pinned{top:228px}
 @media(orientation:landscape) and (max-height:560px){.compact-hud .quest{right:112px}}
 /* 高阶多一个特技键时改为两排，横屏也不挤进快捷物品栏。 */
-@media(orientation:landscape) and (max-height:560px){.compact-hud .touch-actions:has([data-do="active-ability"]:not([hidden])){display:grid;grid-template-columns:repeat(2,1fr);gap:5px}}
+@media(orientation:landscape) and (max-height:560px){.compact-hud.has-touch-ability .touch-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}}
+
+/* 手机传送不使用整屏闪光，保留虫洞和角色动作提示。 */
+.compact-hud #game.warp-flash:after{animation:none;display:none}
+.compact-hud .overlay{backdrop-filter:none}

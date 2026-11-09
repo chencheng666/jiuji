@@ -30,3 +30,10 @@ test('摇杆限制幅度并忽略第二触点，取消、失焦和进入后台�
   el.map.pointerdown(pointer(4));globalThis.document.hidden=true;globalThis.document.map.visibilitychange();assert.deepEqual(values.at(-1),{x:0,y:0});
  }finally{if(oldWindow===undefined)delete globalThis.window;else globalThis.window=oldWindow;if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
 });
+
+test('手机首次默认30帧，保留玩家手动选择60帧，桌面默认60帧',()=>{
+ const old=globalThis.window;globalThis.window={innerWidth:390,innerHeight:844,matchMedia:()=>({matches:true})};
+ try{assert.equal(readControls({getItem:()=>null}).fps,30);assert.equal(readControls({getItem:()=>'{"fps":60}'}).fps,60);
+  globalThis.window={innerWidth:1440,innerHeight:900,matchMedia:()=>({matches:false})};assert.equal(readControls({getItem:()=>null}).fps,60);
+ }finally{globalThis.window=old;}
+});

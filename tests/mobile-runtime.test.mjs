@@ -70,3 +70,43 @@ test('低内存设备地形保持逻辑坐标与点击位置，换图主动释�
   assert.equal(view.terrain.width,1800);assert.deepEqual(view.toWorld(view.w/2,view.h/2),view.camera);
  }finally{globalThis.window=previousWindow;globalThis.document=previousDocument;globalThis.Image=previousImage;}
 });
+
+test('小数视口的夜色画布复用整数缓冲，连续绘制不反复分配',()=>{
+ const old=globalThis.document;let allocations=0,creates=0;
+ const context=new Proxy({createRadialGradient:()=>({addColorStop(){}})},{get:(o,k)=>o[k]??(()=>{})});
+ const canvas={getContext:()=>context};let w=300,h=150;
+ Object.defineProperties(canvas,{width:{get:()=>w,set:v=>{w=Math.floor(v);allocations++;}},height:{get:()=>h,set:v=>{h=Math.floor(v);allocations++;}}});
+ globalThis.document={createElement:()=>{creates++;return canvas;}};
+ try{const view=Object.assign(Object.create(WorldView.prototype),{w:843.5,h:389.625,mobile:true});
+  for(let i=0;i<120;i++)view.drawNight(context,.84,[{x:200,y:200,r:170}],0,0,1);
+  assert.equal(creates,1);assert.equal(allocations,2);assert.equal(w,633);assert.equal(h,292);
+  view.w=667.25;view.h=375.125;view.drawNight(context,.84,[],0,0,1);assert.equal(allocations,4);
+ }finally{globalThis.document=old;}
+});
+
+test('夜色缓冲分配失败时使用简化夜色，后续帧不重试分配或抛错',()=>{
+ const old=globalThis.document;let count=0,fills=0;
+ globalThis.document={createElement:()=>{count++;return{width:0,height:0,getContext:()=>null};}};
+ const c={save(){},restore(){},fillRect(){fills++;}};
+ try{const view=Object.assign(Object.create(WorldView.prototype),{w:390,h:844,mobile:true});
+  assert.doesNotThrow(()=>view.drawNight(c,.84,[],0,0,1));
+  assert.doesNotThrow(()=>view.drawNight(c,.84,[],0,0,1));
+  assert.equal(view.simpleLighting,true);assert.equal(view.darkCanvas,null);assert.equal(count,1);assert.equal(fills,2);
+ }finally{globalThis.document=old;}
+});
+
+test('重复视口事件不清空主画布，高分屏遵守像素预算且点击坐标不变',()=>{
+ const old=globalThis.window;globalThis.window={devicePixelRatio:4};let writes=0,w=0,h=0;
+ const canvas={getBoundingClientRect:()=>({width:1440.5,height:900.25})};
+ Object.defineProperties(canvas,{width:{get:()=>w,set:v=>{w=v;writes++;}},height:{get:()=>h,set:v=>{h=v;writes++;}}});
+ try{const view=Object.assign(Object.create(WorldView.prototype),{canvas,mobile:true,ctx:{setTransform(){}},camera:{x:800,y:900}});
+  view.resize();assert.ok(w*h<=1501500);assert.equal(writes,2);
+  for(let i=0;i<60;i++)view.resize();assert.equal(writes,2);assert.deepEqual(view.toWorld(view.w/2,view.h/2),view.camera);
+ }finally{globalThis.window=old;}
+});
+
+test('宿主重复发送同一高度时不广播重建画布，真实高度变化仍通知',()=>{
+ const {env,events,frames}=bootEnvironment();let notified=0;events.set('jiuji:viewport',()=>notified++);
+ for(let i=0;i<10;i++){events.get('viewport:resize')();frames.shift()();}
+ assert.equal(notified,0);env.visualViewport.height=300;events.get('viewport:resize')();frames.shift()();assert.equal(notified,1);
+});

@@ -10,14 +10,47 @@ import {paintTerrain,groundDetails,drawRabbit,gatherPose,ambientObjects,building
 import {season,WORLD,NODES,BUILDING_NAMES,biome,isLand,phase,day,placementReason,TRIALS} from './survival.js';
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 export class WorldView{
-  constructor(canvas){this.canvas=canvas;this.ctx=canvas.getContext('2d');if(!this.ctx)throw Error('设备无法创建游戏画布');this.terrainScale=(window.matchMedia?.('(pointer: coarse)').matches||Math.min(window.innerWidth,window.innerHeight)<600)?0.5:1;this.camera={x:WORLD.spawn.x,y:WORLD.spawn.y};this.zoom=1;this.w=0;this.h=0;this.images={};this.hover=null;this.pointer=null;this.building=null;this.snap=true;this.reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches||false;this.makeTerrain();for(const name of [...CO_RECIPES.filter(r=>r.building).map(r=>r.building),...Object.keys(CO_NODES),'player-left','player-right',...['botanist','engineer','ranger','keeper'].map(id=>'companion-'+id),'windmill','solararray','relay','assembler','conduit','wayfarer','mirrorsand','starroot','starfiber','phasecore','accord','powercell','pulsebolt','arcblade','prismBow','gravityHammer','composter','relaywork','matterloom','aidbeacon','compost','stardew','fielddesk','nursery','dryingrack','oldwell','wildpod','fieldnest','fallenlog','oldcache','echoStone','lostpack','wormhole','emberstone','froststone',...Object.keys(CREATURES),'pond','rod','fish','shelter','cookpot','trap','mushroom','burrow','rabbit','stew','tree','rock','ore','crystal','bush','grass','twig','flint','flower','player','player-back','shadow','campfire','table','furnace','farm','resonator','drill','beacon','ruin','chest','observatory','gate','synthesizer','forge','garden','archive','ascension','meteor','lumen','trial']){const im=new Image();im.src='./assets/'+name+'.svg';this.images[name]=im;}this.resize();}
-  resize(){const d=Math.min(window.devicePixelRatio||1,this.terrainScale<1?1.5:2),r=this.canvas.getBoundingClientRect();this.w=r.width;this.h=r.height;this.canvas.width=Math.round(this.w*d);this.canvas.height=Math.round(this.h*d);this.ctx.setTransform(d,0,0,d,0,0);this.zoom=this.w<650?.82:1;}
+  constructor(canvas){this.canvas=canvas;this.ctx=canvas.getContext('2d');if(!this.ctx)throw Error('设备无法创建游戏画布');this.mobile=!!window.matchMedia?.('(pointer: coarse)').matches||Math.min(window.innerWidth,window.innerHeight)<600;this.terrainScale=this.mobile?(globalThis.navigator?.deviceMemory<=4?.35:.5):1;this.camera={x:WORLD.spawn.x,y:WORLD.spawn.y};this.zoom=1;this.w=0;this.h=0;this.images={};this.hover=null;this.pointer=null;this.building=null;this.snap=true;this.reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches||false;this.makeTerrain();for(const name of [...CO_RECIPES.filter(r=>r.building).map(r=>r.building),...Object.keys(CO_NODES),'player-left','player-right',...['botanist','engineer','ranger','keeper'].map(id=>'companion-'+id),'windmill','solararray','relay','assembler','conduit','wayfarer','mirrorsand','starroot','starfiber','phasecore','accord','powercell','pulsebolt','arcblade','prismBow','gravityHammer','composter','relaywork','matterloom','aidbeacon','compost','stardew','fielddesk','nursery','dryingrack','oldwell','wildpod','fieldnest','fallenlog','oldcache','echoStone','lostpack','wormhole','emberstone','froststone',...Object.keys(CREATURES),'pond','rod','fish','shelter','cookpot','trap','mushroom','burrow','rabbit','stew','tree','rock','ore','crystal','bush','grass','twig','flint','flower','player','player-back','shadow','campfire','table','furnace','farm','resonator','drill','beacon','ruin','chest','observatory','gate','synthesizer','forge','garden','archive','ascension','meteor','lumen','trial']){const im=new Image();im.src='./assets/'+name+'.svg';this.images[name]=im;}this.resize();canvas.addEventListener?.('contextlost',e=>{e.preventDefault();this.contextLost=true;});canvas.addEventListener?.('contextrestored',()=>{this.ctx=canvas.getContext('2d');this.contextLost=!this.ctx;if(this.ctx){this.simpleLighting=false;this.resize();}});}
+  resize(){
+    const r=this.canvas.getBoundingClientRect();
+    this.w=Math.max(1,Number.isFinite(r.width)?r.width:1);this.h=Math.max(1,Number.isFinite(r.height)?r.height:1);
+    // 地址栏和宿主反复发出相同尺寸时，不重建画布；手机限制像素预算。
+    const limit=this.mobile?1500000:4000000,d=Math.min(window.devicePixelRatio||1,this.mobile?1.5:2,Math.sqrt(limit/(this.w*this.h)));
+    const width=Math.max(1,Math.round(this.w*d)),height=Math.max(1,Math.round(this.h*d));
+    if(this.canvas.width!==width)this.canvas.width=width;
+    if(this.canvas.height!==height)this.canvas.height=height;
+    this.ctx?.setTransform(width/this.w,0,0,height/this.h,0,0);this.zoom=this.w<650?.82:1;this.needsRender=true;
+  }
+  drawNight(c,dark,lights,left,top,z){
+    const fallback=()=>{c.save();c.fillStyle=`rgba(10,24,37,${Math.min(.44,dark)})`;c.fillRect(0,0,this.w,this.h);c.restore();};
+    if(this.simpleLighting){fallback();return;}
+    try{
+      if(!this.darkCanvas)this.darkCanvas=document.createElement('canvas');
+      const d=this.darkCanvas,scale=this.mobile?.75:1,width=Math.max(1,Math.round(this.w*scale)),height=Math.max(1,Math.round(this.h*scale));
+      // Canvas 的尺寸始终为整数，不能用小数 CSS 尺寸作每帧重建判断。
+      if(d.width!==width)d.width=width;
+      if(d.height!==height)d.height=height;
+      const q=d.getContext('2d');if(!q)throw Error('夜色画布不可用');
+      q.setTransform(width/this.w,0,0,height/this.h,0,0);q.globalCompositeOperation='source-over';q.clearRect(0,0,this.w,this.h);
+      q.fillStyle=`rgba(10,24,37,${dark})`;q.fillRect(0,0,this.w,this.h);q.globalCompositeOperation='destination-out';
+      for(const b of lights){
+        const x=(b.x-left)*z,y=(b.y-top)*z,r=b.r*z;
+        if(x+r<0||y+r<0||x-r>this.w||y-r>this.h)continue;
+        const g=q.createRadialGradient(x,y,10,x,y,r);g.addColorStop(0,'#000');g.addColorStop(.45,'#000e');g.addColorStop(1,'#0000');q.fillStyle=g;q.beginPath();q.arc(x,y,r,0,7);q.fill();
+      }
+      q.globalCompositeOperation='source-over';c.drawImage(d,0,0,this.w,this.h);
+    }catch{
+      // 宿主无法分配夜色画布时保留可见画面，不让异常终止游戏循环。
+      if(this.darkCanvas){this.darkCanvas.width=0;this.darkCanvas.height=0;this.darkCanvas=null;}
+      this.simpleLighting=true;fallback();
+    }
+  }
   shore(c){c.beginPath();for(let i=0;i<=360;i++){const a=i*Math.PI/180,e=1+.055*Math.sin(a*5)+.025*Math.sin(a*9),x=1800+Math.cos(a)*1510*e,y=1390+Math.sin(a)*1100*e;i?c.lineTo(x,y):c.moveTo(x,y);}c.closePath();}
   makeTerrain(id='home'){if(this.terrain){this.terrain.width=0;this.terrain.height=0;}this.terrain=paintTerrain(this,id);this.terrainId=id;}
   toWorld(x,y){return{x:(x-this.w/2)/this.zoom+this.camera.x,y:(y-this.h/2)/this.zoom+this.camera.y};}
   hit(s,x,y){const p=this.toWorld(x,y);let best=null,dd=60;for(const n of [...s.nodes.filter(n=>n.available||n.type==='pond'),...s.buildings]){const bodyHit=n.type==='tree'&&Math.abs(n.x-p.x)<46&&p.y>n.y-125&&p.y<n.y+12;const d=bodyHit?Math.min(55,Math.abs(n.x-p.x)+20):Math.hypot(n.x-p.x,(n.y-22)-p.y);if(d<dd){best=n;dd=d;}}for(const n of [...s.enemies,...s.expedition.creatures.filter(m=>m.hp>0&&!m.pacified)]){if(Math.hypot(n.x-p.x,n.y-22-p.y)<40)return{...n,type:'enemy'};}return best;}
   sprite(c,name,x,y,w=86,alpha=1){const im=this.images[name==='lantern'?'resonator':name];if(!im?.complete||!im.naturalWidth)return;c.save();c.globalAlpha=alpha;c.drawImage(im,x-w/2,y-w*1.125,w,w*1.25);c.restore();}
-  render(s,dt=0){if(this.terrainId!==s.expedition.current){this.makeTerrain(s.expedition.current);this.camera={...s.player};this.hover=null;}const c=this.ctx,z=this.zoom;if(!this.photo){this.camera.x+=(s.player.x-this.camera.x)*Math.min(1,dt*9);this.camera.y+=(s.player.y-this.camera.y)*Math.min(1,dt*9);}const left=this.camera.x-this.w/2/z,top=this.camera.y-this.h/2/z;c.clearRect(0,0,this.w,this.h);c.save();c.scale(z,z);c.translate(-left,-top);c.drawImage(this.terrain,0,0,3600,2800);const visible=n=>n.x>left-140&&n.x<left+this.w/z+140&&n.y>top-60&&n.y<top+this.h/z+190;
+  render(s,dt=0){if(this.contextLost)return;if(this.terrainId!==s.expedition.current){this.makeTerrain(s.expedition.current);this.camera={...s.player};this.hover=null;}const c=this.ctx,z=this.zoom;if(!this.photo){this.camera.x+=(s.player.x-this.camera.x)*Math.min(1,dt*9);this.camera.y+=(s.player.y-this.camera.y)*Math.min(1,dt*9);}const left=this.camera.x-this.w/2/z,top=this.camera.y-this.h/2/z;c.clearRect(0,0,this.w,this.h);c.save();c.scale(z,z);c.translate(-left,-top);c.drawImage(this.terrain,0,0,3600,2800);const visible=n=>n.x>left-140&&n.x<left+this.w/z+140&&n.y>top-60&&n.y<top+this.h/z+190;
     drawRiftGround(c,s);groundDetails(c,s,visible);drawWarnings(c,s);
     if(inHome(s)&&s.level<2&&2450<left+this.w/z&&1050>top){c.strokeStyle='#e2e4b799';c.lineWidth=4;c.setLineDash([12,8]);c.beginPath();c.moveTo(2450,270);c.lineTo(2450,1050);c.lineTo(3240,1050);c.stroke();c.setLineDash([]);c.fillStyle='#263e3de0';c.fillRect(2490,970,218,40);c.fillStyle='#e7e2c3';c.font='14px sans-serif';c.fillText('星陨高地 · 二级开启',2508,995);}
     if(s.path.length){c.strokeStyle='#f7df9a60';c.lineWidth=2;c.setLineDash([5,9]);c.beginPath();c.moveTo(s.player.x,s.player.y);for(const p of s.path)c.lineTo(p.x,p.y);c.stroke();c.setLineDash([]);const p=s.path.at(-1);c.strokeStyle='#f7df9a';c.beginPath();c.ellipse(p.x,p.y,10,6,0,0,7);c.stroke();}
@@ -40,7 +73,7 @@ export class WorldView{
     drawCoLife(this,c,s);drawCivilization(this,c,s,visible);ambientObjects(c,s,this,visible);if(this.building)buildingPreview(this,c,s);if(this.planting)plantingPreview(this,c,s);
     c.restore();
     const ph=phase(s),t=s.time%300,dark=ph==='night'?.84:ph==='dusk'?.14+(t-190)/40*.57:t<20?.45*(1-t/20):t>170?(t-170)/20*.12:0;
-    if(dark>0){if(!this.darkCanvas){this.darkCanvas=document.createElement('canvas');}const d=this.darkCanvas;if(d.width!==this.w||d.height!==this.h){d.width=this.w;d.height=this.h;}const q=d.getContext('2d');q.clearRect(0,0,d.width,d.height);q.fillStyle=`rgba(10,24,37,${dark})`;q.fillRect(0,0,d.width,d.height);q.globalCompositeOperation='destination-out';const lights=s.buildings.filter(b=>(b.type==='campfire'&&b.fuel>0)||b.type==='lantern'||(b.type==='beacon'&&s.chapterCompleted)).map(b=>({...b,r:b.type==='lantern'?245:215}));if(s.level>=8)lights.push({...s.player,r:210});if(s.torchOn&&s.torchFuel>0)lights.push({...s.player,r:170});for(const b of lights){const x=(b.x-left)*z,y=(b.y-top)*z,r=b.r*z,g=q.createRadialGradient(x,y,10,x,y,r);g.addColorStop(0,'#000');g.addColorStop(.45,'#000e');g.addColorStop(1,'#0000');q.fillStyle=g;q.beginPath();q.arc(x,y,r,0,7);q.fill();}q.globalCompositeOperation='source-over';c.drawImage(d,0,0,this.w,this.h);}
+    if(dark>0){const lights=s.buildings.filter(b=>(b.type==='campfire'&&b.fuel>0)||b.type==='lantern'||(b.type==='beacon'&&s.chapterCompleted)).map(b=>({...b,r:b.type==='lantern'?245:215}));if(s.level>=8)lights.push({...s.player,r:210});if(s.torchOn&&s.torchFuel>0)lights.push({...s.player,r:170});this.drawNight(c,dark,lights,left,top,z);}
     if(this.particles!==false)screenWeather(c,s,this.w,this.h);
     const seasonal=season(s);if(seasonal.index){c.save();c.fillStyle=seasonal.index===1?'#e4b15d0a':seasonal.index===2?'#c4753310':'#c7e6f01c';c.fillRect(0,0,this.w,this.h);if(seasonal.index===3&&this.particles!==false){c.fillStyle='#f5f4e4bb';for(let i=0;i<45;i++){const x=(i*127+s.time*9)%this.w,y=(i*73+s.time*23)%this.h;c.beginPath();c.arc(x,y,1+i%3*.5,0,7);c.fill();}}c.restore();}
     c.save();c.scale(z,z);c.translate(-left,-top);for(const f of s.fx){c.globalAlpha=clamp(1-(s.time-f.at)/2.2,0,1);c.font='bold 13px sans-serif';c.textAlign='center';c.fillStyle='#fff4c8';c.strokeStyle='#283c36';c.lineWidth=4;c.strokeText(f.text,f.x,f.y-75-(s.time-f.at)*15);c.fillText(f.text,f.x,f.y-75-(s.time-f.at)*15);}c.restore();
