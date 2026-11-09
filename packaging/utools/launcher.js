@@ -4,7 +4,7 @@
   const api = window.utools;
   const status = document.querySelector('#status');
   const launchButton = document.querySelector('#launch');
-  const links = Object.freeze({ online: 'https://www.daguojueqi.site/jiuji/?from=utools', website: 'https://www.daguojueqi.site/', github: 'https://github.com/chencheng666/jiuji' });
+  const links = Object.freeze({ online: 'https://www.daguojueqi.site/jiuji/?from=utools', website: 'https://www.daguojueqi.site/jiuji/official/', github: 'https://github.com/chencheng666/jiuji' });
   async function external(name) {
     if (!Object.hasOwn(links, name)) return;
     if (!api?.shellOpenExternal) { status.textContent = '请在 uTools 中使用在线试玩与源码入口。'; return; }
@@ -23,7 +23,7 @@
     try {
       // 游戏窗口只运行本地前端，不开放 Node.js 或文件系统桥接。
       gameWindow = api.createBrowserWindow('game.html', {
-        show: true, title: '饥荒升级版-九级 · 单人旅程', width: 1280, height: 850,
+        show: true, title: '饥荒升级版-九级 · __JIUJI_VERSION__ 共生远征', width: 1280, height: 850,
         minWidth: 800, minHeight: 620, backgroundColor: '#20362f',
         resizable: true, fullscreenable: true, autoHideMenuBar: true,
         webPreferences: { nodeIntegration: false, contextIsolation: true, webSecurity: true },

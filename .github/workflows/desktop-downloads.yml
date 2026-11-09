@@ -1,0 +1,71 @@
+name: 九级 Windows 与 macOS 安装包
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  desktop:
+    name: ${{ matrix.label }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            label: Windows x64 安装包
+            target: x86_64-pc-windows-msvc
+            bundles: nsis
+            artifact: jiuji-windows-x64
+          - os: macos-15
+            label: macOS 通用安装包
+            target: universal-apple-darwin
+            bundles: dmg
+            artifact: jiuji-macos-universal
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+          key: ${{ matrix.target }}
+      - name: 安装 macOS 通用架构
+        if: runner.os == 'macOS'
+        run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
+      - run: npm ci --registry=https://registry.npmjs.org
+      - name: 校验规则与构建离线资源
+        run: npm test && npm run check && npm run package:desktop-web
+      - name: 构建系统安装包
+        run: npm run desktop:build -- --config src-tauri/tauri.offline.conf.json --target ${{ matrix.target }} --bundles ${{ matrix.bundles }} -- --locked
+      - name: 整理 Windows 安装包
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          $files = @(Get-ChildItem "src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*.exe")
+          if ($files.Count -ne 1) { throw "安装包数量不符合预期" }
+          Copy-Item $files[0].FullName "artifacts/desktop-downloads/Jiuji-v$version-windows-x64-setup.exe"
+          Get-ChildItem artifacts/desktop-downloads -File | Get-FileHash -Algorithm SHA256 | Format-Table
+      - name: 整理 macOS 安装包
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          version=$(node -p "require('./package.json').version")
+          files=(src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg)
+          test "${#files[@]}" -eq 1
+          cp "${files[0]}" "artifacts/desktop-downloads/Jiuji-v${version}-macos-universal.dmg"
+          app="src-tauri/target/universal-apple-darwin/release/bundle/macos/Jiuji.app"
+          test -d "$app"
+          lipo -archs "$app/Contents/MacOS/jiuji-desktop"
+          codesign --verify --deep --strict "$app"
+          ditto -c -k --sequesterRsrc --keepParent "$app" "artifacts/desktop-downloads/Jiuji-v${version}-macos-universal.app.zip"
+          shasum -a 256 artifacts/desktop-downloads/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: artifacts/desktop-downloads/
+          if-no-files-found: error
+          retention-days: 30

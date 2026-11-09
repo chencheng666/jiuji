@@ -34,5 +34,5 @@ test('在线试玩和源码仅通过主动点击打开固定地址', async () =>
   const opened=[]; const {click}=environment({shellOpenExternal:async url=>opened.push(url)});
   assert.equal(opened.length,0);
   await click('online'); await click('github'); await click('website');
-  assert.deepEqual(opened,['https://www.daguojueqi.site/jiuji/?from=utools','https://github.com/chencheng666/jiuji','https://www.daguojueqi.site/']);
+  assert.deepEqual(opened,['https://www.daguojueqi.site/jiuji/?from=utools','https://github.com/chencheng666/jiuji','https://www.daguojueqi.site/jiuji/official/']);
 });

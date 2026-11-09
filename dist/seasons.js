@@ -8,10 +8,14 @@ export const SEASONS = [
 ];
 export function season(s){const days=Math.floor(s.time/300),index=Math.floor(days/4)%4;return {...SEASONS[index],index,day:days%4+1,remaining:1200-s.time%1200,next:SEASONS[(index+1)%4].name};}
 export function initSeasons(s){s.living??={temperature:25,claimed:[],fishCaught:0};}
-export function stepSeasons(s,dt){
+export function temperatureTarget(s){
  const current=season(s),night=s.time%300>=230,covered=s.buildings.some(b=>b.type==='shelter'&&Math.hypot(b.x-s.player.x,b.y-s.player.y)<125),warm=s.buildings.some(b=>b.type==='campfire'&&b.fuel>0&&Math.hypot(b.x-s.player.x,b.y-s.player.y)<165);
  let target=current.temperature+realm(s).temperature-(night?7:0)-s.wilderness.wetness*.05;
  if(s.inventory.coat&&target<20)target+=12;if(s.torchOn&&s.torchFuel>0)target+=5;if(covered)target= Math.max(14,Math.min(29,target));if(warm)target=27;if(s.level>=8)target=25;
+ return target;
+}
+export function stepSeasons(s,dt){
+ const target=temperatureTarget(s);
  s.living.temperature+=Math.max(-dt*.3,Math.min(dt*.3,target-s.living.temperature));
  if(s.level<8&&(s.living.temperature<6||s.living.temperature>33)){s.player.hunger=Math.max(0,s.player.hunger-dt*.025);s.player.clarity=Math.max(0,s.player.clarity-dt*.035);}
 }

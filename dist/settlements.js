@@ -1,5 +1,6 @@
+import {bindVillageLife,initVillageLife,stepVillageLife,validateVillageLife} from './village-life.js';
 // 原创聚落协作：交易有库存，委托有交付，战术演练不消耗生存物资。
-let G;export function bindSettlements(rules){G=rules;}
+let G;export function bindSettlements(rules){G=rules;bindVillageLife(rules,VILLAGES);}
 export const VILLAGES={
  bay:{name:'河湾聚落',npc:'禾 · 守岸人',level:1,x:1530,y:1580,color:'#d5bd87',intro:'潮水把你送来了。先留下一团火，再决定要走多远。',want:{wood:4},gift:{berry:4},quest:{name:'给第一夜留一点温暖',cost:{wood:6,grass:4},reward:{cooked:2},text:'准备燃料和干燥纤维，帮助守岸人修好公共火塘。'},care:{seed:3,wood:3}},
  ridge:{name:'石脊聚落',npc:'砾 · 修械师',level:2,x:2130,y:1470,color:'#b9b4a3',intro:'我们交换手艺，也交换修复旧机器的办法。',want:{ore:4,wood:2},gift:{ingot:1},quest:{name:'停摆的风轮',cost:{stone:8,board:2},reward:{relicpart:1},text:'补好风轮基座与叶片，让聚落有稳定的动力。'},care:{stone:6,flint:3}},
@@ -20,7 +21,7 @@ export function initSettlements(s,legacy=false){
   let p={x:d.x,y:d.y};for(let i=0;i<32;i++){const q={x:d.x+Math.cos(i*2.4)*Math.floor(i/8)*65,y:d.y+Math.sin(i*2.4)*Math.floor(i/8)*65};if(G.isLand(q.x,q.y)&&!home.nodes.some(n=>dist(n,q)<60)&&!home.buildings.some(n=>dist(n,q)<80)){p=q;break;}}
   home.nodes.push({id:'village-'+id,type:'settlement',village:id,...p,hp:1,available:true,respawnAt:0});
  }
- return s.settlements;
+ initVillageLife(s);return s.settlements;
 }
 export function guideStage(s){if(s.stats.nights)return 3;if(s.buildings.some(b=>b.type==='campfire'))return 2;if(s.inventory.axe||s.crafted.includes('axe'))return 1;return 0;}
 export function guideGoal(s){return[
@@ -62,10 +63,10 @@ export function settlementAction(s,action,id='',value=''){
  }
  return fail('未知聚落行动');
 }
-export function stepSettlements(s){const e=s.settlements;if(!e||!G.inHome(s))return;for(const v of Object.values(e.villages)){
+export function stepSettlements(s,dt=0){const e=s.settlements;if(!e||!G.inHome(s))return;for(const v of Object.values(e.villages)){
  const now=G.day(s);if(v.day===now)continue;v.day=now;v.trades=0;if(!v.met)continue;
  const food=Math.max(1,Math.ceil(v.population/3)-(e.tech.includes('council')&&v.affinity>=40?1:0));if(v.food>=food&&v.fuel>=1){v.food-=food;v.fuel--;v.comfort=Math.min(100,v.comfort+8);if(v.affinity>=15&&v.comfort>=65)v.population=Math.min(10,v.population+1);}else v.comfort=Math.max(0,v.comfort-5);
- }}
+ }initVillageLife(s);if(dt>0)stepVillageLife(s,dt);}
 export function recordDeath(s){const w=G.weather(s),cause=s.player.hunger<=0?'缺粮':s.darkTime>6?'缺光':w.raining&&s.wilderness.wetness>60?'淋雨':s.ecology<25?'生态压力':s.living.temperature<5?'失温':'战斗或环境伤害';s.settlements.death={cause,tip:({缺粮:'保留浆果，先学会在营火烤食物。',缺光:'天黑前准备营火燃料或一支火炬。',淋雨:'下雨时到庇护所避雨，火边烘干衣物。',生态压力:'砍树后补种，花与农圃都需要健康土地。',失温:'寒地远征先准备披肩、热食和营火。'})[cause]||'先观察蓄力预警，闪避后再攻击；演练不损失角色生命。'};}
 export function validateSettlements(s,num){const e=s.settlements;if(e===undefined)return;const integer=(v,a=0,b=1e9)=>Number.isInteger(v)&&num(v,a,b),list=(x,valid)=>Array.isArray(x)&&new Set(x).size===x.length&&x.every(id=>valid.includes(id));
  if(!e||!integer(e.intro,0,3)||!integer(e.lesson,0,3)||typeof e.expert!=='boolean'||typeof e.mercyUsed!=='boolean'||!(e.active===null||has(VILLAGES,e.active))||!list(e.tech,VILLAGE_TECH.map(t=>t.id)))throw Error('聚落引导数据无效');
@@ -73,5 +74,6 @@ export function validateSettlements(s,num){const e=s.settlements;if(e===undefine
  if(e.tech.some(id=>VILLAGE_TECH.find(t=>t.id===id).requires.some(pre=>!e.tech.includes(pre))))throw Error('聚落科技前置无效');
  if(!e.villages||Object.keys(e.villages).length!==3||Object.entries(e.villages).some(([id,v])=>!has(VILLAGES,id)||!v||!['met','quest','outpost'].every(k=>typeof v[k]==='boolean')||!integer(v.affinity,0,100)||!integer(v.comfort,0,100)||!integer(v.population,3,10)||!integer(v.food,0,100)||!integer(v.fuel,0,100)||(!integer(v.day,1)||v.day>G.day(s))||!integer(v.trades,0,3)))throw Error('聚落经营进度无效');
  for(const map of [s,...Object.values(s.expedition.worlds)])for(const n of map.nodes||[])if(n.type==='settlement'&&(!has(VILLAGES,n.village)||n.id!=='village-'+n.village))throw Error('聚落地点无效');
+ validateVillageLife(s,num);
  const b=e.encounter;if(b!==null&&(!b||!has(VILLAGES,b.village)||typeof b.practice!=='boolean'||!integer(b.hp,1,16)||!integer(b.enemy,0,12)||!integer(b.position,0,2)||!integer(b.enemyLane,0,2)||!integer(b.warning,0,2)||!integer(b.turn)||typeof b.log!=='string'||b.log.length>200))throw Error('据点事件进度无效');
 }

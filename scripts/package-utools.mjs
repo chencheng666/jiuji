@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {dirname,join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
+import {offlineTelemetry,auditOfflineFiles} from './offline-package.mjs';
 const root=dirname(dirname(fileURLToPath(import.meta.url))),version=JSON.parse(await readFile(join(root,'package.json'),'utf8')).version;
 const parent=join(root,`releases/utools-v${version}`),out=join(parent,'饥荒升级版-九级');
 // 仅清理本脚本专用构建目录，不触碰网页版本、存档或其他插件。
@@ -16,13 +17,11 @@ const result=await build({entryPoints:[join(root,'dist/play.js')],bundle:true,wr
   code=code.replace('匿名玩法统计默认关闭，可在菜单随时选择。','uTools 本地离线版。更新前请导出存档备份。').replace(/ if\(panel==='privacy'\)[^\n]*/,privacy);
   code=code.replaceAll('隐私与统计','离线隐私说明');
   code=code.replace('电脑和手机可直接玩网页版。','此版本为 uTools 桌面离线版。').replace('（目前桌面安装包为 Linux / 统信；联机仍在规划中）。','。网页版可在手机体验，联机仍在规划中。');
-  code=code.replace('<a href="https://github.com/chencheng666/jiuji/releases" target="_blank" rel="noopener">查看开源发行与安装包</a>','回到 uTools 应用入口查看开源发行与更新');
+  code=code.replace(/<p class="download-note">[^\n]*?<\/p>/,'<p class="download-note">uTools 桌面离线版。更新前请导出存档；试玩、官网与源码可从应用入口主动打开。</p>');
+  code=code.replace('setInterval(()=>telemetry.flush(),15000);','').replace(/ if\(action==='consent-on'\|\|action==='consent-off'\)\{[^\n]*?\}if\(action==='privacy'\)/," if(action==='privacy')");
   return{contents:code,loader:'js',resolveDir:dirname(args.path)};
  });
- b.onLoad({filter:/[\\/]dist[\\/]telemetry\.js$/},async args=>{
-  let code=await readFile(args.path,'utf8');if(!code.includes('const enabledHost=official||pages||desktop;'))throw Error('统计入口已变化，停止离线打包');
-  code=code.replace('const enabledHost=official||pages||desktop;','const enabledHost=false;');return{contents:code,loader:'js',resolveDir:dirname(args.path)};
- });
+ b.onLoad({filter:/[\\/]dist[\\/]telemetry\.js$/},()=>({contents:offlineTelemetry,loader:'js'}));
 }}]});
 if(result.outputFiles.length!==1)throw Error('离线游戏必须只有一个完整 JavaScript 入口');
 const boot=(await readFile(join(root,'dist/boot.js'),'utf8')).replace(/<\/script/gi,'<\\/script');
@@ -31,10 +30,16 @@ html=html.replace(/<link\b[^>]+rel="(?:stylesheet|modulepreload)"[^>]*>/g,'').re
 const policy="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'";
 html=html.replace('<head>','<head><meta name="jiuji-runtime" content="utools"><meta http-equiv="Content-Security-Policy" content="'+policy+'"><style>'+css.replace(/<\/style/gi,'<\\/style')+'</style>');
 if(/<script\b[^>]+src=/.test(html)||/type="module"/.test(html))throw Error('游戏仍然依赖外置脚本或文件模块加载');
+const networkFindings=auditOfflineFiles([{name:'game.html',text:html}]);
+if(networkFindings.length)throw Error('本地游戏仍含联网实现或外链：'+JSON.stringify(networkFindings));
 await writeFile(join(out,'game.html'),html);
 for(const name of await readdir(join(root,'dist/assets')))if(/\.(svg|png|webp)$/.test(name))await copyFile(join(root,'dist/assets',name),join(out,'assets',name));
-for(const name of ['plugin.json','index.html','launcher.js','privacy.html','使用说明.txt'])await copyFile(join(root,'packaging/utools',name),join(out,name));
-await copyFile(join(root,'dist/assets/jiuji-logo-512.png'),join(out,'logo.png'));
+for(const name of ['plugin.json','index.html','launcher.js','privacy.html','使用说明.txt']){
+ const template=await readFile(join(root,'packaging/utools',name),'utf8');
+ await writeFile(join(out,name),template.replaceAll('__JIUJI_VERSION__',version));
+}
+// 按 uTools 打包器要求导出 256 像素图标，保留最新设计。
+execFileSync('/usr/bin/sips',['-z','256','256',join(root,'dist/assets/jiuji-logo-512.png'),'--out',join(out,'logo.png')],{stdio:'ignore'});
 await copyFile(join(root,'dist/favicon.svg'),join(out,'favicon.svg'));
 await copyFile(join(root,'LICENSE'),join(out,'LICENSE'));
 const manifest={};async function collect(dir,prefix=''){for(const name of (await readdir(dir)).sort()){const file=join(dir,name),key=prefix+name;if((await stat(file)).isDirectory())await collect(file,key+'/');else manifest[key]=createHash('sha256').update(await readFile(file)).digest('hex');}}
