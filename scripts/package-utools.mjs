@@ -5,7 +5,7 @@ import {dirname,join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 const root=dirname(dirname(fileURLToPath(import.meta.url))),version=JSON.parse(await readFile(join(root,'package.json'),'utf8')).version;
-const parent=join(root,'releases/utools'),out=join(parent,'饥荒升级版-九级');
+const parent=join(root,`releases/utools-v${version}`),out=join(parent,'饥荒升级版-九级');
 // 仅清理本脚本专用构建目录，不触碰网页版本、存档或其他插件。
 await rm(out,{recursive:true,force:true});await mkdir(join(out,'assets'),{recursive:true});
 const privacy=" if(panel==='privacy')html=dialog('本地离线版隐私说明','由你掌握进度','<p class=\"subtle\">本插件在本机运行，不自动联网或上传存档、设备、昵称与游玩时长。导入的备份只在本机使用。<br>更新、卸载或清理数据前，请先导出存档。网页版与 uTools 的进度可手动导出、导入。</p><button class=\"primary\" data-do=\"close\">返回旅程</button>');";
@@ -26,7 +26,7 @@ const result=await build({entryPoints:[join(root,'dist/play.js')],bundle:true,wr
 }}]});
 if(result.outputFiles.length!==1)throw Error('离线游戏必须只有一个完整 JavaScript 入口');
 const boot=(await readFile(join(root,'dist/boot.js'),'utf8')).replace(/<\/script/gi,'<\\/script');
-let html=await readFile(join(root,'dist/index.html'),'utf8'),css=(await readFile(join(root,'dist/survival.css'),'utf8'))+'\n'+(await readFile(join(root,'dist/odyssey.css'),'utf8'));
+let html=await readFile(join(root,'dist/index.html'),'utf8'),css=(await readFile(join(root,'dist/survival.css'),'utf8'))+'\n'+(await readFile(join(root,'dist/odyssey.css'),'utf8'))+'\n'+(await readFile(join(root,'dist/symbiosis.css'),'utf8'));
 html=html.replace(/<link\b[^>]+rel="(?:stylesheet|modulepreload)"[^>]*>/g,'').replace('<script src="./boot.js"></script>',()=>'<script>'+boot+'</script>').replace('<script type="module" src="./play.js"></script>',()=>'<script>'+result.outputFiles[0].text.replace(/<\/script/gi,'<\\/script')+'</script>');
 const policy="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'";
 html=html.replace('<head>','<head><meta name="jiuji-runtime" content="utools"><meta http-equiv="Content-Security-Policy" content="'+policy+'"><style>'+css.replace(/<\/style/gi,'<\\/style')+'</style>');

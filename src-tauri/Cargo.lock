@@ -1122,7 +1122,7 @@ dependencies = [
 
 [[package]]
 name = "jiuji-desktop"
-version = "2.0.0"
+version = "3.0.0"
 dependencies = [
  "serde_json",
  "tauri",

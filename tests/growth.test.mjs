@@ -59,3 +59,10 @@ test('成长指引读取当前地图树苗与当前等级条件，查询不修�
  s.level=2;const next=growthStatus(s);assert.ok(next.requirements.some(r=>r.text.includes('星火信标')));assert.ok(next.requirements.every(r=>!r.text.includes('意识共振')));
  s.level=3;assert.deepEqual(growthStatus(s).requirements,G.chapterRequirements(s));
 });
+
+test('成长提示覆盖完整晋升条件，新主线目标不能遮掉设施与共鸣',()=>{
+ const s=G.createOdysseyGame();s.level=2;const rows=growthStatus(s).requirements;
+ for(const keyword of ['心光庇护','采矿机','信标','10 共鸣','晶能供电'])assert.ok(rows.some(r=>r.text.includes(keyword)),keyword);
+ s.level=3;assert.deepEqual(growthStatus(s).requirements,G.chapterRequirements(s));
+ s.level=9;assert.deepEqual(growthStatus(s).requirements,[]);
+});

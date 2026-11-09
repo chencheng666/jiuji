@@ -11,11 +11,6 @@ export function growthStatus(s){
     saplings:saplings.length,
     nextGrowth:saplings.length?Math.max(0,Math.ceil(Math.min(...saplings.map(n=>n.respawnAt))-s.time)):null,
     plantingPoint:G.plantingNearPlayer(s),
-    requirements:s.level===1?G.promotionRequirements(s):s.level===2?[
-      {ok:s.tech.includes('ward'),text:'掌握「心光庇护」'},
-      {ok:s.buildings.some(b=>b.type==='drill'),text:'建成晶能采矿机'},
-      {ok:s.buildings.some(b=>b.type==='beacon'),text:'在星陨高地建成星火信标'},
-      {ok:s.resonance>=10,text:`储备 10 共鸣 · 当前 ${Math.floor(s.resonance)}`}
-    ]:G.chapterRequirements(s)
+    requirements:G.advancementRequirements(s)
   };
 }

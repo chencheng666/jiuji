@@ -1,6 +1,8 @@
-# 九级 · 星海回响
+# 九级 · 共生远征
 
-当前版本：**2.0.0 · 星海回响**。六张独立地图、四类遗构解谜、晶能工业、真实跨图货运、三对意识投影臂与六地共建主线。
+当前源码：**3.0.0 · 共生远征**。六张常驻地图之外，加入潮汐群岛与地心菌窟两类可重复远征、四名营地伙伴、十二种装备模块与九级后的共建。
+
+3.0 网页版与各商店分别发行，实际版本以对应入口和发行记录为准；TapTap 的既有 1.3.2 → 2.0 审核安排独立进行。
 
 
 原创俯视角单人生存游戏。采集、合成、建造、四季生活与双轨科技，从一根树枝成长到九级文明。
@@ -10,6 +12,18 @@
 - [GitHub](https://github.com/chencheng666/jiuji)
 - [游戏官网](https://www.daguojueqi.site/jiuji/official/)
 - 公众号：**数字机器莱西奥**
+
+## 3.0 共生远征
+
+- 从原岛营火准备出发，三级探索潮汐群岛、四级进入地心菌窟；两类裂隙各有三个路线模板，种子固定路线、资源、天气和事件。
+- 三处观测、十八段事件、八种普通生物与两名三阶段守卫；可解谜修复或战斗推进，入口随时免费返回。紧急救援事先展示材料代价。
+- 四名伙伴自愿加入，最多一人随行；五级安排育苗、维护、制饵和炊事，使用真实材料，夜间休息、离图和离线暂停。
+- 十二种模块，探索装备、当前武器和投影臂各有两个槽；在营火免费拆换，原有武器专长继续生效。
+- 六种功能设施、八种收藏装饰；七级水系与菌群修复、八级六地协作、九级深层远征与共生碑。
+- 手机摇杆、左右手、按键大小与透明度、30/60 帧和减少动态；材料来源追踪、相邻目标选择、暂停拍照与种子分享。
+- v9 存档兼容 v2—v8，保留旧槽位、即时备份和三个时间恢复点；失败导入不会替换当前进度。
+
+[3.0 玩法说明与验收边界](docs/releases/3.0.0.md)。旧旅程无需重练等级；在暂停菜单打开「3.0 共生远征」，回到原岛营火附近解锁对应行动。
 
 ## 2.0 星海回响
 
@@ -65,7 +79,7 @@
 npm run dev
 ```
 
-打开终端中的本机地址；部署整个 `dist/`。不要直接双击 HTML。手机可以使用触屏按钮，微信小游戏、小程序与联机仍是后续计划。
+打开终端中的本机地址；部署整个 `dist/`。不要直接双击 HTML。手机可以使用虚拟摇杆和触屏按钮，微信小游戏、小程序与联机仍是后续计划。
 
 桌面包构建需要 Rust、Tauri 和对应系统依赖：
 
@@ -76,14 +90,14 @@ npm run desktop:build
 
 ### uTools 离线版
 
-应用名称为「饥荒升级版-九级」，指令包含「九级」「九级生存」。1.3.1 已于 2026 年 11 月 3 日提交市场，当前待审核，可先从 [GitHub 下载正式 UPXS 安装包](https://github.com/chencheng666/jiuji/releases/tag/utools-v1.3.1)。应用内注明原创项目与玩法灵感来源，并非《饥荒》官方版本。
+应用名称为「饥荒升级版-九级」，指令包含「九级」「九级生存」。1.3.1 于 2026 年 11 月 3 日提交市场，后续审核状态以平台回读为准；可从 [GitHub 下载正式 UPXS 安装包](https://github.com/chencheng666/jiuji/releases/tag/utools-v1.3.1)。应用内注明原创项目与玩法灵感来源，并非《饥荒》官方版本。
 
 ```sh
 npm ci
 npm run package:utools
 ```
 
-在 uTools 开发者工具中导入 `releases/utools/饥荒升级版-九级/plugin.json`。构建时将游戏模块和样式合并为本地文件，关闭匿名统计，保留本地素材、独立游戏窗口与存档导入导出。网页版与 uTools 存档不自动同步，迁移或更新前请手动备份。外部试玩、官网与 GitHub 仅在点击入口按钮后打开。
+在 uTools 开发者工具中导入 `releases/utools-v3.0.0/饥荒升级版-九级/plugin.json`。构建时将游戏模块和样式合并为本地文件，关闭匿名统计，保留本地素材、独立游戏窗口与存档导入导出。网页版与 uTools 存档不自动同步，迁移或更新前请手动备份。外部试玩、官网与 GitHub 仅在点击入口按钮后打开。
 
 目录 ZIP 用于开发导入与备份，正式 `.upxs` 必须由 uTools 开发者工具生成。打包与送审状态见 [uTools 发行记录](docs/releases/utools-20261102/README.md)。
 
@@ -104,9 +118,10 @@ npm run test:expedition
 npm run test:homestead
 npm run test:frontier
 npm run test:odyssey
+npm run test:coexist
 ```
 
-规则、地图和战斗分别位于 `survival.js`、`expeditions.js`；四季和手册在 `seasons.js`，Canvas 画面在 `world.js`、`expedition-view.js`，界面在 `play.js`。文明课题与工业逻辑在 `odyssey-data.js`、`odyssey.js`，界面和动作渲染在 `odyssey-ui.js`、`odyssey-view.js`。场景素材为原创 SVG，品牌图标为原创生成图片。
+规则、地图和战斗分别位于 `survival.js`、`expeditions.js`；四季和手册在 `seasons.js`，Canvas 画面在 `world.js`、`expedition-view.js`，界面在 `play.js`。文明课题与工业逻辑在 `odyssey-data.js`、`odyssey.js`，界面和动作渲染在 `odyssey-ui.js`、`odyssey-view.js`。3.0 配置、规则、界面和画面分别在 `symbiosis-data.js`、`symbiosis.js`、`symbiosis-ui.js`、`symbiosis-view.js`；设备控制在 `device-controls.js`。场景素材为原创 SVG，品牌图标为原创生成图片。
 
 自动流程不等同于所有设备的人工全程体验。欢迎在 Issue 提供设备、游戏版本、复现过程和截图。MIT 许可证，参见 [共建指南](CONTRIBUTING.md)。
 

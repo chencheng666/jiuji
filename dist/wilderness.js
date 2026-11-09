@@ -45,7 +45,7 @@ export function initWilderness(s){
     for(const [x,y] of [[1080,1520],[1430,1370],[940,1190],[1260,1040],[730,1350],[1600,1900],[1900,2240],[2180,1890],[950,1950],[1780,880]])add('mushroom',x,y);
     for(const [x,y] of [[1450,1900],[1040,1780],[1750,2060],[2250,2080],[1280,2210],[860,1460],[1640,1160]])add('burrow',x,y);
   }
-  for(const [x,y] of [[1550,1670],[1010,1410],[2040,2110]])if(!s.nodes.some(n=>n.id==='pond-'+x))s.nodes.push({id:'pond-'+x,type:'pond',x,y,hp:1,available:true,respawnAt:0});
+  if(!['tide','fungus'].includes(s.expedition?.current))for(const [x,y] of [[1550,1670],[1010,1410],[2040,2110]])if(!s.nodes.some(n=>n.id==='pond-'+x))s.nodes.push({id:'pond-'+x,type:'pond',x,y,hp:1,available:true,respawnAt:0});
   s.wilderness.particles=[];s.wilderness.impact=null;
   for(const b of s.buildings)if(['cookpot','trap'].includes(b.type))b.inventory||={};
 }

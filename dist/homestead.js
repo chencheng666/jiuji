@@ -26,7 +26,7 @@ export const CONTRACTS=maps.flatMap(map=>['well','pod','den'].map((type,i)=>({id
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y),fail=reason=>({ok:false,reason});
 export function initHomestead(s){
  s.homestead??={mode:'survival',active:null,completed:[],sites:[],choices:{},specialty:{},satiety:0,recoveries:0,graves:[],lures:[],channel:null};
- const add=(map,id)=>{if(id==='home')return;Object.keys(SITE_TYPES).forEach((type,i)=>{
+ const add=(map,id)=>{if(['home','tide','fungus'].includes(id))return;Object.keys(SITE_TYPES).forEach((type,i)=>{
   const siteId='site-'+id+'-'+type;if(map.nodes.some(n=>n.id===siteId))return;
   const bases=[[1600,1780],[1810,1390],[1470,1110],[2050,2000],[2440,1190],[990,2040]],jitter=(s.seed%61)-30;
   let x=bases[i][0]+jitter,y=bases[i][1]-jitter;

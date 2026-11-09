@@ -9,3 +9,5 @@ releases/utools/
 
 __pycache__/
 *.pyc
+
+releases/utools-v*/
