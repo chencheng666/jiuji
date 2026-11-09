@@ -52,7 +52,7 @@ export function stepVillageLife(s,dt){
    if(r.path.length){const p=r.path[0],length=dist(r,p),speed=urgent?52:27+(r.index%3)*3,amount=Math.min(length,speed*dt),x=length?r.x+(p.x-r.x)*amount/length:p.x,y=length?r.y+(p.y-r.y)*amount/length:p.y;
     if(G.walkable(s,x,y)){r.face=x>=r.x?1:-1;r.x=x;r.y=y;r.walk+=dt*7;if(length<=amount+.001)r.path.shift();}else{r.path=[];r.waitUntil=s.time+2;}
     if(!r.path.length){r.waitUntil=s.time+6+(r.index*3)%8;r.walk=0;}
-   }else{r.walk=0;r.inside=urgent;}
+   }else{r.walk=0;r.inside=urgent&&dist(r,{x:n.x+(r.index%3-1)*57,y:n.y+18})<65;}
   }
  }
 }

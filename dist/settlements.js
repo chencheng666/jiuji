@@ -66,7 +66,7 @@ export function settlementAction(s,action,id='',value=''){
 export function stepSettlements(s,dt=0){const e=s.settlements;if(!e||!G.inHome(s))return;for(const v of Object.values(e.villages)){
  const now=G.day(s);if(v.day===now)continue;v.day=now;v.trades=0;if(!v.met)continue;
  const food=Math.max(1,Math.ceil(v.population/3)-(e.tech.includes('council')&&v.affinity>=40?1:0));if(v.food>=food&&v.fuel>=1){v.food-=food;v.fuel--;v.comfort=Math.min(100,v.comfort+8);if(v.affinity>=15&&v.comfort>=65)v.population=Math.min(10,v.population+1);}else v.comfort=Math.max(0,v.comfort-5);
- }initVillageLife(s);if(dt>0)stepVillageLife(s,dt);}
+ }if(dt>0)stepVillageLife(s,dt);else initVillageLife(s);}
 export function recordDeath(s){const w=G.weather(s),cause=s.player.hunger<=0?'缺粮':s.darkTime>6?'缺光':w.raining&&s.wilderness.wetness>60?'淋雨':s.ecology<25?'生态压力':s.living.temperature<5?'失温':'战斗或环境伤害';s.settlements.death={cause,tip:({缺粮:'保留浆果，先学会在营火烤食物。',缺光:'天黑前准备营火燃料或一支火炬。',淋雨:'下雨时到庇护所避雨，火边烘干衣物。',生态压力:'砍树后补种，花与农圃都需要健康土地。',失温:'寒地远征先准备披肩、热食和营火。'})[cause]||'先观察蓄力预警，闪避后再攻击；演练不损失角色生命。'};}
 export function validateSettlements(s,num){const e=s.settlements;if(e===undefined)return;const integer=(v,a=0,b=1e9)=>Number.isInteger(v)&&num(v,a,b),list=(x,valid)=>Array.isArray(x)&&new Set(x).size===x.length&&x.every(id=>valid.includes(id));
  if(!e||!integer(e.intro,0,3)||!integer(e.lesson,0,3)||typeof e.expert!=='boolean'||typeof e.mercyUsed!=='boolean'||!(e.active===null||has(VILLAGES,e.active))||!list(e.tech,VILLAGE_TECH.map(t=>t.id)))throw Error('聚落引导数据无效');

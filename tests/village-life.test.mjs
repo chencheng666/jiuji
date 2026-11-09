@@ -24,3 +24,6 @@ test('人口增长生成新居民；远处聚落不每帧寻路，屏幕上最�
 test('新手建议按进度调整，每次最多三条，不增加常驻界面',()=>{
  const{s}=setup();const first=beginnerAdvice(s);assert.equal(first.length,3);assert.match(first[0].title,/石斧/);s.crafted.push('axe');s.buildings.push({type:'campfire'});s.settlements.villages.bay.met=true;s.level=2;s.player.hunger=30;const next=beginnerAdvice(s);assert.equal(next[0].action,'safety');assert.ok(next.some(t=>t.action==='robots'));assert.ok(next.length<=3);
 });
+test('避雨途中受阻的居民不会在远离住处时直接消失',()=>{
+ const{s,n}=setup(),r=s.settlements.life.people.bay[0];s.time=360;r.x=n.x+180;r.y=n.y+60;r.state='rain';r.path=[];r.waitUntil=460;r.inside=false;stepVillageLife(s,.1);assert.equal(r.inside,false);
+});
