@@ -1,0 +1,12 @@
+// 设备设置独立于世界存档，换存档不覆盖当前手机的操作习惯。
+export const CONTROL_DEFAULTS={size:1,opacity:.9,leftHanded:false,reducedMotion:false,particles:true,fps:60,quality:'auto',ability:'dash'};
+export function normalizeControls(value={}){return{size:[.85,1,1.15].includes(value.size)?value.size:1,opacity:[.6,.9,1].includes(value.opacity)?value.opacity:.9,leftHanded:value.leftHanded===true,reducedMotion:value.reducedMotion===true,particles:value.particles!==false,fps:value.fps===30?30:60,quality:['auto','clear','smooth'].includes(value.quality)?value.quality:'auto',ability:['dash','projection','return'].includes(value.ability)?value.ability:'dash'};}
+export function readControls(storage){
+ const mobile=globalThis.window?.matchMedia?.('(pointer: coarse)')?.matches||Math.min(globalThis.window?.innerWidth||Infinity,globalThis.window?.innerHeight||Infinity)<600;
+ const defaults={...CONTROL_DEFAULTS,fps:mobile?30:60};
+ try{return normalizeControls({...defaults,...JSON.parse((storage??globalThis.localStorage).getItem('jiuji.controls.v3')||'{}')});}catch{return defaults;}
+}
+export function applyControls(document,config){document.documentElement.style.setProperty('--touch-scale',config.size);document.documentElement.style.setProperty('--touch-opacity',config.opacity);document.body.classList.toggle('left-handed',config.leftHanded);document.body.classList.toggle('reduce-motion',config.reducedMotion);}
+export function bindStick(element,change){let pointer=null;const update=e=>{const r=element.getBoundingClientRect(),dx=e.clientX-r.left-r.width/2,dy=e.clientY-r.top-r.height/2,radius=r.width*.32,len=Math.hypot(dx,dy),scale=Math.max(radius,len);const x=len<8?0:dx/scale,y=len<8?0:dy/scale;element.style.setProperty('--stick-x',x*radius+'px');element.style.setProperty('--stick-y',y*radius+'px');change({x,y});};
+ element.addEventListener('pointerdown',e=>{if(pointer!==null)return;e.preventDefault();pointer=e.pointerId;element.setPointerCapture(pointer);update(e);});element.addEventListener('pointermove',e=>{if(e.pointerId===pointer)update(e);});const reset=e=>{if(e&&e.pointerId!==undefined&&e.pointerId!==pointer)return;pointer=null;element.style.setProperty('--stick-x','0px');element.style.setProperty('--stick-y','0px');change({x:0,y:0});};for(const name of ['pointerup','pointercancel','lostpointercapture'])element.addEventListener(name,reset);window.addEventListener('blur',()=>reset());document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});return reset;
+}

@@ -1,3 +1,4 @@
+import {layoutMultiplier} from './camp-layout.js';
 // 荒野生活扩展：天气、营地烹饪与诱捕；不依赖绘图和浏览器。
 export const WILD_ITEMS = {
   rod:{name:'枝编钓竿',icon:'rod',durability:40},
@@ -45,14 +46,14 @@ export function initWilderness(s){
     for(const [x,y] of [[1080,1520],[1430,1370],[940,1190],[1260,1040],[730,1350],[1600,1900],[1900,2240],[2180,1890],[950,1950],[1780,880]])add('mushroom',x,y);
     for(const [x,y] of [[1450,1900],[1040,1780],[1750,2060],[2250,2080],[1280,2210],[860,1460],[1640,1160]])add('burrow',x,y);
   }
-  for(const [x,y] of [[1550,1670],[1010,1410],[2040,2110]])if(!s.nodes.some(n=>n.id==='pond-'+x))s.nodes.push({id:'pond-'+x,type:'pond',x,y,hp:1,available:true,respawnAt:0});
+  if(!['tide','fungus'].includes(s.expedition?.current))for(const [x,y] of [[1550,1670],[1010,1410],[2040,2110]])if(!s.nodes.some(n=>n.id==='pond-'+x))s.nodes.push({id:'pond-'+x,type:'pond',x,y,hp:1,available:true,respawnAt:0});
   s.wilderness.particles=[];s.wilderness.impact=null;
   for(const b of s.buildings)if(['cookpot','trap'].includes(b.type))b.inventory||={};
 }
 export function stepWilderness(s,dt){
   const w=weather(s),p=s.player,covered=shelterAt(s),warm=s.buildings.some(b=>b.type==='campfire'&&b.fuel>0&&near(p,b,165));
   let change=w.raining&&!covered&&s.level<8?1.05*w.intensity*(s.inventory.coat?.25:1):-.24;
-  if(covered)change=-.7;if(warm)change=-1.8;
+  if(covered){const shelter=s.buildings.find(b=>b.type==='shelter'&&near(p,b,125));change=-.7*layoutMultiplier(s,shelter,'sheltered');}if(warm)change=-1.8;
   s.wilderness.wetness=Math.max(0,Math.min(100,s.wilderness.wetness+change*dt));
   if(s.wilderness.wetness>65&&!warm&&!covered)p.clarity=Math.max(0,p.clarity-.09*dt);
   if(s.wilderness.wetness>90&&s.time%300>=230&&!warm&&!covered)p.hp-=.22*dt;

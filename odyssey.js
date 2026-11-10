@@ -1,4 +1,5 @@
 import * as G from './survival.js';
+import {hasModule} from './symbiosis.js';
 import {payCraft} from './homestead.js';
 import {AUTO_RECIPES,SITES,CONTACTS,GUARDIAN_REPAIR,SIGNAL_COST,INITIAL_HEALTH} from './odyssey-data.js';
 export * from './odyssey-data.js';
@@ -210,15 +211,20 @@ export function nextCampaignGoal(s){
   return campaignRequirements(s).find(r=>!r.ok)||null;
 }
 export function canDismantle(s,b){
+  if(b.pen&&(b.pen.animals||b.pen.breeding))return'先放归圈舍动物，并完成繁育后再拆除';
+  if(s.nodes.some(n=>n.followPen===b.id))return'有动物正返回这座圈舍，请等它到达';
+  if(b.pen&&(b.pen.food>0||b.pen.reserve>0||b.pen.energy>0))return'圈舍仍有饲料或晶能，请先使用或取回储备';
+  if(b.coTask)return'伙伴岗位仍有在制任务，请恢复岗位并完成后再拆除';
   if(b.machine?.job)return'先完成自动装配台当前订单，避免丢失已投入材料';
   if(b.type==='relay'&&s.odyssey.routes.some(r=>(r.from===s.expedition.current||r.to===s.expedition.current)&&(r.enabled||r.cargo)))return'先停用关联货运，并等待在途货物抵达';
   return'';
 }
 export function stepOdyssey(s,dt,projectHarvest){
   const e=s.odyssey;if(!e)return;
-  e.heat=clamp(e.heat-dt*5);if(e.overheated&&e.heat<40)e.overheated=false;e.shutdown=Math.max(0,e.shutdown-dt);
+  e.heat=clamp(e.heat-dt*5*(hasModule(s,'cooler')?1.4:1));if(e.overheated&&e.heat<40)e.overheated=false;e.shutdown=Math.max(0,e.shutdown-dt);
   const current=s.expedition.current;
   for(const[id,map]of allMaps(s)){
+    if(!e.grids[id])continue;
     if(id!==current&&!map.buildings.some(b=>b.type==='relay'))continue;
     const grid=e.grids[id],capacity=gridCapacity(map);
     const generators=map.buildings.filter(b=>['windmill','solararray'].includes(b.type));
@@ -277,7 +283,7 @@ export function stepOdyssey(s,dt,projectHarvest){
       for(const n of candidates){
         if(e.power<.8&&!e.creative){e.projection=false;say(s,'投影臂晶能不足，已安全收起。');break;}
         if(e.heat>=85){e.projection=false;e.overheated=true;say(s,'投影臂热量达到保护线，已收起散热；材料与工具没有额外损失。');break;}
-        if(projectHarvest(s,n)){if(!e.creative){e.power=Math.max(0,e.power-.8);e.heat=clamp(e.heat+7);}e.stats.projectionHits++;e.trails.push({x:n.x,y:n.y,at:s.time,type:'arm'});}
+        if(projectHarvest(s,n)){if(!e.creative){e.power=Math.max(0,e.power-(hasModule(s,'efficiency')?.6:.8));e.heat=clamp(e.heat+7);}e.stats.projectionHits++;e.trails.push({x:n.x,y:n.y,at:s.time,type:'arm'});}
       }
     }
   }

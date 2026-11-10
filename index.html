@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#20362f"><meta name="description" content="九级：从一把石斧到一座星火信标。在荒野中采集、合成、建造，点亮物质与意识科技树。2.0 星海回响：六地远征、晶能工业、折跃货运、意识投影臂与遗构解谜。"><title>九级 2.0 · 星海回响</title><link rel="apple-touch-icon" href="./assets/jiuji-logo-180.png"><link rel="icon" href="./assets/jiuji-logo-64.png"><link rel="stylesheet" href="./survival.css"><link rel="stylesheet" href="./odyssey.css"><link rel="modulepreload" href="./play.js"><link rel="modulepreload" href="./homestead.js"><link rel="modulepreload" href="./frontier.js"><link rel="modulepreload" href="./survival.js"><link rel="modulepreload" href="./chapters.js"><link rel="modulepreload" href="./wilderness.js"><link rel="modulepreload" href="./world.js"><link rel="modulepreload" href="./atmosphere.js"><link rel="modulepreload" href="./audio.js"><link rel="modulepreload" href="./seasons.js"><link rel="modulepreload" href="./storage.js"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#20362f"><meta name="description" content="九级：从一把石斧到一座星火信标。在荒野中采集、合成、建造，点亮物质与意识科技树。3.4 流畅与交锋：高分屏画质设置、武器与避战演练；昼夜火光、季节动物、鸡兔养殖与可进入的聚落；潮汐群岛、地心菌窟、营地伙伴、装备模块与九级共建。"><title>九级 3.4.0 · 流畅与交锋</title><link rel="apple-touch-icon" href="./assets/jiuji-logo-180.png"><link rel="icon" href="./assets/jiuji-logo-64.png"><link rel="stylesheet" href="./survival.css"><link rel="stylesheet" href="./odyssey.css"><link rel="stylesheet" href="./symbiosis.css"><link rel="modulepreload" href="./play.js"><link rel="modulepreload" href="./homestead.js"><link rel="modulepreload" href="./frontier.js"><link rel="modulepreload" href="./survival.js"><link rel="modulepreload" href="./chapters.js"><link rel="modulepreload" href="./wilderness.js"><link rel="modulepreload" href="./world.js"><link rel="modulepreload" href="./atmosphere.js"><link rel="modulepreload" href="./audio.js"><link rel="modulepreload" href="./seasons.js"><link rel="modulepreload" href="./storage.js"></head>
 <body>
 <main id="game">
   <section id="boot" role="status"><h1>九级</h1><p>正在展开荒野地图…</p><small>首次进入需要加载游戏资源，请稍候。</small><button id="reload-game">重新加载</button></section>
@@ -12,7 +12,7 @@
     <button class="menu-button" data-do="pause" aria-label="暂停菜单">Ⅱ</button>
   </header>
   <div id="weather" class="weather"></div><aside id="pinned" class="pinned" hidden></aside><button class="sound-toggle" data-do="sound" aria-pressed="true">音效 开</button>
-  <div class="knowledge" id="knowledge"></div>
+  <div class="knowledge" id="knowledge"></div><div class="growth-strip" id="growth-strip" aria-label="九级成长路线"></div>
   <div class="camp-toolbar" id="camp-toolbar">
   <button class="camp-toolbar-toggle" id="camp-toolbar-toggle" aria-controls="camp-tools" aria-expanded="true" aria-label="收起营地菜单"><b>营地</b><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></button>
   <nav class="tool-rail" id="camp-tools" aria-label="营地操作">
@@ -20,16 +20,18 @@
     <button data-do="tech" title="科技 T"><span>✧</span><b>科技</b><kbd>T</kbd></button>
     <button data-do="bag" title="背包 B"><span>▣</span><b>背包</b><kbd>B</kbd></button>
     <button data-do="map" title="地图 M"><span>⌖</span><b>地图</b><kbd>M</kbd></button><button data-do="journey" title="九级历程 J"><span>Ⅸ</span><b>历程</b><kbd>J</kbd></button>
-  <button data-do="settlement" title="营地经营与远征回信"><span>⌂</span><b>经营</b></button><button data-do="handbook" title="生存手册与四季"><span>❧</span><b>手册</b></button></nav>
+  <button data-do="villages" title="聚落交易、委托与守望演练"><span>♧</span><b>聚落</b></button><button data-do="coexist" title="共生远征与营地伙伴"><span>✦</span><b>远征</b></button><button data-do="settlement" title="营地经营与远征回信"><span>⌂</span><b>经营</b></button><button data-do="handbook" title="生存手册与四季"><span>❧</span><b>手册</b></button></nav>
   </div>
-  <aside class="quest" id="quest"></aside>
+  <button id="quest-toggle" class="quest-toggle" data-ui="quest-toggle" aria-controls="quest" aria-expanded="true" aria-label="收起荒野手记"><span>荒野手记</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><aside class="quest" id="quest"></aside>
   <div class="location" id="location"></div>
   <button class="mini-map" data-do="map" aria-label="打开探索地图"><canvas id="mini" width="230" height="176"></canvas><span>探索地图 <kbd>M</kbd></span></button>
   <div id="abilities" class="abilities" hidden></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="context" id="context"></div>
   <div class="build-controls" id="build-controls" hidden></div>
   <div class="hotbar-wrap"><div id="hotbar" class="hotbar" aria-label="快捷物品"></div><div class="controls-hint">W A S D 移动 <i>·</i> E 采集 <i>·</i> F 添柴 <i>·</i> 点击资源自动采集</div></div>
-  <div class="touch-controls"><div class="dpad"><button data-move="up" aria-label="向上移动">↑</button><button data-move="left" aria-label="向左移动">←</button><button data-move="down" aria-label="向下移动">↓</button><button data-move="right" aria-label="向右移动">→</button></div><div class="touch-actions"><button data-do="interact">采集</button><button data-do="attack">攻击</button><button data-do="dodge">闪避</button></div></div>
+  <div class="touch-controls"><div class="dpad stick" id="touch-stick" role="group" aria-label="拖动摇杆移动"><span class="stick-ring">✥</span><span class="stick-knob"></span></div><div class="touch-actions"><button data-do="interact">采集</button><button data-do="attack">攻击</button><button data-do="dodge">闪避</button><button data-do="active-ability" hidden>特技</button></div></div>
+  <div id="photo-tools" hidden><button data-photo-pan="-80,0">←</button><button data-photo-pan="0,-80">↑</button><button data-photo-pan="0,80">↓</button><button data-photo-pan="80,0">→</button><button data-photo-zoom="-.1">−</button><button data-photo-zoom=".1">＋</button><button data-do="photo-save">保存照片</button><button data-do="photo-close">返回游戏</button></div>
+  <section id="village-visit" aria-label="聚落内部探索" hidden></section>
   <div id="overlay" class="overlay" hidden></div>
 </main>
 <input type="file" id="import-file" accept="application/json,.json" hidden>

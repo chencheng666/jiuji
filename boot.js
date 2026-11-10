@@ -8,13 +8,16 @@
     return this[index < 0 ? this.length + index : index];
   }, configurable: true, writable: true});
 
-  var boot = document.querySelector('#boot'), ready = false, frame = 0;
+  var boot = document.querySelector('#boot'), ready = false, frame = 0, lastHeight = 0, lastWidth = 0, lastRatio = 0;
   function syncViewport() {
     frame = 0;
     var viewport = window.visualViewport;
     // 放大阅读时不缩小游戏，只跟随横竖屏切换和宿主可用区域变化。
     var height = viewport && viewport.scale === 1 ? viewport.height : window.innerHeight;
-    if (height > 0) document.documentElement.style.setProperty('--game-height', Math.round(height) + 'px');
+    var rounded = Math.round(height), width = window.innerWidth || 0, ratio = window.devicePixelRatio || 1;
+    if (!(height > 0) || rounded === lastHeight && width === lastWidth && ratio === lastRatio) return;
+    lastHeight = rounded; lastWidth = width; lastRatio = ratio;
+    document.documentElement.style.setProperty('--game-height', rounded + 'px');
     window.dispatchEvent(new Event('jiuji:viewport'));
   }
   function resize() { if (!frame) frame = requestAnimationFrame(syncViewport); }
