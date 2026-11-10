@@ -1,3 +1,4 @@
+import {villageContextLine} from './camp-living.js';
 let G,VILLAGES;
 export function bindVillageLife(rules,villages){G=rules;VILLAGES=villages;}
 import {findLandPath} from './navigation.js';
@@ -26,7 +27,7 @@ function schedule(s,n,v,r){
  if(danger)return{state:'danger',x:(r.index%3-1)*57,y:18,text:'先回屋，等外面安全些。'};
  if(w.raining)return{state:'rain',x:(r.index%3-1)*57,y:18,text:'下雨了，把工具收好。'};
  if(time>=230)return{state:'home',x:(r.index%3-1)*57,y:18,text:'明早再见。'};
- if(r.index===0&&dist(s.player,n)<190)return{state:'greeting',x:38,y:38,text:v.met?'回来啦，营地里慢慢聊。':'欢迎，点聚落标牌就能和我们交谈。'};
+ if(r.index===0&&dist(s.player,n)<190)return{state:'greeting',x:38,y:38,text:villageContextLine(s,n.village)||(v.met?'回来啦，营地里慢慢聊。':'欢迎，点聚落标牌就能和我们交谈。')};
  if(time>=190)return{state:'chat',x:Math.cos(r.index*2.4)*45,y:65+Math.sin(r.index*2.4)*22,text:v.food>0?'今天的粮食已经收好了。':'明天得准备些食物和柴火。'};
  const phase=(r.round+r.index+Math.floor(s.seed/13))%4;
  if(phase===3)return{state:'walk',x:Math.cos(r.index*2.4+r.round)*145,y:45+Math.sin(r.index*2.4+r.round)*80,text:'出去走一走，看看新长的草。'};

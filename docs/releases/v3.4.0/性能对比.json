@@ -1,0 +1,336 @@
+{
+  "基线": {
+    "method": "固定种子34，2K视口，白昼/夜晚同一路线，各预热30次+连续绘制240次；CPU提交耗时，不代表设备实际FPS",
+    "renderer": "Canvas2D",
+    "viewport": [
+      2560,
+      1440
+    ],
+    "results": [
+      {
+        "quality": "original",
+        "phase": "day",
+        "renderP50": 1.2000000476837158,
+        "renderP95": 1.7999999523162842,
+        "mapP50": 0.2999999523162842,
+        "buffer": [
+          2560,
+          1440
+        ],
+        "cache": null
+      },
+      {
+        "quality": "original",
+        "phase": "night",
+        "renderP50": 1.2000000476837158,
+        "renderP95": 1.7999999523162842,
+        "mapP50": 0.2999999523162842,
+        "buffer": [
+          2560,
+          1440
+        ],
+        "cache": null
+      }
+    ],
+    "nodes": 353
+  },
+  "优化后": {
+    "method": "固定种子34，2K视口，白昼/夜晚同一路线，各预热30次+连续绘制240次；CPU提交耗时，不代表设备实际FPS",
+    "renderer": "Canvas2D",
+    "viewport": [
+      2560,
+      1440
+    ],
+    "results": [
+      {
+        "quality": "auto",
+        "phase": "day",
+        "renderP50": 0.5999999046325684,
+        "renderP95": 0.8000000715255737,
+        "mapP50": 0.2999999523162842,
+        "buffer": [
+          2108,
+          1185
+        ],
+        "cache": {
+          "entries": 29,
+          "bytes": 1252080,
+          "hits": 71198,
+          "misses": 29
+        }
+      },
+      {
+        "quality": "auto",
+        "phase": "night",
+        "renderP50": 0.6000000238418579,
+        "renderP95": 0.8999999761581421,
+        "mapP50": 0.20000004768371582,
+        "buffer": [
+          2108,
+          1185
+        ],
+        "cache": {
+          "entries": 29,
+          "bytes": 1252080,
+          "hits": 142221,
+          "misses": 29
+        }
+      },
+      {
+        "quality": "clear",
+        "phase": "day",
+        "renderP50": 0.6000000238418579,
+        "renderP95": 0.9000000953674316,
+        "mapP50": 0.20000004768371582,
+        "buffer": [
+          2560,
+          1440
+        ],
+        "cache": {
+          "entries": 29,
+          "bytes": 1252080,
+          "hits": 213244,
+          "misses": 29
+        }
+      },
+      {
+        "quality": "clear",
+        "phase": "night",
+        "renderP50": 0.5999999046325684,
+        "renderP95": 0.8999999761581421,
+        "mapP50": 0.20000004768371582,
+        "buffer": [
+          2560,
+          1440
+        ],
+        "cache": {
+          "entries": 29,
+          "bytes": 1252080,
+          "hits": 284267,
+          "misses": 29
+        }
+      },
+      {
+        "quality": "smooth",
+        "phase": "day",
+        "renderP50": 0.6000000238418579,
+        "renderP95": 0.7999999523162842,
+        "mapP50": 0.20000004768371582,
+        "buffer": [
+          1632,
+          918
+        ],
+        "cache": {
+          "entries": 58,
+          "bytes": 1959228,
+          "hits": 355261,
+          "misses": 58
+        }
+      },
+      {
+        "quality": "smooth",
+        "phase": "night",
+        "renderP50": 0.5999999046325684,
+        "renderP95": 0.7999999523162842,
+        "mapP50": 0.20000004768371582,
+        "buffer": [
+          1632,
+          918
+        ],
+        "cache": {
+          "entries": 58,
+          "bytes": 1959228,
+          "hits": 426284,
+          "misses": 58
+        }
+      }
+    ],
+    "nodes": 353
+  },
+  "移动端": [
+    {
+      "name": "手机竖屏",
+      "buffer": {
+        "viewport": [
+          390,
+          844
+        ],
+        "buffer": [
+          585,
+          1266
+        ],
+        "quality": "smooth"
+      },
+      "overflow": 0,
+      "bodyOverflow": 0,
+      "scroll": 0,
+      "canvas": {
+        "x": 30,
+        "y": 329.4140625,
+        "width": 330,
+        "height": 142.5703125,
+        "top": 329.4140625,
+        "right": 360,
+        "bottom": 471.984375,
+        "left": 30
+      },
+      "buttons": [
+        {
+          "name": "林语弓",
+          "y": 483.984375,
+          "height": 44
+        },
+        {
+          "name": "碎岩锤",
+          "y": 483.984375,
+          "height": 44
+        },
+        {
+          "name": "霜晶长矛",
+          "y": 483.984375,
+          "height": 44
+        },
+        {
+          "name": "攻击目标",
+          "y": 483.984375,
+          "height": 44
+        },
+        {
+          "name": "重试本课",
+          "y": 539.984375,
+          "height": 44
+        },
+        {
+          "name": "下一课",
+          "y": 539.984375,
+          "height": 44
+        }
+      ],
+      "feedback": "命中！箭迹展示了弓的射程；每次消耗一支演练箭矢。",
+      "bootHidden": true
+    },
+    {
+      "name": "手机横屏",
+      "buffer": {
+        "viewport": [
+          844,
+          390
+        ],
+        "buffer": [
+          1266,
+          585
+        ],
+        "quality": "smooth"
+      },
+      "overflow": 0,
+      "bodyOverflow": 0,
+      "scroll": 0,
+      "canvas": {
+        "x": 26,
+        "y": 157,
+        "width": 540,
+        "height": 148,
+        "top": 157,
+        "right": 566,
+        "bottom": 305,
+        "left": 26
+      },
+      "buttons": [
+        {
+          "name": "林语弓",
+          "y": 156,
+          "height": 44
+        },
+        {
+          "name": "碎岩锤",
+          "y": 156,
+          "height": 44
+        },
+        {
+          "name": "霜晶长矛",
+          "y": 206,
+          "height": 44
+        },
+        {
+          "name": "攻击目标",
+          "y": 206,
+          "height": 44
+        },
+        {
+          "name": "重试本课",
+          "y": 256,
+          "height": 44
+        },
+        {
+          "name": "下一课",
+          "y": 256,
+          "height": 44
+        }
+      ],
+      "feedback": "命中！箭迹展示了弓的射程；每次消耗一支演练箭矢。",
+      "bootHidden": true
+    },
+    {
+      "name": "宿主短横屏",
+      "buffer": {
+        "viewport": [
+          720,
+          324
+        ],
+        "buffer": [
+          1080,
+          486
+        ],
+        "quality": "smooth"
+      },
+      "overflow": 0,
+      "bodyOverflow": 0,
+      "scroll": 0,
+      "canvas": {
+        "x": 26,
+        "y": 124,
+        "width": 416,
+        "height": 148,
+        "top": 124,
+        "right": 442,
+        "bottom": 272,
+        "left": 26
+      },
+      "buttons": [
+        {
+          "name": "林语弓",
+          "y": 123,
+          "height": 44
+        },
+        {
+          "name": "碎岩锤",
+          "y": 123,
+          "height": 44
+        },
+        {
+          "name": "霜晶长矛",
+          "y": 173,
+          "height": 44
+        },
+        {
+          "name": "攻击目标",
+          "y": 173,
+          "height": 44
+        },
+        {
+          "name": "重试本课",
+          "y": 223,
+          "height": 44
+        },
+        {
+          "name": "下一课",
+          "y": 223,
+          "height": 44
+        }
+      ],
+      "feedback": "命中！箭迹展示了弓的射程；每次消耗一支演练箭矢。",
+      "bootHidden": true
+    }
+  ],
+  "说明": "CPU提交耗时不等于实际FPS；本轮未完成反馈机型真机测试。"
+}

@@ -1,6 +1,6 @@
 // 设备设置独立于世界存档，换存档不覆盖当前手机的操作习惯。
-export const CONTROL_DEFAULTS={size:1,opacity:.9,leftHanded:false,reducedMotion:false,particles:true,fps:60,ability:'dash'};
-export function normalizeControls(value={}){return{size:[.85,1,1.15].includes(value.size)?value.size:1,opacity:[.6,.9,1].includes(value.opacity)?value.opacity:.9,leftHanded:value.leftHanded===true,reducedMotion:value.reducedMotion===true,particles:value.particles!==false,fps:value.fps===30?30:60,ability:['dash','projection','return'].includes(value.ability)?value.ability:'dash'};}
+export const CONTROL_DEFAULTS={size:1,opacity:.9,leftHanded:false,reducedMotion:false,particles:true,fps:60,quality:'auto',ability:'dash'};
+export function normalizeControls(value={}){return{size:[.85,1,1.15].includes(value.size)?value.size:1,opacity:[.6,.9,1].includes(value.opacity)?value.opacity:.9,leftHanded:value.leftHanded===true,reducedMotion:value.reducedMotion===true,particles:value.particles!==false,fps:value.fps===30?30:60,quality:['auto','clear','smooth'].includes(value.quality)?value.quality:'auto',ability:['dash','projection','return'].includes(value.ability)?value.ability:'dash'};}
 export function readControls(storage){
  const mobile=globalThis.window?.matchMedia?.('(pointer: coarse)')?.matches||Math.min(globalThis.window?.innerWidth||Infinity,globalThis.window?.innerHeight||Infinity)<600;
  const defaults={...CONTROL_DEFAULTS,fps:mobile?30:60};

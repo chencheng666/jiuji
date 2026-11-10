@@ -1,3 +1,4 @@
+import {layoutMultiplier} from './camp-layout.js';
 // 荒野生活扩展：天气、营地烹饪与诱捕；不依赖绘图和浏览器。
 export const WILD_ITEMS = {
   rod:{name:'枝编钓竿',icon:'rod',durability:40},
@@ -52,7 +53,7 @@ export function initWilderness(s){
 export function stepWilderness(s,dt){
   const w=weather(s),p=s.player,covered=shelterAt(s),warm=s.buildings.some(b=>b.type==='campfire'&&b.fuel>0&&near(p,b,165));
   let change=w.raining&&!covered&&s.level<8?1.05*w.intensity*(s.inventory.coat?.25:1):-.24;
-  if(covered)change=-.7;if(warm)change=-1.8;
+  if(covered){const shelter=s.buildings.find(b=>b.type==='shelter'&&near(p,b,125));change=-.7*layoutMultiplier(s,shelter,'sheltered');}if(warm)change=-1.8;
   s.wilderness.wetness=Math.max(0,Math.min(100,s.wilderness.wetness+change*dt));
   if(s.wilderness.wetness>65&&!warm&&!covered)p.clarity=Math.max(0,p.clarity-.09*dt);
   if(s.wilderness.wetness>90&&s.time%300>=230&&!warm&&!covered)p.hp-=.22*dt;

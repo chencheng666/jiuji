@@ -1,3 +1,4 @@
+import {craftStorageRange,layoutMultiplier} from './camp-layout.js';
 import * as G from './survival.js';
 import {REALMS} from './expeditions.js';
 // 林海回声：委托、探索与营地形成闭环；计时只在当前地图推进。
@@ -39,7 +40,7 @@ export function initHomestead(s){
 export function craftAmount(s,id){
  if(['insight','resonance'].includes(id))return G.amount(s,id);
  const item=G.ITEMS[id];let n=G.amount(s,id);if(!item||item.durability||item.unique)return n;
- for(const b of s.buildings)if(['chest','robotdock'].includes(b.type)&&distance(b,s.player)<=180)n+=b.inventory?.[id]||0;
+ for(const b of s.buildings)if(['chest','robotdock'].includes(b.type)&&distance(b,s.player)<=craftStorageRange(s,b))n+=b.inventory?.[id]||0;
  return n;
 }
 export function craftAffordable(s,cost){return Object.entries(cost||{}).every(([id,n])=>craftAmount(s,id)>=n);}
@@ -48,7 +49,7 @@ export function payCraft(s,cost){
  for(const[id,n]of Object.entries(cost||{})){
   if(['insight','resonance'].includes(id)){s[id]-=n;continue;}let left=n;
   const take=Math.min(left,s.inventory[id]||0);s.inventory[id]=(s.inventory[id]||0)-take;left-=take;
-  for(const b of s.buildings)if(left&&['chest','robotdock'].includes(b.type)&&distance(b,s.player)<=180){const v=Math.min(left,b.inventory?.[id]||0);if(v)b.inventory[id]-=v;left-=v;}
+  for(const b of s.buildings)if(left&&['chest','robotdock'].includes(b.type)&&distance(b,s.player)<=craftStorageRange(s,b)){const v=Math.min(left,b.inventory?.[id]||0);if(v)b.inventory[id]-=v;left-=v;}
  }
 }
 function rewardsFit(s,drop){return Object.entries(drop).every(([id,n])=>(s.inventory[id]||0)+n<=9999);}
@@ -81,6 +82,7 @@ export function stepHomestead(s,dt,interrupted){
   if(interrupted||s.player.hp<a.hp||s.action||s.channel||s.path.length||s.expedition.current!==a.realm||!n||distance(s.player,n)>140){h.channel=null;s.message={id:++s.messageSeq,text:'探索已中断，材料未消耗。'};}
   else if((a.elapsed+=dt)>=a.duration){h.channel=null;const reason=siteReason(s,a.id,a.choice);if(reason){s.message={id:++s.messageSeq,text:reason};}else{const o=SITE_TYPES[n.siteType].options.find(o=>o.id===a.choice);for(const[id,v]of Object.entries(o.cost))s.inventory[id]-=v;reward(s,o.drop);s.insight+=o.insight||0;s.resonance=Math.min(100,s.resonance+(o.resonance||0));s.ecology=Math.min(100,s.ecology+(o.eco||0));h.sites.push(a.id);h.choices[a.id]=a.choice;n.available=false;s.message={id:++s.messageSeq,text:'完成「'+SITE_TYPES[n.siteType].name+'」。成果已收入行囊，返回手记台交付委托。'};}}
  }
+ for(const b of s.buildings)if(b.type==='dryingrack'&&b.crop)b.crop.readyAt-=dt*(layoutMultiplier(s,b,'processing')-1);
  for(const b of s.buildings)if(b.crop&&s.time>=b.crop.readyAt){b.inventory??={};reward({inventory:b.inventory},b.crop.kind==='trailmeal'?{trailmeal:1}:CROPS[b.crop.kind].drop);b.crop=null;}
 }
 export function recoveryCamp(s){

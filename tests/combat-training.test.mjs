@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import * as G from '../dist/survival.js';
+import {CombatTraining} from '../dist/combat-training.js';
+import {drawCombat} from '../dist/combat-view.js';
+const tick=(lesson,n=3)=>{for(let i=0;i<n*20;i++)lesson.step(.05);};
+test('弓演练：近战够不到，弓真实扣箭并命中，重试还原物资',()=>{const t=new CombatTraining(0);t.act('hammer');t.act('attack');assert.equal(t.done,false);tick(t);t.act('bow');t.act('attack');assert.equal(t.done,true);assert.equal(t.state.inventory.arrow,19);assert.ok(t.state.expedition.creatures[0].hp<60);assert.equal(t.state.expedition.shot.weapon,'bow');t.reset();assert.equal(t.state.inventory.arrow,20);});
+test('打断和减速复用正式攻击规则，显示控制状态不额外扣伤害',()=>{for(const [index,weapon,status,hp]of [[1,'hammer','stun',56],[2,'frostSpear','slow',3]]){const t=new CombatTraining(index);t.act(weapon);t.act('attack');const m=t.state.expedition.creatures[0];assert.equal(t.done,true);assert.ok(m[status]>0);assert.equal(m.hp,hp);if(index===1)assert.equal(m.warning,null);}});
+test('诱饵绕行、锁定冲锋侧移均可不杀怪完成',()=>{const t=new CombatTraining(3);t.act('sidestep');assert.equal(t.running,false);t.act('lure');t.act('sidestep');tick(t);assert.equal(t.done,true);assert.equal(t.state.expedition.creatures[0].hp,60);assert.equal(t.state.inventory.lure,1);const dodge=new CombatTraining(4);dodge.act('sidestep');tick(dodge,2.05);assert.equal(dodge.done,true);assert.equal(dodge.state.player.hp,100);assert.ok(Math.abs(dodge.state.expedition.creatures[0].y-205)<8);});
+test('演练失败可以重试，独立场景不会修改现有存档；瞬态效果读档清理',()=>{const s=G.createGame(34),before=G.serialize(s),t=new CombatTraining(1);t.act('bow');t.act('attack');tick(t);assert.equal(t.done,false);t.reset();assert.equal(t.state.player.hp,100);assert.equal(G.serialize(s),before);s.expedition.shot={weapon:'bow',until:99};assert.equal(G.parseSave(G.serialize(s)).expedition.shot,null);});
+test('减少动态模式保留武器语义，画面代码不改变战斗状态',()=>{for(const weapon of ['bow','hammer','frostSpear']){const t=new CombatTraining(weapon==='bow'?0:weapon==='hammer'?1:2);t.act(weapon);t.act('attack');const before=G.serialize(t.state),ops=[];const c=new Proxy({},{get:(_,key)=> (...args)=>ops.push([key,...args]),set:()=>true});drawCombat(c,t.state,true);assert.ok(ops.some(x=>x[0]==='strokeText'));assert.equal(G.serialize(t.state),before);}});

@@ -85,6 +85,7 @@ function createRealm(s,id,nodes,isLand){
 }
 export function portalReason(s,n){if(s.status!=='playing')return'旅程已结束';if(!n||n.type!=='wormhole'||!REALMS[n.destination])return'虫洞不存在';if(dist(s.player,n)>110)return'走近虫洞后才能穿越';if(s.expedition.cooldown>0)return'等待裂隙稳定 '+Math.ceil(s.expedition.cooldown)+' 秒';if(s.level<REALMS[n.destination].level)return'需要 '+REALMS[n.destination].level+' 级文明';return'';}
 export function travel(s,id,{nodes,isLand,say}){
+ if(s.rural?.visit)return{ok:false,reason:'先离开聚落内部，再穿越虫洞'};
  const n=s.nodes.find(n=>n.id===id),reason=portalReason(s,n);if(reason)return{ok:false,reason};
  return switchRealm(s,n.destination,{nodes,isLand,say});
 }
@@ -120,7 +121,7 @@ export function expeditionAttack(s,{give,say}){
  if(w.ammo)s.inventory[w.ammo]--;if(w.power&&s.odyssey&&!s.odyssey.creative)s.odyssey.power=Math.max(0,s.odyssey.power-w.power);
  s.attackCooldown=w.cooldown;s.swingUntil=s.time+.25;
  const main=candidates[0],targets=w.area?candidates.filter(m=>dist(m,main)<=w.area):[main];
- s.expedition.shot={x:s.player.x,y:s.player.y-30,tx:main.x,ty:main.y-25,until:s.time+.25,kind:w.kind};
+ s.expedition.shot={x:s.player.x,y:s.player.y-30,tx:main.x,ty:main.y-25,at:s.time,until:s.time+.42,duration:.42,kind:w.kind,weapon:id,label:['bow','prismBow'].includes(id)?'远程命中':id==='hammer'?'钝击 · 打断':w.kind==='frost'?'霜晶 · 减速':''};
  for(const m of targets){const d=creatureProfile(m),mult=d?.weak===w.kind?2:d?.armor&&w.kind==='pierce'?(d.behavior==='armor'&&m.cooldown>1?.85:.55):1;const damage=Math.round(w.damage*mult);m.hp-=damage;
   if(d){if(d.phases&&d.phase!==creatureProfile(m).phase){m.warning=null;m.cooldown=1.5;say(s,d.name+'进入第 '+(creatureProfile(m).phase+1)+' 阶段，攻击与弱点已改变。');}if(w.kind==='frost')m.slow=2;if(w.kind==='blunt'&&id==='hammer'){m.stun=s.homestead?.specialty.hammer==='stagger'?1.2:.6;m.warning=null;}m.alert=4;}
   s.fx.push({x:m.x,y:m.y,at:s.time,text:(mult>1?'克制 ':'')+'−'+damage});

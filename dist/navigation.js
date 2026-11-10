@@ -1,10 +1,10 @@
 // 角色与机器人共用陆地寻路，避免沿海岸直线穿水。
-export function findLandPath(from,to,passable){
+export function findLandPath(from,to,passable,{cell=70}={}){
  const distance=Math.hypot(to.x-from.x,to.y-from.y);
  if(!passable(to.x,to.y))return null;
  const clear=(a,b)=>{const steps=Math.max(1,Math.ceil(Math.hypot(a.x-b.x,a.y-b.y)/24));for(let i=1;i<=steps;i++)if(!passable(a.x+(b.x-a.x)*i/steps,a.y+(b.y-a.y)*i/steps))return false;return true;};
  if(clear(from,to))return[{x:to.x,y:to.y}];
- const cell=70,key=(x,y)=>x+','+y,sx=Math.floor(from.x/cell),sy=Math.floor(from.y/cell),gx=Math.floor(to.x/cell),gy=Math.floor(to.y/cell);
+ const key=(x,y)=>x+','+y,sx=Math.floor(from.x/cell),sy=Math.floor(from.y/cell),gx=Math.floor(to.x/cell),gy=Math.floor(to.y/cell);
  const start={x:sx,y:sy,g:0,f:distance/cell},open=[start],seen=new Map([[key(sx,sy),start]]),closed=new Set();let found=null,limit=0;
  while(open.length&&limit++<2500){open.sort((a,b)=>a.f-b.f);const n=open.shift(),nk=key(n.x,n.y);if(closed.has(nk))continue;closed.add(nk);
   const p=n.parent?{x:(n.x+.5)*cell,y:(n.y+.5)*cell}:from;

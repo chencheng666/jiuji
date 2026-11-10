@@ -1,3 +1,4 @@
+import {companionReaction} from './camp-living.js';
 import {inRift,riftGeometry,highTide,COMPANIONS,CO_RECIPES,hasModule} from './symbiosis.js';
 export function drawRiftGround(c,s){
  if(!inRift(s)||!s.symbiosis.run)return;const r=s.symbiosis.run,g=riftGeometry(r),tide=r.realm==='tide';c.save();c.fillStyle=tide?'#244c55':'#252d3a';c.fillRect(0,0,3600,2800);
@@ -14,7 +15,7 @@ export function drawRiftGround(c,s){
 }
 export function companionObjects(s){return Object.entries(s.symbiosis?.companions||{}).filter(([id])=>s.expedition.current==='home'||s.symbiosis.following===id).map(([id,c])=>({...c,id:'companion-'+id,kind:id,type:'companion'}));}
 export function drawCoObject(view,c,s,n){
- if(n.type==='companion'){const d=COMPANIONS[n.kind],follow=s.symbiosis.following===n.kind,working=n.job&&s.time%300<230;view.sprite(c,'companion-'+n.kind,n.x,n.y+(view.reducedMotion?0:Math.sin(s.time*(working?5:2))*(working?1.5:.5)),90);c.font='11px sans-serif';c.textAlign='center';c.strokeStyle='#223d34';c.lineWidth=3;const text=d.name.split(' · ')[0]+' · '+(follow?'同行':working?d.job:'歇息');c.strokeText(text,n.x,n.y-110);c.fillStyle=d.color;c.fillText(text,n.x,n.y-110);return true;}
+ if(n.type==='companion'){const d=COMPANIONS[n.kind],follow=s.symbiosis.following===n.kind,working=n.job&&s.time%300<230;view.sprite(c,'companion-'+n.kind,n.x,n.y+(view.reducedMotion?0:Math.sin(s.time*(working?5:2))*(working?1.5:.5)),90);c.font='11px sans-serif';c.textAlign='center';c.strokeStyle='#223d34';c.lineWidth=3;const text=d.name.split(' · ')[0]+' · '+(follow?'同行':working?d.job:'歇息');c.strokeText(text,n.x,n.y-110);c.fillStyle=d.color;c.fillText(text,n.x,n.y-110);if((follow||!s.symbiosis.following&&Object.entries(s.symbiosis.companions).sort(([,a],[,b])=>Math.hypot(a.x-s.player.x,a.y-s.player.y)-Math.hypot(b.x-s.player.x,b.y-s.player.y))[0]?.[0]===n.kind&&Math.hypot(n.x-s.player.x,n.y-s.player.y)<160)&&s.time%36<5){const full=companionReaction(s,n.kind),line=view.mobile&&full.length>17?full.slice(0,17)+'…':full;c.font='12px sans-serif';c.strokeText(line,n.x,n.y-132);c.fillText(line,n.x,n.y-132);}return true;}
  if(['riftanchor','riftevent'].includes(n.type)){const r=s.symbiosis.run,done=n.type==='riftanchor'?r.anchors[n.anchor]:!!r.choices[n.eventId];view.sprite(c,n.type,n.x,n.y,105,done?.5:1);c.strokeStyle=done?'#bcd6b2':'#efce84';c.lineWidth=2;c.beginPath();c.ellipse(n.x,n.y,35,16,0,0,7);c.stroke();c.fillStyle='#eee2b9';c.textAlign='center';c.font='12px sans-serif';c.fillText((done?'✓ ':'◇ ')+(n.type==='riftanchor'?'观测点 '+(n.anchor+1):'远征见闻'),n.x,n.y-125);return true;}
  return false;
 }

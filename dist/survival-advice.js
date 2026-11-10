@@ -1,3 +1,4 @@
+import {fireWindow} from './night-life.js';
 import * as G from './survival.js';
 import {temperatureTarget,SEASONS} from './seasons.js';
 const safe=s=>[...s.nodes,...s.buildings].filter(n=>n.available!==false&&(n.fuel===undefined||n.type!=='campfire'||n.fuel>0)&&s.explored.includes(Math.floor(n.x/160)+','+Math.floor(n.y/160))&&G.walkable(s,n.x,n.y));
@@ -28,7 +29,7 @@ export function survivalAdvice(s){
  if(phase<230&&toNight<=50&&!G.lightAt(s,p.x,p.y))add('night','天色将暗',`距夜晚约 ${Math.ceil(toNight)} 秒。${s.inventory.torch?'行囊已有火炬，确认点亮并留意剩余燃料。':'准备火炬，或提前回到有燃料的营火。'}`,1,{node:nearest(s,['campfire','lantern'])});
  if(phase>=230&&!G.lightAt(s,p.x,p.y))add('dark','先回到光里','夜影会伤害角色。点亮火炬，或回到有燃料的营火。',2,{node:nearest(s,['campfire','lantern'])});
  const fire=G.nearby(s,'campfire',180);
- if(fire){const rate=(G.phase(s)==='night'?1:.28)*(weather.raining?1.35:1),seconds=Math.ceil(fire.fuel/rate);if(seconds<100)add('fuel','营火需要备柴',`按当前昼夜和天气，约还能燃烧 ${seconds} 秒。添 1 木材增加 70 燃料；雨天烧得更快。`,seconds<30?2:1,{fire});}
+ if(fire){const seconds=fireWindow(s,fire,weather.raining).seconds;if(seconds<100)add('fuel','营火需要备柴',`按当前昼夜和天气，约还能燃烧 ${seconds} 秒。添 1 木材增加 70 燃料；雨天烧得更快。`,seconds<30?2:1,{fire});}
  if(weather.warning&&!G.shelterAt(s))add('rain','雨云将至',`约 ${Math.ceil(weather.remaining)} 秒后可能下雨。备好柴火，进入庇护所可避免淋湿。`,1,{node:nearest(s,['shelter'])});
  const trend=seasonTrend(s);if(trend)add('season',trend.next+'将至 · '+trend.direction,`约 ${trend.seconds} 秒后换季（本季最后一天）。${trend.tip}`,0);
  return alerts.sort((a,b)=>b.severity-a.severity);

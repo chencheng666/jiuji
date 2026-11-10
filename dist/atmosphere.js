@@ -1,3 +1,4 @@
+import {layoutPreview} from './camp-layout.js';
 import {weather,placementReason,plantingReason,BUILDING_NAMES} from './survival.js';
 // 绘图只读取世界状态，天气伤害与生产计时由生存规则计算。
 export function paintTerrain(view,id='home'){
@@ -70,7 +71,8 @@ export function buildingPreview(view,c,s){
   for(let y=Math.floor((s.player.y-220)/32)*32;y<s.player.y+220;y+=32){c.beginPath();c.moveTo(s.player.x-220,y);c.lineTo(s.player.x+220,y);c.stroke();}
   c.setLineDash([6,7]);c.strokeStyle='#e8d7a670';c.beginPath();c.arc(s.player.x,s.player.y,210,0,7);c.stroke();c.setLineDash([]);
   c.fillStyle=bad?'#b74d3c44':'#d0d69244';c.strokeStyle=bad?'#f0a18a':'#efe4b1';c.beginPath();c.ellipse(p.x,p.y,48,25,0,0,7);c.fill();c.stroke();
-  view.sprite(c,view.building,p.x,p.y,118,.7);label(c,bad||'点击建造 · '+BUILDING_NAMES[view.building],p.x,p.y-140,bad?'#f4baa3':'#f5e6bc');c.restore();
+  view.sprite(c,view.building,p.x,p.y,118,.7);label(c,bad||'点击建造 · '+BUILDING_NAMES[view.building],p.x,p.y-140,bad?'#f4baa3':'#f5e6bc');
+  if(!bad){const links=layoutPreview(s,{type:view.building,...p});for(const[order,link]of links.entries()){label(c,link.name+' · '+link.text+(link.active?'':'（营火未点燃）'),p.x,p.y-164-order*19,'#e6edbc');const target=link.target||link.partner;c.strokeStyle='#c7e9ac99';c.setLineDash([4,6]);c.beginPath();c.moveTo(p.x,p.y);c.lineTo(target.x,target.y);c.stroke();c.setLineDash([]);}}c.restore();
 }
 export function plantingPreview(view,c,s){
   const p=view.pointer?view.toWorld(view.pointer.x,view.pointer.y):{x:s.player.x+65,y:s.player.y+45};

@@ -9,7 +9,7 @@ test('设备设置损坏、被禁用或不存在时仍可开始游戏',()=>{
  try{Object.defineProperty(globalThis,'localStorage',{configurable:true,get(){throw new Error('隐私模式');}});assert.deepEqual(readControls(),CONTROL_DEFAULTS);}
  finally{if(before)Object.defineProperty(globalThis,'localStorage',before);else delete globalThis.localStorage;}
  assert.deepEqual(normalizeControls({size:100,opacity:0,fps:100,ability:'不存在',leftHanded:1}),CONTROL_DEFAULTS);
- const selected={size:1.15,opacity:.6,fps:30,ability:'return',leftHanded:true,reducedMotion:true,particles:false};
+ const selected={quality:'auto',size:1.15,opacity:.6,fps:30,ability:'return',leftHanded:true,reducedMotion:true,particles:false};
  assert.deepEqual(readControls({getItem:()=>JSON.stringify(selected)}),selected);
 });
 
