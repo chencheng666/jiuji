@@ -1,0 +1,77 @@
+{
+  "version": "3.4.0",
+  "date": "2026-11-10",
+  "sourceCommit": "a5199bda1711c445a5cb66c8ee2b9d3f22528c57",
+  "localDevelopmentCommit": "0b85087f7b2a9e9b5759f07abbdc7dee651322e6",
+  "pagesCommit": "3fc3c4e",
+  "repository": "https://github.com/chencheng666/jiuji",
+  "release": "https://github.com/chencheng666/jiuji/releases/tag/v3.4.0",
+  "game": "https://www.daguojueqi.site/jiuji/",
+  "official": "https://www.daguojueqi.site/jiuji/official/",
+  "gameFilesVerified": 234,
+  "pagesFilesVerified": 234,
+  "officialFilesVerified": 97,
+  "gameRelease": "/opt/jiuji/releases/3.4.0-a5199bd-20261110/site",
+  "gameBackup": "/opt/jiuji/backups/3.4.0-a5199bd-20261110",
+  "officialRelease": "/opt/jiuji/official/releases/3.4.0-20261110-downloads/site",
+  "officialBackup": "/opt/jiuji/official/backups/3.4.0-20261110-downloads",
+  "nginxReloaded": false,
+  "greatPowers": {
+    "unchanged": true,
+    "pidsBefore": [
+      998487,
+      998488
+    ],
+    "pidsAfter": [
+      998487,
+      998488
+    ],
+    "version": "3.3.0",
+    "build": "20261110-carrier-nature-r2",
+    "protectedPagesUnchanged": 5
+  },
+  "builds": {
+    "rules": "https://github.com/chencheng666/jiuji/actions/runs/42771402029",
+    "desktop": "https://github.com/chencheng666/jiuji/actions/runs/42771466567",
+    "conclusion": "success"
+  },
+  "mobile": {
+    "browserSimulation": true,
+    "realPhoneVerified": false,
+    "viewport": [
+      720,
+      324
+    ],
+    "lessonsPassed": 5,
+    "horizontalOverflow": 0
+  },
+  "native": {
+    "macVersion": "3.4.0",
+    "macArchitectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "macSignatureIntegrity": true,
+    "macDmgIntegrity": true,
+    "windowsInstalled": false,
+    "macAppLaunched": false
+  },
+  "storeUpdates": false,
+  "downloads": [
+    {
+      "filename": "Jiuji-v3.4.0-offline.zip",
+      "bytes": 805252,
+      "sha256": "c9ac2ce02923b37a9062b79c8e55ca0f0f99b6570fbb24514e2fc01646d0e442"
+    },
+    {
+      "filename": "Jiuji-v3.4.0-windows-x64-setup.exe",
+      "bytes": 2879130,
+      "sha256": "c77b0d51b58e28d59276b3b7254f4fb17bd7a14c2a6b3773b0885b5513e75a76"
+    },
+    {
+      "filename": "Jiuji-v3.4.0-macos-universal.dmg",
+      "bytes": 12137018,
+      "sha256": "7f13f6f3301a066c16fbe792b8c32801e42841b05f6e6b3cb6cf78a56d52f61d"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "sourceCommit": "a5199bda1711c445a5cb66c8ee2b9d3f22528c57",
+  "buildRun": 42771466567,
+  "macVersion": "3.4.0",
+  "macArchitectures": "x86_64 arm64",
+  "macSignatureVerified": true,
+  "windowsRuntimeInstalled": false,
+  "macRuntimeLaunched": false,
+  "files": [
+    {
+      "name": "Jiuji-v3.4.0-windows-x64-setup.exe",
+      "bytes": 2879130,
+      "sha256": "c77b0d51b58e28d59276b3b7254f4fb17bd7a14c2a6b3773b0885b5513e75a76"
+    },
+    {
+      "name": "Jiuji-v3.4.0-macos-universal.dmg",
+      "bytes": 12137018,
+      "sha256": "7f13f6f3301a066c16fbe792b8c32801e42841b05f6e6b3cb6cf78a56d52f61d"
+    },
+    {
+      "name": "Jiuji-v3.4.0-macos-universal.app.zip",
+      "bytes": 9786774,
+      "sha256": "8aeae8c88f2894de8f9da82f64b0b2549696694ca6ec3e2208659afad7fac2ba"
+    },
+    {
+      "name": "Jiuji-v3.4.0-offline.zip",
+      "bytes": 805252,
+      "sha256": "c9ac2ce02923b37a9062b79c8e55ca0f0f99b6570fbb24514e2fc01646d0e442"
+    },
+    {
+      "name": "Jiuji-v3.4.0.zip",
+      "bytes": 866240,
+      "sha256": "03d771ee5b32190ded021c9f2048935e91a2fb84c4cafb66abeb31a12271c909"
+    },
+    {
+      "name": "Jiuji-v3.4.0-a5199bd.tar.gz",
+      "bytes": 1632686,
+      "sha256": "f04ee20392a0e4d3c85ed160aff79486ff8660436844eca942e67c49b9229c16"
+    }
+  ]
+}

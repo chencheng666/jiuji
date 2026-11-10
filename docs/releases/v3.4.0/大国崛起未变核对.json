@@ -1,0 +1,59 @@
+{
+  "checkedAt": "2026-11-10T15:14:41+0800",
+  "unchanged": true,
+  "static": [
+    {
+      "path": "/",
+      "sha256": "3cd1d88555371ec39503d5d7d7ba3543d5ace432f3399de828407f720f8405a6",
+      "same": true
+    },
+    {
+      "path": "/play/",
+      "sha256": "2c2b1508713f7bbc44d0accb38060aaa21801c50433cd38ebebf518e853b5a9c",
+      "same": true
+    },
+    {
+      "path": "/candidate/",
+      "sha256": "2c2b1508713f7bbc44d0accb38060aaa21801c50433cd38ebebf518e853b5a9c",
+      "same": true
+    },
+    {
+      "path": "/downloads/",
+      "sha256": "3abfb5b67d7ebbf5ec6e59e898e3ee2bc9229c6f77d851b6172678d4c0261e3c",
+      "same": true
+    },
+    {
+      "path": "/resume/",
+      "sha256": "fa78dc5a3c3cee90ea248766b15ac6c9c1ea7480c136b0284ab04548788f5dde",
+      "same": true
+    }
+  ],
+  "services": [
+    {
+      "path": "/api/health",
+      "health": {
+        "ok": true,
+        "version": "3.3.0",
+        "build": "20261110-carrier-nature-r2",
+        "protocol": 6,
+        "maxPlayers": 2,
+        "rooms": 0,
+        "battles": 0
+      },
+      "sameBuild": true
+    },
+    {
+      "path": "/candidate/api/health",
+      "health": {
+        "ok": true,
+        "version": "3.3.0",
+        "build": "20261110-carrier-nature-r2",
+        "protocol": 7,
+        "maxPlayers": 6,
+        "rooms": 0,
+        "battles": 0
+      },
+      "sameBuild": true
+    }
+  ]
+}

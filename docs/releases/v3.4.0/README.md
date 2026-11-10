@@ -1,6 +1,8 @@
 # 九级 3.4.0 · 流畅与交锋
 
-本地验收候选。尚未部署腾讯云、推送远端或更新任何商店。此轮没有改动《大国崛起》、uTools 或 TapTap 审核中的包。
+2026-11-10 已发布腾讯云、GitHub 源码、Release 与 Pages；官网同版 ZIP、Windows 与 macOS 安装包已更新并核对。腾讯云游戏 234 文件、官网 97 文件、Pages 234 文件逐一 SHA256 通过；官网下载 ZIP 实际点击下载并检查完整性。
+
+《大国崛起》两个进程 PID、版本、构建号和五处页面内容均保持不变。此次没有更新 uTools、TapTap 或统信商店。详见 [发布记录](发布记录.json)。
 
 ## 针对 2K 屏移动卡顿
 
@@ -50,7 +52,7 @@ Ego Lite 连续 RAF 测试出现约 1 秒调度间隔，本轮未取得可靠的
 - 浏览器逐项完成五课：射程命中、打断蓄力、霜晶减速、诱饵绕行、侧移避开冲锋。
 - 390×844、844×390、720×324：横向溢出为零，短横屏场景与六个操作按钮同屏。
 - ZIP 从本地文件启动、模拟射击与存档导出通过；177 个离线文件通过联网能力静态检查，浏览器未观察到 HTTP(S) 资源请求。
-- 离线包与哈希见项目 `artifacts/desktop-downloads/portable-report.json`。本轮未编译 Windows/macOS 原生安装包。
+- 离线包与哈希见项目 `artifacts/desktop-downloads/portable-report.json`。Windows x64 与 macOS 通用安装包已由 GitHub Actions 成功构建。macOS 包含 Intel/Apple 芯片架构，签名完整性与 DMG 校验通过；本轮未执行 Windows 安装或 macOS 原生应用试玩。
 
 下一批：园丁与搬运机器人，再推进聚落生活事务；继续保护旧存档、真实材料消耗和手机视野。
 
