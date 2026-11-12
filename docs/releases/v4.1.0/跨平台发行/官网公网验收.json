@@ -1,0 +1,796 @@
+{
+  "verified": true,
+  "release": "4.1.0-20261112-downloads",
+  "version": {
+    "name": "九级游戏官网",
+    "version": "4.1.0",
+    "release": "4.1.0-20261112-downloads",
+    "gameVersion": "4.1.0",
+    "url": "https://www.daguojueqi.site/jiuji/official/",
+    "gameCommit": "87769cbe719f958aac31f3ba8ccb62f23eebb65f",
+    "githubSourceCommit": "87769cbe719f958aac31f3ba8ccb62f23eebb65f",
+    "desktopBuildRun": 43155865358,
+    "downloads": [
+      {
+        "filename": "Jiuji-v4.1.0-offline.zip",
+        "bytes": 832578,
+        "sha256": "9651acab2f5b3e5e5072a1b40c90d3556b891aabad7cde1d3caaa8ca65e33122"
+      },
+      {
+        "filename": "Jiuji-v4.1.0-windows-x64-setup.exe",
+        "bytes": 2902210,
+        "sha256": "5c7f49fc52eea9ca4aa5cd5b1a264b63a6a8e48026af7171f3449b833b59b31b"
+      },
+      {
+        "filename": "Jiuji-v4.1.0-macos-universal.dmg",
+        "bytes": 12176906,
+        "sha256": "9dfad4d70ae6a630ff4fc7188a0461ed6dbd9699b7a413e0945dab8142be067b"
+      },
+      {
+        "filename": "Jiuji-v4.1.0-macos-universal.app.zip",
+        "bytes": 9831921,
+        "sha256": "6f4b57d8cc55056173c806f8c187786785cf14317a5283acedb9469d018bdf9b"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "assets/arcblade.svg",
+      "sha256": "882487ca810a4313501594facd23cad53fc7f34ebf101c79bb9646eccf89f424",
+      "bytes": 498,
+      "status": 200
+    },
+    {
+      "path": "assets/archive.svg",
+      "sha256": "47d57e185e741e60a7ad9f8ca9201d0737ac7fb1ee673ff002553df46783c9dc",
+      "bytes": 1517,
+      "status": 200
+    },
+    {
+      "path": "assets/ascension.svg",
+      "sha256": "dd221db1c621ad6b967b6fd60c5b7845cb5fdf2ccf56379716178213cfcdd43f",
+      "bytes": 1859,
+      "status": 200
+    },
+    {
+      "path": "assets/assembler.svg",
+      "sha256": "ac937fc6aa1357d1e01824133a543a2a6de9fa3ac01d1b4d859744bc487e6dd0",
+      "bytes": 617,
+      "status": 200
+    },
+    {
+      "path": "assets/axe.svg",
+      "sha256": "186af51abcb3b45edac65c8c0b15aa7afaaab80da86324077fd7ba6d8d914eb0",
+      "bytes": 502,
+      "status": 200
+    },
+    {
+      "path": "assets/beacon.svg",
+      "sha256": "9759e988f179c59bca0a424e43324ca43bc059c44d6df29504e5bee08b0cd537",
+      "bytes": 1406,
+      "status": 200
+    },
+    {
+      "path": "assets/blueprint.svg",
+      "sha256": "7c086ee50f44af5bc04313a7340818bbf148b89f2c835c4c435733452152f418",
+      "bytes": 464,
+      "status": 200
+    },
+    {
+      "path": "assets/boar.svg",
+      "sha256": "c0937e699bb254516aa1ae686bf66f6235c752ee2f9bddc928dda220a2b448da",
+      "bytes": 549,
+      "status": 200
+    },
+    {
+      "path": "assets/bush.svg",
+      "sha256": "eba0070c6b7487b0b289b366239387b9a5e81c996a61c080217d3e4085e1e1ca",
+      "bytes": 1143,
+      "status": 200
+    },
+    {
+      "path": "assets/camp.webp",
+      "sha256": "7fb4601ccc73c89cc5c0b4c2f805b6e0fbced47cca2d286616513dfb3d582b92",
+      "bytes": 118340,
+      "status": 200
+    },
+    {
+      "path": "assets/campfire.svg",
+      "sha256": "978d8bf3dad02411c3b5d78d48df88772553535d2b546e8adceb52ce1c154589",
+      "bytes": 1517,
+      "status": 200
+    },
+    {
+      "path": "assets/cinder.webp",
+      "sha256": "448bc8d993b4929aa2d8799c2e502b4f1e9dd44d5fcb65211748d29456562b4e",
+      "bytes": 47866,
+      "status": 200
+    },
+    {
+      "path": "assets/cinderwarden.svg",
+      "sha256": "9f88165ab43b3ebe8122a34164dd66d3a1ce9221561739ac71585ea066fb1a43",
+      "bytes": 577,
+      "status": 200
+    },
+    {
+      "path": "assets/companion-botanist.svg",
+      "sha256": "aa484f864b7cbc23eada913bc491f26f123b617f199190e92b5b59641beb09e5",
+      "bytes": 1433,
+      "status": 200
+    },
+    {
+      "path": "assets/companion-engineer.svg",
+      "sha256": "ae2b7dc24b7cc4757e64809ec59213e592fdf73df9d7d5e970fa8a2739650a5c",
+      "bytes": 1437,
+      "status": 200
+    },
+    {
+      "path": "assets/companion-keeper.svg",
+      "sha256": "3a5349b4fafffaca8e627e106c11150627b23a644f31b89ff71ec02b1d5841d8",
+      "bytes": 1435,
+      "status": 200
+    },
+    {
+      "path": "assets/companion-ranger.svg",
+      "sha256": "b0a328e1d612ee0286542148eccdec9070e1303caf536d6990083ecfe05f5148",
+      "bytes": 1439,
+      "status": 200
+    },
+    {
+      "path": "assets/crystal.svg",
+      "sha256": "29cd0a810a16900d1d4825289dc85ef08e7e3c041f5ef6611a2af29bf41ca6a1",
+      "bytes": 1180,
+      "status": 200
+    },
+    {
+      "path": "assets/drill.svg",
+      "sha256": "acdc3607bb34b91ef5e263f8a094abf0cc395fb7033c0271dd54985171b734e1",
+      "bytes": 1498,
+      "status": 200
+    },
+    {
+      "path": "assets/farm.svg",
+      "sha256": "cc32b82ddca1cdd48e1f054403e4d6df84ff1e4784912b508132fb32b3f2e883",
+      "bytes": 1260,
+      "status": 200
+    },
+    {
+      "path": "assets/favicon.svg",
+      "sha256": "30ac62285497b058f25fe8e8cf957277e9de4d308517dc1d300831133a1f1420",
+      "bytes": 282,
+      "status": 200
+    },
+    {
+      "path": "assets/fish.svg",
+      "sha256": "63983aab25e60a89b9b3727cf2edafa9c6e509eb28b6569130eb0fc2c2513897",
+      "bytes": 389,
+      "status": 200
+    },
+    {
+      "path": "assets/flower.svg",
+      "sha256": "d59fa63aabd8045b895e3a8bbcd95cb537602cdb8b4e941271c3860af2ee620d",
+      "bytes": 984,
+      "status": 200
+    },
+    {
+      "path": "assets/forest.webp",
+      "sha256": "1abe7ffafe150fb3110eacc35c529c79c348a4566eb98c3e989289be52cdce06",
+      "bytes": 125720,
+      "status": 200
+    },
+    {
+      "path": "assets/forge.svg",
+      "sha256": "553d0336c99a2ad36727c2b62bb75da3d3b513f8132a6c278c0a77ed51b7c670",
+      "bytes": 1743,
+      "status": 200
+    },
+    {
+      "path": "assets/frost.webp",
+      "sha256": "bc1e0cd0ed6e0c9f8dae24c9f232493cc09e332e2d72ed28db2c9807afbc8775",
+      "bytes": 39108,
+      "status": 200
+    },
+    {
+      "path": "assets/frostwarden.svg",
+      "sha256": "49488d0a8cc1d2b2201d0fe9f6fc9df2018523e88c266eefa3dd4e9f12449eae",
+      "bytes": 577,
+      "status": 200
+    },
+    {
+      "path": "assets/frostwolf.svg",
+      "sha256": "afe32803c98c2ffe31a659081d06d13ddd4467dd612a0d8cda2541d7cbf48afb",
+      "bytes": 553,
+      "status": 200
+    },
+    {
+      "path": "assets/furnace.svg",
+      "sha256": "02269dd452fc14a853f79b4bc9a1a4b536bd92eaaf79f3e2aa6488167ad7b97e",
+      "bytes": 1336,
+      "status": 200
+    },
+    {
+      "path": "assets/garden.svg",
+      "sha256": "6d144fffac1826a4489af7ad8dd269f4fee565d8e618bb4bf87af83c2bf1fe02",
+      "bytes": 1708,
+      "status": 200
+    },
+    {
+      "path": "assets/garden.webp",
+      "sha256": "ebfac0e2cf507fe6acd6697267e4944a20b99b0e71080e8729430ea84bc0a2ad",
+      "bytes": 32990,
+      "status": 200
+    },
+    {
+      "path": "assets/gardenbot.svg",
+      "sha256": "e36e8be91877bcc5723be402a6fec1a76bdd6f5b3cb97d6f1e3258c491fcb65b",
+      "bytes": 810,
+      "status": 200
+    },
+    {
+      "path": "assets/gate.svg",
+      "sha256": "9287e8f1e2b86ccf1bf28537c9f83eba253422ee58802943ffafd33227551c3e",
+      "bytes": 1668,
+      "status": 200
+    },
+    {
+      "path": "assets/gatherbot.svg",
+      "sha256": "5e25b340e1790c044a408a09e5086d5dc264a6a9f05c747ce882c60f77b84248",
+      "bytes": 1134,
+      "status": 200
+    },
+    {
+      "path": "assets/grain.svg",
+      "sha256": "0ce4dcd35dc2274a0c35bbcb0564a2b45177b74de54263cc2a3c11c6567027e9",
+      "bytes": 251,
+      "status": 200
+    },
+    {
+      "path": "assets/grass.svg",
+      "sha256": "464acf7fb72fc361553c18f27ce5d77b43e29f19bd8cd261113d8b6678ea145d",
+      "bytes": 762,
+      "status": 200
+    },
+    {
+      "path": "assets/gravityHammer.svg",
+      "sha256": "8b3379ac2297bb746f6b1c8b6969dc77ed7a4da1753e29c20e0d8987dc900eb7",
+      "bytes": 465,
+      "status": 200
+    },
+    {
+      "path": "assets/haulbot.svg",
+      "sha256": "100dfb2c006ae11008b05eb96b4045d18737cc65ce08c447449f4e28fe66eacb",
+      "bytes": 774,
+      "status": 200
+    },
+    {
+      "path": "assets/industry.webp",
+      "sha256": "f971e39d7cce9c3763ee1e945b711e6cdc5652c0703407fb9b0e1a7c468cdf98",
+      "bytes": 26330,
+      "status": 200
+    },
+    {
+      "path": "assets/jiuji-logo-180.png",
+      "sha256": "7c0cb4bacb26727f8f557a02e3af4ecea9894a8cfda3587cead8f3c3a18795f4",
+      "bytes": 52740,
+      "status": 200
+    },
+    {
+      "path": "assets/jiuji-logo-512.png",
+      "sha256": "c2e56bb9465b0d912ee872b4ddf16d1e6a0f100b7ec055e25b7abdf1393a9720",
+      "bytes": 407918,
+      "status": 200
+    },
+    {
+      "path": "assets/jiuji-logo-64.png",
+      "sha256": "b1d362c35dd2d884a932fa6fdc153880e0902028119516e01e992edfdc4c3b03",
+      "bytes": 7687,
+      "status": 200
+    },
+    {
+      "path": "assets/jiuji-logo.webp",
+      "sha256": "833bb629cc2f1a0daf9103cc1a705e1ae870b0bbf1def903d856051147373634",
+      "bytes": 40618,
+      "status": 200
+    },
+    {
+      "path": "assets/lumen.svg",
+      "sha256": "d264447295c81f9124c41d5b071f3df7382d88cb548ef71c6325f054f62434f0",
+      "bytes": 1729,
+      "status": 200
+    },
+    {
+      "path": "assets/matterloom.svg",
+      "sha256": "40eeb0b0541534df485e5b9f5633a0bea045277bbde45839f5ef1a8e8b014b16",
+      "bytes": 671,
+      "status": 200
+    },
+    {
+      "path": "assets/meteor.svg",
+      "sha256": "656eeb5c571c8bf899a5ded8d5430f480355c9039df6e8ef0a4fa58522b780cc",
+      "bytes": 1392,
+      "status": 200
+    },
+    {
+      "path": "assets/mirror.webp",
+      "sha256": "54a44445a7220526638b64d983af267393caa4e605e0c3530525bbd4b6a0e1b0",
+      "bytes": 74492,
+      "status": 200
+    },
+    {
+      "path": "assets/mirrorsand.svg",
+      "sha256": "b45b39cdde638be969fecead9625d1752367702ce598ee2ed2ed64cacd6d4116",
+      "bytes": 484,
+      "status": 200
+    },
+    {
+      "path": "assets/mosswarden.svg",
+      "sha256": "74298b7cd1133f86d121eb52bcea5aefa50d32eca68e1a9e6aa772fabee057fd",
+      "bytes": 577,
+      "status": 200
+    },
+    {
+      "path": "assets/mushroom.svg",
+      "sha256": "d7590ab9afa965f3dbca2c925bba1854549007296e16d3e419a0c97f4dd4e879",
+      "bytes": 601,
+      "status": 200
+    },
+    {
+      "path": "assets/night-bloodbats.svg",
+      "sha256": "fd1f1bef4b9469eede95abf6f93b255ec778f2674385fbe72488212345e11efe",
+      "bytes": 1304,
+      "status": 200
+    },
+    {
+      "path": "assets/night-boneboar.svg",
+      "sha256": "cec275834e80939090f50df1f49a6d4073c5d08e9cf13427fed204b8629b3ef9",
+      "bytes": 717,
+      "status": 200
+    },
+    {
+      "path": "assets/night-devourer.svg",
+      "sha256": "0c90f17f142e4897511941cae81706de428a5fc811a6b7b409cc935f051ea73c",
+      "bytes": 767,
+      "status": 200
+    },
+    {
+      "path": "assets/night-howler.svg",
+      "sha256": "0cc4a8d63d655d56bee3e582817da6cbc0568e236d09d2fb5de7b5fd0a44bcf7",
+      "bytes": 724,
+      "status": 200
+    },
+    {
+      "path": "assets/night-scorpion.svg",
+      "sha256": "ed9de79d235271d8acd4e9eca816dc7c4963c812da36617e702b27e2f9595dc7",
+      "bytes": 956,
+      "status": 200
+    },
+    {
+      "path": "assets/nursery.svg",
+      "sha256": "19ea2410004a450f6a114cdd01c34b452140c2cfd0f7e0a1527902a06989001f",
+      "bytes": 722,
+      "status": 200
+    },
+    {
+      "path": "assets/observatory.svg",
+      "sha256": "22f3d51916f671e5411a2769009e73ec9004495e417de1e4d9284506bb0d14a1",
+      "bytes": 1561,
+      "status": 200
+    },
+    {
+      "path": "assets/orbit.webp",
+      "sha256": "aa88d0ecb323c4a8018b1b75f50c418a34bfc1783c35eba418aa84886583c1f4",
+      "bytes": 73304,
+      "status": 200
+    },
+    {
+      "path": "assets/orbitwarden.svg",
+      "sha256": "54f4406dae007454c0080fcda8463339b2c0300f2f13385c2fc9e5289b9afbe1",
+      "bytes": 664,
+      "status": 200
+    },
+    {
+      "path": "assets/outpost.svg",
+      "sha256": "60eb19fe8788e20f85873156180335e42a335c51c5c5e8936ceb6fe7031aa6c4",
+      "bytes": 603,
+      "status": 200
+    },
+    {
+      "path": "assets/pickaxe.svg",
+      "sha256": "8acb1706744edb5e3f5ec463a042a556cee824328e1f8255de3e2e43ee6beb72",
+      "bytes": 514,
+      "status": 200
+    },
+    {
+      "path": "assets/player-back.svg",
+      "sha256": "f5e9095cab0b67da16e3870ac86175d5cecff21241671fbea7c5e3967fba4e67",
+      "bytes": 1237,
+      "status": 200
+    },
+    {
+      "path": "assets/player.svg",
+      "sha256": "35705bee99a6e22a63149ecef949d5de6a775984b8adad56c2e1a54e830bd004",
+      "bytes": 1650,
+      "status": 200
+    },
+    {
+      "path": "assets/powercell.svg",
+      "sha256": "6abe86d7e9b2ee79d4e36ff0d0b4c39dac797cf8b7d509a09f85bdd7045cd115",
+      "bytes": 465,
+      "status": 200
+    },
+    {
+      "path": "assets/prismBow.svg",
+      "sha256": "ba8301a7e5ade5a017af5f52175e091457200bb4593eb4e4818603dcf07e8309",
+      "bytes": 534,
+      "status": 200
+    },
+    {
+      "path": "assets/prismwarden.svg",
+      "sha256": "4cb4465627b349a43b95300217a2a9bb6d71e5f643a866d8b1dc6550fa4fb973",
+      "bytes": 612,
+      "status": 200
+    },
+    {
+      "path": "assets/rabbit.svg",
+      "sha256": "a140c9ce5cf4d429e96afd8a65e4e5661125d7ce0a7f5ddb60dc9dfaa040fc31",
+      "bytes": 698,
+      "status": 200
+    },
+    {
+      "path": "assets/relay.svg",
+      "sha256": "66fb4db2f8304953c4ae5fb43a7d55eb372c1a992a2966163108aacc410c945b",
+      "bytes": 574,
+      "status": 200
+    },
+    {
+      "path": "assets/relaywork.svg",
+      "sha256": "30325297037c9e287fac09811e3f1389eb7a569fcd81d159b2ce30dbdf487bad",
+      "bytes": 684,
+      "status": 200
+    },
+    {
+      "path": "assets/resonator.svg",
+      "sha256": "c94c65bbdcd0f4032c97782397a18b9a9e60641db1ca390958383b54d7b18028",
+      "bytes": 1264,
+      "status": 200
+    },
+    {
+      "path": "assets/riftanchor.svg",
+      "sha256": "5c0e591769da7421da039b76848f80a2c9a20675c44a31e48ec45e0c19301db6",
+      "bytes": 499,
+      "status": 200
+    },
+    {
+      "path": "assets/riftcore.svg",
+      "sha256": "14dfaf4886a006978e7ee1f05035556d92d67e4b99cd59b85df55948f1eb6331",
+      "bytes": 336,
+      "status": 200
+    },
+    {
+      "path": "assets/robotdock.svg",
+      "sha256": "63e8157939b8fd6f2aca130ebb9f37db5092ee358fddf73b2a1c396d30c1dd9a",
+      "bytes": 1017,
+      "status": 200
+    },
+    {
+      "path": "assets/rock.svg",
+      "sha256": "e02dc93e2febc4bf5c92366104f02ad57ebfdb04af46b1e2127c08b195eb03fe",
+      "bytes": 903,
+      "status": 200
+    },
+    {
+      "path": "assets/rod.svg",
+      "sha256": "97889f28fcb51b3f89d3f0b81b37e20b194ac55e033f1ec6de331ef030c67d40",
+      "bytes": 367,
+      "status": 200
+    },
+    {
+      "path": "assets/shelter.svg",
+      "sha256": "577915c0ab035c49021603ce9562f68e6a8ad109f9d12d77784ef2d5258dfa5d",
+      "bytes": 825,
+      "status": 200
+    },
+    {
+      "path": "assets/sporepod.svg",
+      "sha256": "5757814ba45328f9ef66012442db3f829eee48d2d2720165779dcc581d948e0c",
+      "bytes": 464,
+      "status": 200
+    },
+    {
+      "path": "assets/starfiber.svg",
+      "sha256": "0ff3e0f7c9f549b7db5b30a00ba1a79bd1ac20e206f45fd7ab7330bc4beeb447",
+      "bytes": 438,
+      "status": 200
+    },
+    {
+      "path": "assets/steamworks.svg",
+      "sha256": "b64e2fd34f2417127bbe661a44e0e063da2d712919c25eb7fbf524d5d59fdc8e",
+      "bytes": 1025,
+      "status": 200
+    },
+    {
+      "path": "assets/stew.svg",
+      "sha256": "14429e273bde589e471864cfb90388d584a921b580abf7ce4b4933f7873eff88",
+      "bytes": 689,
+      "status": 200
+    },
+    {
+      "path": "assets/synthesizer.svg",
+      "sha256": "7e1e8b80596a3afa485ddb1bfee56715c58377157d00b3539b47f160a6b87f35",
+      "bytes": 1804,
+      "status": 200
+    },
+    {
+      "path": "assets/technology.webp",
+      "sha256": "2a5d1f524861b7bad319e047f2925e547efe2b25f0a2f47399cd6efcfab1eed5",
+      "bytes": 46110,
+      "status": 200
+    },
+    {
+      "path": "assets/tideglass.svg",
+      "sha256": "fa67c46c0c9a60b1452ce40a473b026cdd549e904e630340f94007f0634cd6f2",
+      "bytes": 464,
+      "status": 200
+    },
+    {
+      "path": "assets/tree.svg",
+      "sha256": "69cfb9bf3a75dafedc13e7aaa6cc2f62bdc69217544ad82d09748562cd43c4ed",
+      "bytes": 1120,
+      "status": 200
+    },
+    {
+      "path": "assets/v3-companions.webp",
+      "sha256": "f9f0917deb10b429bc349207847962c549cf9c09d74e66f030f8e3881a8f8747",
+      "bytes": 43464,
+      "status": 200
+    },
+    {
+      "path": "assets/v3-mobile.webp",
+      "sha256": "2b3ae33bec053556ecbdaebafb0afacd860760a9ec8f28513b81cf00b48ea474",
+      "bytes": 33278,
+      "status": 200
+    },
+    {
+      "path": "assets/v3-rift.webp",
+      "sha256": "69a6fb558de656b0d6bc909d46d7ebdee110d9bc24c4c4688753d485dce97816",
+      "bytes": 40768,
+      "status": 200
+    },
+    {
+      "path": "assets/v3-village.webp",
+      "sha256": "c1c00ec73b9e8ef1a91d07d65295e60e1d12623eac4ed9d505f6b11fb31c7cdf",
+      "bytes": 27980,
+      "status": 200
+    },
+    {
+      "path": "assets/v31-robot.webp",
+      "sha256": "086c2bcc7a7a86516096f78046af2ac5288f9d549ad96aa3fec2ca9364f35051",
+      "bytes": 44122,
+      "status": 200
+    },
+    {
+      "path": "assets/v31-village.webp",
+      "sha256": "9bac0b519c020a202523fc1ddf3fdb2e2cce48e782d7cf9b12596ee0badc5469",
+      "bytes": 124146,
+      "status": 200
+    },
+    {
+      "path": "assets/v32-animals.png",
+      "sha256": "1acaa41b32a62714b7ce57907d16a2959c9b57ab57706c8b75ec978e0355471a",
+      "bytes": 121343,
+      "status": 200
+    },
+    {
+      "path": "assets/v33-layout.png",
+      "sha256": "845d0bf15c2588339f34468c81138d2c5487f81014bca6581aa7cd4b67aafe62",
+      "bytes": 300654,
+      "status": 200
+    },
+    {
+      "path": "assets/v34-training.png",
+      "sha256": "1e6cf78aa3fecf93bc1865afbc71f284570954ba335a3549de2d94ec7d65d394",
+      "bytes": 449087,
+      "status": 200
+    },
+    {
+      "path": "assets/v40-community.png",
+      "sha256": "2ad7e49f2c913c6ef734e414e84dec46144df89bdb61b1277ba5f1724b808ee5",
+      "bytes": 920666,
+      "status": 200
+    },
+    {
+      "path": "assets/v40-gardener.png",
+      "sha256": "d61954139516926419caa5857d1bd00e3cece8dfb9605d575d47a20f42f9ad89",
+      "bytes": 170087,
+      "status": 200
+    },
+    {
+      "path": "assets/v40-hauler.png",
+      "sha256": "6418fab22684fd656c492d6e835c73feac10139a1b17bcd89ad9d8901c7bc2e3",
+      "bytes": 108067,
+      "status": 200
+    },
+    {
+      "path": "assets/v40-steam.png",
+      "sha256": "81bf869994a684a5bbacffb909f3ecb5fd8409c008271d44ef6e3da5cebdb98c",
+      "bytes": 931011,
+      "status": 200
+    },
+    {
+      "path": "assets/workshop.webp",
+      "sha256": "c40d9c6cb13a7b5d749da0e6302790971fe1d1beb3a52390b3d07668a3e64610",
+      "bytes": 37060,
+      "status": 200
+    },
+    {
+      "path": "assets/wormhole.svg",
+      "sha256": "14bb8787600872cfd8e688ec54de474e680cac96ea74c3a71dcca76d0afbc660",
+      "bytes": 631,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v3.1.0-macos-universal.dmg",
+      "sha256": "3dd44ab57745346576c61a16117e1b19e1f2386355e551315a3de8955e788398",
+      "bytes": 12058311,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v3.1.0-offline.zip",
+      "sha256": "c0f3bbad012c24efe760d54dcdff8cc07b0e5b13a789c94f855e9ebfe4ab6653",
+      "bytes": 768736,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v3.1.0-windows-x64-setup.exe",
+      "sha256": "2c2f6e70d1a76076b189afd71204ca59516b078d2f1759da8b29580fc235348c",
+      "bytes": 2850479,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v3.4.0-macos-universal.dmg",
+      "sha256": "7f13f6f3301a066c16fbe792b8c32801e42841b05f6e6b3cb6cf78a56d52f61d",
+      "bytes": 12137018,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v3.4.0-offline.zip",
+      "sha256": "c9ac2ce02923b37a9062b79c8e55ca0f0f99b6570fbb24514e2fc01646d0e442",
+      "bytes": 805252,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v3.4.0-windows-x64-setup.exe",
+      "sha256": "c77b0d51b58e28d59276b3b7254f4fb17bd7a14c2a6b3773b0885b5513e75a76",
+      "bytes": 2879130,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v4.0.0-macos-universal.app.zip",
+      "sha256": "a0926d05aafdd6c3082072497eb720d99a23c538a896da9d77ab5c8dc683d8de",
+      "bytes": 9818801,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v4.0.0-macos-universal.dmg",
+      "sha256": "3601797273965d5dd87b81fc30e9e42b54e03724c6228fd7f6ee1dcf210bfbc3",
+      "bytes": 12167306,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v4.0.0-offline.zip",
+      "sha256": "e08a82e9abc7b3f45b3295ab85570ce763938d55e8c239c6c0b992ef266d669a",
+      "bytes": 824498,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v4.0.0-windows-x64-setup.exe",
+      "sha256": "c151b90608a298055219703a9e1a8d2b8b1e9131ac75829b9aed48d78980b18f",
+      "bytes": 2895506,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v4.1.0-macos-universal.app.zip",
+      "sha256": "6f4b57d8cc55056173c806f8c187786785cf14317a5283acedb9469d018bdf9b",
+      "bytes": 9831921,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v4.1.0-macos-universal.dmg",
+      "sha256": "9dfad4d70ae6a630ff4fc7188a0461ed6dbd9699b7a413e0945dab8142be067b",
+      "bytes": 12176906,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v4.1.0-offline.zip",
+      "sha256": "9651acab2f5b3e5e5072a1b40c90d3556b891aabad7cde1d3caaa8ca65e33122",
+      "bytes": 832578,
+      "status": 200
+    },
+    {
+      "path": "downloads/Jiuji-v4.1.0-windows-x64-setup.exe",
+      "sha256": "5c7f49fc52eea9ca4aa5cd5b1a264b63a6a8e48026af7171f3449b833b59b31b",
+      "bytes": 2902210,
+      "status": 200
+    },
+    {
+      "path": "downloads/SHA256SUMS.txt",
+      "sha256": "7b50c9fc85a6eb2fcc52bd9606c4dcff8d66a747c725aeb3450e1e54d54bb273",
+      "bytes": 394,
+      "status": 200
+    },
+    {
+      "path": "downloads/downloads.json",
+      "sha256": "9d41fed1ffa1b28408402e5c2109ea1ffb53496a8c3c801e6c7445a8836c1d92",
+      "bytes": 1174,
+      "status": 200
+    },
+    {
+      "path": "index.html",
+      "sha256": "1ea5d7a3d25dc2fcd2ded9b36b78ff7798161503248308b469d17884e2fc6858",
+      "bytes": 34915,
+      "status": 200
+    },
+    {
+      "path": "site.css",
+      "sha256": "ceb6340ad521ee500082bcdf67051f1ecd49082c2db8789d22a62cf9f65ae50d",
+      "bytes": 48315,
+      "status": 200
+    },
+    {
+      "path": "site.js",
+      "sha256": "aeb510efae59767ade5eb453daaba23eb11e6da50651cdb82e0133c6f688e200",
+      "bytes": 14633,
+      "status": 200
+    },
+    {
+      "path": "version.json",
+      "sha256": "30a26d02cdb9378975555c10e57bca2e467edcc2ee87c735281a7490e5763a12",
+      "bytes": 1057,
+      "status": 200
+    }
+  ],
+  "routes": [
+    {
+      "path": "/jiuji/",
+      "ok": true,
+      "health": null
+    },
+    {
+      "path": "/",
+      "ok": true,
+      "health": null
+    },
+    {
+      "path": "/play/",
+      "ok": true,
+      "health": null
+    },
+    {
+      "path": "/api/health",
+      "ok": true,
+      "health": {
+        "ok": true,
+        "version": "3.6.2",
+        "build": "20261112-procedural-facilities-r2",
+        "protocol": 6,
+        "maxPlayers": 2,
+        "rooms": 0,
+        "battles": 0
+      }
+    },
+    {
+      "path": "/candidate/api/health",
+      "ok": true,
+      "health": {
+        "ok": true,
+        "version": "3.6.2",
+        "build": "20261112-procedural-facilities-r2",
+        "protocol": 7,
+        "maxPlayers": 6,
+        "rooms": 0,
+        "battles": 0
+      }
+    }
+  ],
+  "checkedAt": "2026-11-12T13:00:08+0800"
+}

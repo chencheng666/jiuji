@@ -1,0 +1,38 @@
+{
+  "version": "4.1.0",
+  "sourceCommit": "87769cbe719f958aac31f3ba8ccb62f23eebb65f",
+  "buildRun": "https://github.com/chencheng666/jiuji/actions/runs/43155865358",
+  "downloads": [
+    {
+      "filename": "Jiuji-v4.1.0-offline.zip",
+      "bytes": 832578,
+      "sha256": "9651acab2f5b3e5e5072a1b40c90d3556b891aabad7cde1d3caaa8ca65e33122"
+    },
+    {
+      "filename": "Jiuji-v4.1.0-windows-x64-setup.exe",
+      "bytes": 2902210,
+      "sha256": "5c7f49fc52eea9ca4aa5cd5b1a264b63a6a8e48026af7171f3449b833b59b31b"
+    },
+    {
+      "filename": "Jiuji-v4.1.0-macos-universal.dmg",
+      "bytes": 12176906,
+      "sha256": "9dfad4d70ae6a630ff4fc7188a0461ed6dbd9699b7a413e0945dab8142be067b"
+    },
+    {
+      "filename": "Jiuji-v4.1.0-macos-universal.app.zip",
+      "bytes": 9831921,
+      "sha256": "6f4b57d8cc55056173c806f8c187786785cf14317a5283acedb9469d018bdf9b"
+    }
+  ],
+  "equivalentOfflineFiles": 190,
+  "lineEndingOnlyDifferences": 67,
+  "identicalGameScript": true,
+  "macOSMinimum": "12.0",
+  "macOSArchitectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "windowsTarget": "x86_64-pc-windows-msvc",
+  "windowsRealInstallTest": false,
+  "physicalPhoneTest": false
+}

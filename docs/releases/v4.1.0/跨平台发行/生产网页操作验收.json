@@ -1,0 +1,36 @@
+{
+  "version": "4.1.0",
+  "browser": "Ego Lite",
+  "game": {
+    "url": "https://www.daguojueqi.site/jiuji/",
+    "boot": true,
+    "normalGathering": {
+      "gathered": 1,
+      "twig": 3
+    },
+    "nightGuide": {
+      "entries": 5,
+      "opensExpanded": true
+    },
+    "viewports": [
+      "390×844",
+      "844×390"
+    ],
+    "horizontalOverflow": false,
+    "closeButtonPx": 44
+  },
+  "official": {
+    "url": "https://www.daguojueqi.site/jiuji/official/",
+    "viewports": [
+      "390×844",
+      "844×390"
+    ],
+    "nightCards": 5,
+    "horizontalOverflow": false,
+    "allThreeDownloadsVersion": "4.1.0",
+    "zipClickedAndHashVerified": true
+  },
+  "physicalPhoneTest": false,
+  "windowsRealInstallTest": false,
+  "macNativeBootTest": false
+}

@@ -1,0 +1,9 @@
+{
+  "origin": "https://chencheng666.github.io/jiuji/",
+  "version": "4.1.0",
+  "commit": "87769cbe719f958aac31f3ba8ccb62f23eebb65f",
+  "manifestFilesMatched": 258,
+  "runtimeFilesVerified": true,
+  "missingFileHTTPStatus": 503,
+  "note": "全部258项清单文件和下载ZIP已逐项通过SHA256；末项不存在文件检查返回GitHub503，保留该平台状态，不记为完整404检查通过。"
+}

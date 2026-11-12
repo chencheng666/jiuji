@@ -1,8 +1,8 @@
-# 九级 · 荒野共同体
+# 九级 · 夜行与火光
 
-当前源码：**4.1.0 · 夜行与火光（本地候选）**。五类分阶段夜间生灵、毒区与吞火预警、撞树阻挡与木料掉落、遭遇后记录的夜间图鉴、弯腰采集；蒸汽工坊先研究科技才能建造和生产。详见 [4.1 玩法、截图与验收](docs/releases/v4.1.0/README.md)。
+当前版本：**4.1.0 · 夜行与火光**。五类分阶段夜间生灵、毒区与吞火预警、撞树阻挡与木料掉落、遭遇后记录的夜间图鉴、弯腰采集；蒸汽工坊先研究科技才能建造和生产。腾讯云、GitHub、官网和 ZIP / Windows / macOS 下载已更新。
 
-当前公开发行仍为 **4.0.0 · 荒野共同体**。三类机器人、聚落生活、六地经营和三级蒸汽工坊；腾讯云、GitHub、官网和 Windows/macOS 下载沿用已核验的 [4.0 发行](https://github.com/chencheng666/jiuji/releases/tag/v4.0.0)。本轮没有发布 4.1。
+[4.1 玩法与截图](docs/releases/v4.1.0/README.md) · [4.1 正式下载](https://github.com/chencheng666/jiuji/releases/tag/v4.1.0) · [跨平台发行验收](docs/releases/v4.1.0/跨平台发行/说明.md)。保留 4.0 的三类机器人、聚落生活、六地经营和近战翻滚突进，旧存档可导入接续。
 
 网页版、ZIP、Windows/macOS 安装包和各商店独立发行；下载入口、版本与验收状态以[官网](https://www.daguojueqi.site/jiuji/official/)和发行记录为准。
 

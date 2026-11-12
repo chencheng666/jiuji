@@ -1,0 +1,38 @@
+{
+  "version": "4.1.0",
+  "sourceCommit": "87769cbe719f958aac31f3ba8ccb62f23eebb65f",
+  "release": "https://github.com/chencheng666/jiuji/releases/tag/v4.1.0",
+  "gameRelease": "/opt/jiuji/releases/4.1.0-87769cb-20261112/site",
+  "gameBackup": "/opt/jiuji/backups/4.1.0-87769cb-20261112",
+  "officialRelease": "/opt/jiuji/official/releases/4.1.0-20261112-downloads/site",
+  "officialBackup": "/opt/jiuji/official/backups/4.1.0-20261112-downloads",
+  "gameFilesVerified": 258,
+  "githubReleaseAssets": 6,
+  "greatPowersPidsBefore": [
+    1064396,
+    1064397
+  ],
+  "greatPowersPidsAfter": [
+    1064396,
+    1064397
+  ],
+  "greatPowersBuildUnchanged": "20261112-procedural-facilities-r2",
+  "protectedPublicRoutesUnchanged": 8,
+  "nginxReloaded": false,
+  "rulesPassed": 263,
+  "desktopBuildRun": 43155865358,
+  "macAppVersion": "4.1.0",
+  "macArchitectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "macCodesignVerified": true,
+  "dmgVerified": true,
+  "windowsRealInstallTest": false,
+  "physicalPhoneTest": false,
+  "storesUpdated": false,
+  "officialFilesVerified": 119,
+  "runtimeFilesIdentical": 256,
+  "officialVersion": "4.1.0",
+  "zipDownloadVerified": true
+}
