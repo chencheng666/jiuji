@@ -1,4 +1,4 @@
-import {stepNightCreatures} from './night-creatures.js';
+import {stepNightCreatures,selectNightKind,NIGHT_KINDS} from './night-creatures.js';
 import {STEAM_TECH,STEAM_RECIPE} from './steam-data.js';
 import {stepSteam,validateSteam} from './steam.js';
 export {steamAction} from './steam.js';
@@ -45,6 +45,7 @@ Object.assign(ITEMS,EXTRA_ITEMS,WILD_ITEMS,EXPEDITION_ITEMS,HOME_ITEMS,FRONTIER_
 DISHES.push(...HOME_DISHES);
 export const RESOURCE_NAMES = {...Object.fromEntries(Object.entries(ITEMS).map(([k,v])=>[k,v.name])),insight:'洞见',resonance:'共鸣'};
 export const NODES = {
+  brokenwood:{name:'折断木料',hp:1,time:.5,drop:{wood:3,twig:1}},
   tree:{name:'青杉',tool:'axe',hp:3,time:.65,drop:{wood:4,twig:1,seed:1},eco:-1.2},
   rock:{name:'岩石',tool:'pickaxe',hp:3,time:.65,drop:{stone:5,flint:2},eco:-.3},
   ore:{name:'铜矿脉',tool:'pickaxe',hp:4,time:.65,drop:{ore:5,stone:2},eco:-.8},
@@ -352,9 +353,9 @@ export function step(s,dt,input={}){
   for(const b of s.buildings){if(b.type==='campfire')b.fuel=Math.max(0,b.fuel-dt*(ph==='day'?.28:1)*(weather(s).raining?1.35:1));if(b.type==='drill'&&!isOdyssey(s)&&s.time-b.productionAt>=15){b.stored=Math.min(30,b.stored+Math.floor((s.time-b.productionAt)/15));b.productionAt=s.time;}if(b.type==='farm'&&s.ecology<100)s.ecology=clamp(s.ecology+dt*.009);}
   for(const n of s.nodes)if(!n.available&&n.respawnAt&&s.time>=n.respawnAt){n.available=true;n.hp=NODES[n.type].hp;n.respawnAt=0;if(n.sapling){n.sapling=false;s.resonance=Math.min(100,s.resonance+1);}}
   if(ph==='night'){
-    s.enemyClock+=dt;if(s.enemyClock>19&&s.enemies.length<4){s.enemyClock=0;const a=random(s)*Math.PI*2,x=p.x+Math.cos(a)*430,y=p.y+Math.sin(a)*430;if(walkable(s,x,y))s.enemies.push({id:'e'+s.time,x,y,hp:35,cooldown:0,kind:['stalker','lancer','prowler'][Math.floor(random(s)*3)]});}
+    s.enemyClock+=dt;if(s.enemyClock>19&&s.enemies.length<4){s.enemyClock=0;const a=random(s)*Math.PI*2,x=p.x+Math.cos(a)*430,y=p.y+Math.sin(a)*430;if(walkable(s,x,y)){const kind=selectNightKind(s,random(s));s.enemies.push({id:'e'+s.time,x,y,hp:NIGHT_KINDS[kind].hp,cooldown:0,kind});}}
     stepNightCreatures(s,dt,{walkable,lightAt});
-  }else{s.enemies=[];s.enemyClock=0;}
+  }else{s.enemies=[];s.enemyClock=0;s.nightEncounter=null;}
   if(day(s)>oldDay){s.stats.nights++;say(s,'第 '+day(s)+' 天。你平安度过了一个夜晚。',true);}
   if(ph!==oldPhase){if(ph==='dusk')say(s,'天色渐暗。准备营火、火炬和食物。',true);if(ph==='night')say(s,'夜晚降临。留在光里，夜影惧怕火光。',true);}
   const area=inHome(s)?biome(p.x,p.y):{id:s.expedition.current,name:realm(s).name};if(!s.visited.includes(area.id)){s.visited.push(area.id);s.insight+=4;say(s,'发现「'+area.name+'」· 洞见 +4。',true);}reveal(s);
@@ -398,7 +399,7 @@ export function parseSave(raw){
   validateLiving(s);if(s.version>=6&&!s.homestead)throw new Error('缺少营地远征进度');validateHomestead(s,num);if(s.version>=7&&!s.frontier)throw Error('缺少营地经营进度');validateFrontier(s,num);if(savedVersion>=8)validateOdyssey(s,num);else delete s.odyssey;if(savedVersion>=9)validateSymbiosis(s,num);else delete s.symbiosis;initSymbiosis(s);initExpansion(s);initWilderness(s);initSeasons(s);initExpedition(s);initHomestead(s);initFrontier(s);initOdyssey(s);
   validateSettlements(s,num);initSettlements(s,true);validateRobotics(s,num);initRobotics(s);validateCountryside(s,num);initCountryside(s);validateCampLiving(s,num);initCampLiving(s);validateCommunity(s,num);initCommunity(s);
   if(typeof s.torchOn!=='boolean'||typeof s.chapterCompleted!=='boolean')throw new Error('存档状态无效');
-  s.enemies=[];s.channel=null;s.action=null;s.target=null;s.path=[];s.fx=[];s.request=null;s.motion=null;s.player.walk=0;s.message=null;return s;
+  s.enemies=[];s.nightEncounter=null;s.channel=null;s.action=null;s.target=null;s.path=[];s.fx=[];s.request=null;s.motion=null;s.player.walk=0;s.message=null;return s;
 }
 
 export function maxHealth(s){return s.level===1?100:100+s.level*10;}

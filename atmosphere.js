@@ -39,6 +39,9 @@ export function gatherPose(c,s){
   const n=s.nodes.find(n=>n.id===a.id);if(!n)return;
   const p=s.player,side=n.x<p.x?-1:1,progress=a.elapsed/a.duration;
   if(n.type==='pond'){const cast=Math.min(1,progress/.16),reel=progress>.85?(progress-.85)/.15:0;c.save();c.strokeStyle='#b7a778';c.lineWidth=4;c.beginPath();c.moveTo(p.x+10,p.y-35);c.lineTo(p.x+side*43,p.y-84);c.stroke();c.strokeStyle='#d9ddc0';c.lineWidth=1;c.beginPath();c.moveTo(p.x+side*43,p.y-84);c.quadraticCurveTo((p.x+n.x)/2,p.y-60,p.x+(n.x-p.x)*cast*(1-reel*.8),p.y+(n.y-p.y)*cast-30+Math.sin(progress*12)*2);c.stroke();c.fillStyle=progress>.75?'#f5cc8e':'#d7e8c5';c.beginPath();c.arc(p.x+(n.x-p.x)*cast*(1-reel*.8),p.y+(n.y-p.y)*cast-30,progress>.75?5:3,0,7);c.fill();c.restore();return;}
+  if(['twig','flint','flower','bush','grass','mushroom','brokenwood'].includes(n.type)){
+   const bend=Math.sin(progress*Math.PI);c.save();c.strokeStyle='#2c4034';c.lineWidth=8;c.beginPath();c.moveTo(p.x+side*8,p.y-35+bend*7);c.quadraticCurveTo(p.x+side*25,p.y-17,p.x+side*(24+bend*10),p.y-8);c.stroke();c.strokeStyle='#bca675';c.lineWidth=4;c.stroke();c.fillStyle='#ddc596';c.beginPath();c.arc(p.x+side*(24+bend*10),p.y-8,4,0,7);c.fill();c.restore();return;
+  }
   c.save();c.translate(p.x+side*12,p.y-27);c.scale(side,1);const swing=progress<.35?progress/.35*.25:progress<.72?.25+(progress-.35)/.37*.75:1-(progress-.72)/.28*.5;c.rotate(-1.5+swing*2.4);
   c.strokeStyle='#302f24';c.lineWidth=8;c.beginPath();c.moveTo(0,0);c.lineTo(25,-24);c.stroke();c.strokeStyle='#ae8a54';c.lineWidth=4;c.stroke();
   if(['tree','rock','ore','crystal','meteor','mirrorsand','starroot'].includes(n.type)){
