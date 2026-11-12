@@ -20,7 +20,9 @@ function solve(){const map=s.expedition.current,def=SITES[map],p=s.odyssey.puzzl
 function contact(){const id=s.expedition.current;if(s.odyssey.contacts[id])return;const o=CONTACTS[id].options[1];cost(o.cost);const target=s.nodes.find(n=>n.type==='wayfarer');walk(target);check(G.odysseyAction(s,'contact',target.id,o.id));}
 function prepRelay(){cost(G.RECIPES.find(r=>r.id==='relay').cost);}
 function relay(){return s.buildings.find(b=>b.type==='relay')||build('relay',{x:s.player.x,y:s.player.y});}
-function trial(id){travel('home');const t=G.TRIALS.find(t=>t.id===id),o=t.options[0];cost(o.cost);walk(t);if(t.planted)plantMany(t.planted);check(G.beginTrial(s,id,o.id));while(s.channel)advance();assert.ok(s.expansion.completed.includes(id));}
+function trial(id){travel('home');const t=G.TRIALS.find(t=>t.id===id),o=t.options[0];cost(o.cost);walk(t);if(t.planted)plantMany(t.planted);// 遗迹调谐允许受击中断；真实准备诱饵后绕开野猪，不跳过规则。
+ if(s.expedition.creatures.some(m=>m.hp>0&&G.distance(m,t)<350)){make('lure');walk({x:t.x+180,y:t.y+40});check(G.useItem(s,'lure'));walk({x:t.x,y:t.y-110});}
+ for(let attempt=0;attempt<5&&!s.expansion.completed.includes(id);attempt++){if(G.distance(s.player,t)>140)walk({x:t.x,y:t.y-110});check(G.beginTrial(s,id,o.id));while(s.channel)advance();}assert.ok(s.expansion.completed.includes(id),'遗迹未完成：'+JSON.stringify(s.message));}
 function ascend(){const chapter=G.CHAPTERS[s.level];travel('home');trial(chapter.trial);const station=s.buildings.find(b=>b.type===chapter.station)||build(chapter.station,camp);if(s.level===8)build('archive',camp);if(s.ecology<chapter.eco){walk(camp);plantMany(Math.ceil((chapter.eco-s.ecology)/3)+1);}need('resonance',chapter.cost);walk(station);if(s.player.clarity<60){meditate(3);walk(station);}snapshot('before-'+(s.level+1));check(G.stationAction(s,'ascend',station.id));mark('晋升'+s.level+'级');assert.equal(G.parseSave(G.serialize(s)).level,s.level);}
 function learnChapter(){for(const id of G.CHAPTERS[s.level].tech)if(!s.tech.includes(id))learn(id);}
 supplies();contact();learnChapter();
