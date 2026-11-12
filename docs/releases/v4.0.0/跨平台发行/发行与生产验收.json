@@ -1,0 +1,60 @@
+{
+  "version": "4.0.0",
+  "date": "2026-11-12",
+  "sourceCommit": "59c18a8bb90b704615df16dfc45fd3c104f52447",
+  "domesticGameCommit": "aca78a54ab2164a17b4140f1d8682e364295d32d",
+  "runtimeFilesIdentical": 248,
+  "githubRelease": "https://github.com/chencheng666/jiuji/releases/tag/v4.0.0",
+  "publicReleaseAssetsVerified": 6,
+  "pages": {
+    "url": "https://chencheng666.github.io/jiuji/",
+    "commit": "5d40039f58e26dc04a9a1b9a29fb4bbdd34d88ce",
+    "filesVerified": 250
+  },
+  "official": {
+    "url": "https://www.daguojueqi.site/jiuji/official/",
+    "filesVerified": 110,
+    "release": "/opt/jiuji/official/releases/4.0.0-20261112-downloads/site",
+    "backup": "/opt/jiuji/official/backups/4.0.0-20261112-downloads",
+    "nginxReloaded": false
+  },
+  "rulesPassed": 251,
+  "fullJourneysPassed": true,
+  "desktopBuild": "https://github.com/chencheng666/jiuji/actions/runs/43147267202",
+  "downloads": [
+    {
+      "filename": "Jiuji-v4.0.0-macos-universal.app.zip",
+      "bytes": 9818801,
+      "sha256": "a0926d05aafdd6c3082072497eb720d99a23c538a896da9d77ab5c8dc683d8de"
+    },
+    {
+      "filename": "Jiuji-v4.0.0-macos-universal.dmg",
+      "bytes": 12167306,
+      "sha256": "3601797273965d5dd87b81fc30e9e42b54e03724c6228fd7f6ee1dcf210bfbc3"
+    },
+    {
+      "filename": "Jiuji-v4.0.0-offline.zip",
+      "bytes": 824498,
+      "sha256": "e08a82e9abc7b3f45b3295ab85570ce763938d55e8c239c6c0b992ef266d669a"
+    },
+    {
+      "filename": "Jiuji-v4.0.0-windows-x64-setup.exe",
+      "bytes": 2895506,
+      "sha256": "c151b90608a298055219703a9e1a8d2b8b1e9131ac75829b9aed48d78980b18f"
+    }
+  ],
+  "protectedRoutesUnchanged": 10,
+  "gameSymlinkUnchanged": true,
+  "greatPowersPidsBefore": [
+    1064396,
+    1064397
+  ],
+  "greatPowersPidsAfter": [
+    1064396,
+    1064397
+  ],
+  "greatPowersVersionUnchanged": true,
+  "windowsRealInstallTest": false,
+  "physicalPhoneTest": false,
+  "macNativeStartTest": "同版本同运行资源初次构建原生启动与菜单通过；正式构建复核版本、架构、签名和DMG校验"
+}

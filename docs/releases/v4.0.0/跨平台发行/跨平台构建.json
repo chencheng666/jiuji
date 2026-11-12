@@ -1,0 +1,18 @@
+{
+  "status": "completed",
+  "conclusion": "success",
+  "headSha": "59c18a8bb90b704615df16dfc45fd3c104f52447",
+  "url": "https://github.com/chencheng666/jiuji/actions/runs/43147267202",
+  "jobs": [
+    {
+      "name": "macOS 通用安装包",
+      "conclusion": "success",
+      "url": "https://github.com/chencheng666/jiuji/actions/runs/43147267202/job/130947893667"
+    },
+    {
+      "name": "Windows x64 安装包",
+      "conclusion": "success",
+      "url": "https://github.com/chencheng666/jiuji/actions/runs/43147267202/job/130947893970"
+    }
+  ]
+}

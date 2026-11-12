@@ -1,0 +1,29 @@
+{
+  "version": "4.0.0",
+  "publicSource": "59c18a8bb90b704615df16dfc45fd3c104f52447",
+  "runtimeSourceMatchesDomestic": true,
+  "rulesRun": 43147265997,
+  "desktopRun": 43147267202,
+  "rulesPassed": 251,
+  "fullJourneysPassed": true,
+  "macOS": {
+    "version": "4.0.0",
+    "architectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "signatureIntegrity": true,
+    "dmgChecksum": true,
+    "nativeStartAndMenu": true,
+    "nativeTestBuild": "80590408af76bac53a5125696807251774bfdac7",
+    "finalBuild": "59c18a8bb90b704615df16dfc45fd3c104f52447",
+    "runtimeUnchangedBetweenBuilds": true
+  },
+  "windows": {
+    "target": "x86_64-pc-windows-msvc",
+    "installerFormat": "NSIS",
+    "installerVersionResource": "4.0.0",
+    "realInstallTest": false
+  },
+  "phonePhysicalTest": false
+}

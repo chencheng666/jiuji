@@ -1,0 +1,35 @@
+{
+  "version": "4.0.0",
+  "sourceCommit": "59c18a8bb90b704615df16dfc45fd3c104f52447",
+  "buildRun": "https://github.com/chencheng666/jiuji/actions/runs/43147267202",
+  "downloads": [
+    {
+      "filename": "Jiuji-v4.0.0-macos-universal.app.zip",
+      "bytes": 9818801,
+      "sha256": "a0926d05aafdd6c3082072497eb720d99a23c538a896da9d77ab5c8dc683d8de"
+    },
+    {
+      "filename": "Jiuji-v4.0.0-macos-universal.dmg",
+      "bytes": 12167306,
+      "sha256": "3601797273965d5dd87b81fc30e9e42b54e03724c6228fd7f6ee1dcf210bfbc3"
+    },
+    {
+      "filename": "Jiuji-v4.0.0-offline.zip",
+      "bytes": 824498,
+      "sha256": "e08a82e9abc7b3f45b3295ab85570ce763938d55e8c239c6c0b992ef266d669a"
+    },
+    {
+      "filename": "Jiuji-v4.0.0-windows-x64-setup.exe",
+      "bytes": 2895506,
+      "sha256": "c151b90608a298055219703a9e1a8d2b8b1e9131ac75829b9aed48d78980b18f"
+    }
+  ],
+  "macOSMinimum": "12.0",
+  "macOSArchitectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "windowsTarget": "x86_64-pc-windows-msvc",
+  "windowsRealInstallTest": false,
+  "macNativeStartTest": "同一4.0运行源码的初次构建已原生启动并打开暂停菜单，最终构建复核版本、架构与签名完整性"
+}

@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "layouts": [
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "downloads": [
+        {
+          "text": "下载离线 ZIP",
+          "url": "https://www.daguojueqi.site/jiuji/official/downloads/Jiuji-v4.0.0-offline.zip"
+        },
+        {
+          "text": "下载 Windows 安装包",
+          "url": "https://www.daguojueqi.site/jiuji/official/downloads/Jiuji-v4.0.0-windows-x64-setup.exe"
+        },
+        {
+          "text": "下载 macOS 安装包",
+          "url": "https://www.daguojueqi.site/jiuji/official/downloads/Jiuji-v4.0.0-macos-universal.dmg"
+        }
+      ],
+      "badImages": []
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "scrollWidth": 844,
+      "downloads": [
+        {
+          "text": "下载离线 ZIP",
+          "url": "https://www.daguojueqi.site/jiuji/official/downloads/Jiuji-v4.0.0-offline.zip"
+        },
+        {
+          "text": "下载 Windows 安装包",
+          "url": "https://www.daguojueqi.site/jiuji/official/downloads/Jiuji-v4.0.0-windows-x64-setup.exe"
+        },
+        {
+          "text": "下载 macOS 安装包",
+          "url": "https://www.daguojueqi.site/jiuji/official/downloads/Jiuji-v4.0.0-macos-universal.dmg"
+        }
+      ],
+      "badImages": []
+    }
+  ],
+  "zipClickDownload": true,
+  "placeholderImage": "未打开的图片查看器没有src，不作为加载失败"
+}

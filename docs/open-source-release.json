@@ -2,14 +2,14 @@
   "repository": "https://github.com/chencheng666/jiuji",
   "visibility": "public",
   "license": "MIT",
-  "version": "3.4.0",
-  "release": "https://github.com/chencheng666/jiuji/releases/tag/v3.4.0",
+  "version": "4.0.0",
+  "release": "https://github.com/chencheng666/jiuji/releases/tag/v4.0.0",
   "play": "https://chencheng666.github.io/jiuji/",
   "domestic_play": "https://www.daguojueqi.site/jiuji/",
-  "main_commit": "a5199bda1711c445a5cb66c8ee2b9d3f22528c57",
-  "runtime_commit": "a5199bda1711c445a5cb66c8ee2b9d3f22528c57",
-  "pages_commit": "3fc3c4e",
-  "notes": "3.4.0 已发布：腾讯云234文件、官网97文件、Pages234文件逐一哈希核对；官网下载ZIP、Windows、macOS通用包均为3.4.0。226项规则测试及跨平台构建通过，大国崛起两服务PID与五处页面摘要保持一致。本轮未更新任何商店，也未做手机或Windows真机游玩验证。",
+  "main_commit": "59c18a8bb90b704615df16dfc45fd3c104f52447",
+  "runtime_commit": "59c18a8bb90b704615df16dfc45fd3c104f52447",
+  "pages_commit": "5d40039f58e26dc04a9a1b9a29fb4bbdd34d88ce",
+  "notes": "4.0正式发行：源码248个运行文件与腾讯云已上线版本一致，官网110文件、Pages250文件逐一核对，GitHub6项发行资产服务端摘要一致。251项规则与完整旅程、Windows/macOS构建通过；Mac原生启动及版本/架构/签名校验通过。大国崛起两服务PID、九级游戏目录和10个既有入口保持不变。未做Windows真机安装或实体手机测试，未修改商店审核包。",
   "linux_package": {
     "file": "site.daguojueqi.jiuji_1.3.1_amd64.deb",
     "sha256": "ac3b3cc74e6ec10d0c9e6bc4fcda8870d9c6cd381c06a83ad2832cd18d47f985",
@@ -32,22 +32,29 @@
     "not_checked_in_release": "3.4.0"
   },
   "official": "https://www.daguojueqi.site/jiuji/official/",
-  "desktop_build": "https://github.com/chencheng666/jiuji/actions/runs/42771466567",
+  "desktop_build": "https://github.com/chencheng666/jiuji/actions/runs/43147267202",
   "downloads": [
     {
-      "filename": "Jiuji-v3.4.0-offline.zip",
-      "bytes": 805252,
-      "sha256": "c9ac2ce02923b37a9062b79c8e55ca0f0f99b6570fbb24514e2fc01646d0e442"
+      "filename": "Jiuji-v4.0.0-macos-universal.app.zip",
+      "bytes": 9818801,
+      "sha256": "a0926d05aafdd6c3082072497eb720d99a23c538a896da9d77ab5c8dc683d8de"
     },
     {
-      "filename": "Jiuji-v3.4.0-windows-x64-setup.exe",
-      "bytes": 2879130,
-      "sha256": "c77b0d51b58e28d59276b3b7254f4fb17bd7a14c2a6b3773b0885b5513e75a76"
+      "filename": "Jiuji-v4.0.0-macos-universal.dmg",
+      "bytes": 12167306,
+      "sha256": "3601797273965d5dd87b81fc30e9e42b54e03724c6228fd7f6ee1dcf210bfbc3"
     },
     {
-      "filename": "Jiuji-v3.4.0-macos-universal.dmg",
-      "bytes": 12137018,
-      "sha256": "7f13f6f3301a066c16fbe792b8c32801e42841b05f6e6b3cb6cf78a56d52f61d"
+      "filename": "Jiuji-v4.0.0-offline.zip",
+      "bytes": 824498,
+      "sha256": "e08a82e9abc7b3f45b3295ab85570ce763938d55e8c239c6c0b992ef266d669a"
+    },
+    {
+      "filename": "Jiuji-v4.0.0-windows-x64-setup.exe",
+      "bytes": 2895506,
+      "sha256": "c151b90608a298055219703a9e1a8d2b8b1e9131ac75829b9aed48d78980b18f"
     }
-  ]
+  ],
+  "domestic_runtime_commit": "aca78a54ab2164a17b4140f1d8682e364295d32d",
+  "pages_runtime_commit": "8c96d6c716de764c79b54579455d399047ce7b43"
 }
