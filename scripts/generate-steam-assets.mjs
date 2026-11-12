@@ -1,0 +1,10 @@
+import {writeFileSync} from 'node:fs';
+// 参数化部件组合为静态 SVG；实时活动零件留在 Canvas 层，不引入三维渲染依赖。
+const wrap=(name,body)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200"><title>${name}</title><g stroke="#2c4035" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">${body}</g></svg>`;
+const base='<ellipse cx="80" cy="185" rx="71" ry="9" fill="#24382d33" stroke="none"/>';
+const rivets=(x,y,n)=>Array.from({length:n},(_,i)=>`<circle cx="${x+i*13}" cy="${y}" r="2" fill="#dcc28a" stroke="none"/>`).join('');
+const boiler=(x,y)=>`<rect x="${x}" y="${y}" width="58" height="75" rx="21" fill="#8f9c8a"/><path d="M${x+4} ${y+17}h50m-50 42h50" stroke="#b7b89b"/>${rivets(x+9,y+23,4)}<path d="M${x+16} ${y}v-27h17v27" fill="#6f7662"/>`;
+const steam=base+'<path d="M18 167h126v16H18z" fill="#876c4a"/>'+boiler(28,78)+'<path d="M86 111h42v39H86z" fill="#839482"/><path d="M93 110V89h34v21" fill="#c9ad72"/><rect x="37" y="145" width="35" height="26" rx="4" fill="#3c4e3c"/><path d="M42 166l7-14 7 14 7-12 5 12" fill="#e9ae64"/><circle cx="58" cy="112" r="13" fill="#decd96"/><path d="M58 112l6-7"/><path d="M94 155h42v18H94" fill="#897352"/>';
+writeFileSync(new URL('../dist/assets/steamworks.svg',import.meta.url),wrap('蒸汽工坊',steam));
+writeFileSync(new URL('../dist/assets/chickencoop.svg',import.meta.url),wrap('木鸡舍与陶碗',base+'<path d="M23 172V97h93v75z" fill="#a18a5e"/><path d="M13 99l57-42 57 42z" fill="#849369"/><path d="M25 95l45-29 43 29" fill="none"/><path d="M29 108v60m19-61v60m47-60v60m16-60v60" stroke="#786b49"/><path d="M57 171v-43q15-20 29 0v43" fill="#344a37"/><path d="M16 174h111" stroke="#7b6746"/>'));
+for(const[k,color,shape]of [['stalker','#65746a','M31 171l7-76 30-31 29 17 26 89-35-10-29 16Z'],['lancer','#73758a','M23 176l38-83 17-47 13 45 48 88-45-15-18 16-19-16Z'],['prowler','#607c7c','M16 146l26-64 34 21 31-34 37 79-31-5-13 31-32-15-30 17Z']])writeFileSync(new URL('../dist/assets/night-'+k+'.svg',import.meta.url),wrap('夜影',base+`<path d="${shape}" fill="${color}"/><path d="M61 112l9 3m17-2l10-4" stroke="#e8d296"/><path d="M56 145l13-8 13 12 13-13" fill="none" stroke="#33483e"/>`));

@@ -1,0 +1,10 @@
+{
+  "rules": 251,
+  "passed": true,
+  "syntaxChecks": true,
+  "normalResourceJourney": "蒸汽真实流程结果.json",
+  "mobileLayouts": "浏览器布局.json",
+  "offlineStaticAudit": true,
+  "physicalPhoneTest": false,
+  "nativeInstallTest": false
+}

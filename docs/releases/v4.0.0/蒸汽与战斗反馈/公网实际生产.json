@@ -1,0 +1,9 @@
+{
+  "version": "九级 4.0.0 · 荒野共同体",
+  "batches": 3,
+  "stock": {
+    "wood": 0,
+    "board": 1
+  },
+  "backpackWood": 0
+}

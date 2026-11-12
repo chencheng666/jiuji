@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "source": "完整一级至九级正常资源旅程后，关闭结局创造模式，六站建设与共建均真实扣料",
+  "creative": false,
+  "level": 9,
+  "postRealms": [
+    "home",
+    "verdant",
+    "cinder",
+    "frost",
+    "mirror",
+    "orbit"
+  ],
+  "supply": [
+    "home",
+    "verdant",
+    "cinder",
+    "frost",
+    "mirror",
+    "orbit"
+  ],
+  "monument": [
+    "home",
+    "verdant",
+    "cinder",
+    "frost",
+    "mirror",
+    "orbit"
+  ],
+  "teleportPaidCrystal": 1,
+  "teleportPaidResonance": 2
+}

@@ -1,0 +1,61 @@
+{
+  "version": "4.0.0",
+  "days": 5,
+  "level": 3,
+  "stats": {
+    "gathered": 156,
+    "crafted": 92,
+    "planted": 18,
+    "nights": 4,
+    "defeated": 0
+  },
+  "visited": [
+    "home",
+    "verdant"
+  ],
+  "community": {
+    "version": 1,
+    "requests": {
+      "bay": 2,
+      "ridge": 2,
+      "reed": 0
+    },
+    "announced": {
+      "bay": -1,
+      "ridge": -1,
+      "reed": -1
+    },
+    "projects": {
+      "supply": [],
+      "beacon": []
+    },
+    "rests": {},
+    "log": [
+      {
+        "day": 5,
+        "realm": "home",
+        "type": "request-done",
+        "text": "接过河湾的饭篮"
+      },
+      {
+        "day": 5,
+        "realm": "home",
+        "type": "request-done",
+        "text": "修好搬运小车"
+      },
+      {
+        "day": 5,
+        "realm": "home",
+        "type": "request-done",
+        "text": "把热饭送给修械师"
+      },
+      {
+        "day": 5,
+        "realm": "home",
+        "type": "request-done",
+        "text": "为雨天留干柴"
+      }
+    ],
+    "gardens": 1
+  }
+}

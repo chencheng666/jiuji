@@ -1,0 +1,65 @@
+{
+  "version": {
+    "name": "九级",
+    "version": "4.0.0",
+    "commit": "aca78a54ab2164a17b4140f1d8682e364295d32d",
+    "download": "downloads/Jiuji-v4.0.0.zip",
+    "download_sha256": "25637895f6125eb36abc1ba9991da62999c98c755d03b0a4bfa8f6356827aea1"
+  },
+  "filesVerified": 250,
+  "protectedRoutesUnchanged": true,
+  "routes": [
+    {
+      "path": "/",
+      "unchanged": true,
+      "sha256": "436a54c05a20ea72a53e3464cd0bbc730e0e8dcf5c8036dd374ec74d9192d0eb"
+    },
+    {
+      "path": "/play/",
+      "unchanged": true,
+      "sha256": "5bb72551eba57ecfb61f41b9a91f3fe927e881a9c896a7252d02d0e255403c48"
+    },
+    {
+      "path": "/candidate/",
+      "unchanged": true,
+      "sha256": "5bb72551eba57ecfb61f41b9a91f3fe927e881a9c896a7252d02d0e255403c48"
+    },
+    {
+      "path": "/downloads/",
+      "unchanged": true,
+      "sha256": "b12331828b1c2b0f5bd245091d920fc61881571317146ed6e6d90954ca3525a6"
+    },
+    {
+      "path": "/resume/",
+      "unchanged": true,
+      "sha256": "fa78dc5a3c3cee90ea248766b15ac6c9c1ea7480c136b0284ab04548788f5dde"
+    },
+    {
+      "path": "/api/health",
+      "unchanged": true,
+      "sha256": "37d6747b7167c96c956e4dd346f8161af0a5f398399581b7ad99a8f8533746a6"
+    },
+    {
+      "path": "/candidate/api/health",
+      "unchanged": true,
+      "sha256": "7fe12dd04acfcf35f2ec75a306c3de8b4d82b421e426889a1eba75d7d0a642f0"
+    },
+    {
+      "path": "/mist-harbor/",
+      "unchanged": true,
+      "sha256": "81e9a7e41b913186b4d885d864fea5c4caee63770823803525d070fc87f62092"
+    },
+    {
+      "path": "/jiuji/official/",
+      "unchanged": true,
+      "sha256": "81a37bc11d22ab809f71172af415a3cbf698bb2743beedf1e72cee069f2bb6e1"
+    }
+  ],
+  "localCommit": "aca78a54ab2164a17b4140f1d8682e364295d32d",
+  "release": "/opt/jiuji/releases/4.0.0-aca78a5-20261112/site",
+  "backup": "/opt/jiuji/backups/4.0.0-aca78a5-20261112",
+  "nginxReloaded": false,
+  "browserSmoke": "公网实际生产.json",
+  "physicalPhoneTest": false,
+  "nativeOrStoreRelease": false
+}

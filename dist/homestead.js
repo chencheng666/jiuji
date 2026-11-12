@@ -40,7 +40,7 @@ export function initHomestead(s){
 export function craftAmount(s,id){
  if(['insight','resonance'].includes(id))return G.amount(s,id);
  const item=G.ITEMS[id];let n=G.amount(s,id);if(!item||item.durability||item.unique)return n;
- for(const b of s.buildings)if(['chest','robotdock'].includes(b.type)&&distance(b,s.player)<=craftStorageRange(s,b))n+=b.inventory?.[id]||0;
+ for(const b of s.buildings)if(['chest','robotdock','outpost'].includes(b.type)&&distance(b,s.player)<=craftStorageRange(s,b))n+=b.inventory?.[id]||0;
  return n;
 }
 export function craftAffordable(s,cost){return Object.entries(cost||{}).every(([id,n])=>craftAmount(s,id)>=n);}
@@ -49,7 +49,7 @@ export function payCraft(s,cost){
  for(const[id,n]of Object.entries(cost||{})){
   if(['insight','resonance'].includes(id)){s[id]-=n;continue;}let left=n;
   const take=Math.min(left,s.inventory[id]||0);s.inventory[id]=(s.inventory[id]||0)-take;left-=take;
-  for(const b of s.buildings)if(left&&['chest','robotdock'].includes(b.type)&&distance(b,s.player)<=craftStorageRange(s,b)){const v=Math.min(left,b.inventory?.[id]||0);if(v)b.inventory[id]-=v;left-=v;}
+  for(const b of s.buildings)if(left&&['chest','robotdock','outpost'].includes(b.type)&&distance(b,s.player)<=craftStorageRange(s,b)){const v=Math.min(left,b.inventory?.[id]||0);if(v)b.inventory[id]-=v;left-=v;}
  }
 }
 function rewardsFit(s,drop){return Object.entries(drop).every(([id,n])=>(s.inventory[id]||0)+n<=9999);}

@@ -1,0 +1,30 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "bodyWidth": 362,
+    "bodyScroll": 362,
+    "close": {
+      "width": 44,
+      "height": 44,
+      "right": 359,
+      "bottom": 75
+    },
+    "badImages": []
+  },
+  {
+    "width": 720,
+    "height": 324,
+    "scrollWidth": 720,
+    "bodyWidth": 700,
+    "bodyScroll": 700,
+    "close": {
+      "width": 44,
+      "height": 44,
+      "right": 694,
+      "bottom": 66
+    },
+    "badImages": []
+  }
+]

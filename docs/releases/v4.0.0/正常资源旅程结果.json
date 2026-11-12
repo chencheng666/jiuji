@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "source": "从一级正常采集与真实晋升接续，没有注入物资、科技、位置、时间或电量",
+  "level": 3,
+  "day": 5,
+  "gardenerTrips": 4,
+  "gardens": 1,
+  "haulerDelivered": 3,
+  "chestRoot": 3,
+  "communityRequests": {
+    "bay": 2,
+    "ridge": 2,
+    "reed": 0
+  },
+  "postStock": {
+    "wood": 5
+  },
+  "sawPlant": true,
+  "sawCarry": true,
+  "sawCharge": true
+}

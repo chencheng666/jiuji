@@ -1,6 +1,6 @@
 [package]
 name = "jiuji-desktop"
-version = "3.4.0"
+version = "4.0.0"
 edition = "2021"
 rust-version = "1.90"
 [build-dependencies]

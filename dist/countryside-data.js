@@ -13,7 +13,7 @@ export const COUNTRY_ITEMS={egg:{name:'鲜鸡蛋',icon:'egg',food:10,clarity:-2}
 export const COUNTRY_TECH={id:'animalcare',name:'温和驯养',branch:'mind',cost:{insight:5,seed:3,grass:4},requires:['observe'],text:'学习观察、引诱与照料，解锁鸡舍和兔苑；缺粮只暂停产出，动物不会离线死亡。'};
 export const COUNTRY_RECIPES=[
  {id:'feed',name:'谷籽饲料',category:'materials',cost:{seed:2,grass:4},item:'feed',count:2,desc:'制作 2 份饲料。在鸡舍或兔苑投入，每份提供 6 点口粮。'},
- {id:'chickencoop',name:'原野鸡舍',category:'camp',cost:{wood:10,grass:8,twig:4},building:'chickencoop',tech:'animalcare',desc:'先建鸡舍，再用种子引入野鸡。初始容纳 2 只，产出鸡蛋与少量堆肥。'},
+ {id:'chickencoop',name:'原野鸡舍',category:'camp',cost:{wood:10,grass:8,twig:4},building:'chickencoop',tech:'animalcare',desc:'先建鸡舍，再用种子引入野鸡。初始木鸡舍配陶碗，手动投喂，容纳 2 只；产出鸡蛋与少量堆肥。自动喂料需另行升级。'},
  {id:'rabbitpen',name:'棉尾兔苑',category:'camp',cost:{wood:8,grass:10,stone:4},building:'rabbitpen',tech:'animalcare',desc:'先建兔苑，再用浆果引入野兔。照料后收集自然脱落的兔绒与堆肥。'},
  {id:'omelet',name:'营火煎蛋',category:'survival',cost:{egg:2},item:'omelet',station:'campfire',desc:'饱食 +35、生命 +7。用养殖取得的鲜鸡蛋制作。'},
  {id:'woolcoat',name:'兔绒保暖披肩',category:'survival',cost:{rabbitwool:5,grass:6},item:'coat',desc:'收集自然脱落兔绒，制作保暖披肩；不需要猎杀动物。'}

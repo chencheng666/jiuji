@@ -1,3 +1,4 @@
+import {communityLine} from './community.js';
 import {villageContextLine} from './camp-living.js';
 let G,VILLAGES;
 export function bindVillageLife(rules,villages){G=rules;VILLAGES=villages;}
@@ -27,13 +28,15 @@ function schedule(s,n,v,r){
  if(danger)return{state:'danger',x:(r.index%3-1)*57,y:18,text:'先回屋，等外面安全些。'};
  if(w.raining)return{state:'rain',x:(r.index%3-1)*57,y:18,text:'下雨了，把工具收好。'};
  if(time>=230)return{state:'home',x:(r.index%3-1)*57,y:18,text:'明早再见。'};
- if(r.index===0&&dist(s.player,n)<190)return{state:'greeting',x:38,y:38,text:villageContextLine(s,n.village)||(v.met?'回来啦，营地里慢慢聊。':'欢迎，点聚落标牌就能和我们交谈。')};
+ if(r.index===0&&dist(s.player,n)<190)return{state:'greeting',x:38,y:38,text:communityLine(s,n.village)||villageContextLine(s,n.village)||(v.met?'回来啦，营地里慢慢聊。':'欢迎，点聚落标牌就能和我们交谈。')};
  if(time>=190)return{state:'chat',x:Math.cos(r.index*2.4)*45,y:65+Math.sin(r.index*2.4)*22,text:v.food>0?'今天的粮食已经收好了。':'明天得准备些食物和柴火。'};
  const phase=(r.round+r.index+Math.floor(s.seed/13))%4;
  if(phase===3)return{state:'walk',x:Math.cos(r.index*2.4+r.round)*145,y:45+Math.sin(r.index*2.4+r.round)*80,text:'出去走一走，看看新长的草。'};
  if(phase===2&&v.comfort>=40)return{state:'chat',x:(r.index%3-1)*25,y:65,text:'从那边回来的人，带了新的见闻。'};
+ const contribution=s.community?.requests[n.village]||0;
+ if(contribution&&r.role===2)return{state:'work',x:-100,y:60,text:contribution===2?'整理大家一起准备的货箱。':'把新修的小车和工具整理好。'};
  const offsets=[[45,35],[-110,65],[118,40],[20,-85]],p=offsets[r.role];
- return{state:'work',x:p[0]+(r.index%2)*14,y:p[1],text:['看看火塘和住处。','照料苗圃，留下一些种子。',v.food?'整理公共粮仓。':'检查粮仓，还需要大家补充储备。','沿着营地边缘看看。'][r.role]};
+ return{state:'work',x:p[0]+(r.index%2)*14,y:p[1],text:communityLine(s,n.village)||['看看火塘和住处。','照料苗圃，留下一些种子。',v.food?'整理公共粮仓。':'检查粮仓，还需要大家补充储备。','沿着营地边缘看看。'][r.role]};
 }
 function choose(s,n,v,r,task){
  const dest=point(s,n,task.x,task.y),previous=r.state;

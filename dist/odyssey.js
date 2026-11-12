@@ -215,7 +215,9 @@ export function canDismantle(s,b){
   if(s.nodes.some(n=>n.followPen===b.id))return'有动物正返回这座圈舍，请等它到达';
   if(b.pen&&(b.pen.food>0||b.pen.reserve>0||b.pen.energy>0))return'圈舍仍有饲料或晶能，请先使用或取回储备';
   if(b.coTask)return'伙伴岗位仍有在制任务，请恢复岗位并完成后再拆除';
-  if(b.machine?.job)return'先完成自动装配台当前订单，避免丢失已投入材料';
+  if(b.steam?.job)return'先完成蒸汽工坊在制品，避免丢失原料';
+ if(b.steam?.heat>0)return'先在工坊停机排出余热，再拆除';
+ if(b.machine?.job)return'先完成自动装配台当前订单，避免丢失已投入材料';
   if(b.type==='relay'&&s.odyssey.routes.some(r=>(r.from===s.expedition.current||r.to===s.expedition.current)&&(r.enabled||r.cargo)))return'先停用关联货运，并等待在途货物抵达';
   return'';
 }

@@ -1,0 +1,28 @@
+{
+  "version": "4.0.0",
+  "name": "荒野共同体",
+  "status": "本地候选已验收，未发布生产或商店",
+  "date": "2026-11-12",
+  "testsPassed": 242,
+  "ruleCheckPassed": true,
+  "normalResourceRobotJourney": true,
+  "normalResourceSixRealmJourney": true,
+  "migrationPassed": true,
+  "browserLayoutPassed": true,
+  "offline": {
+    "version": "4.0.0",
+    "offline": true,
+    "staticAuditPassed": true,
+    "zip": "/Users/chencheng/Documents/我是陈成/九级/artifacts/desktop-downloads/Jiuji-v4.0.0-offline.zip",
+    "bytes": 818235,
+    "sha256": "ff990da2a1062886405111899512509e02c79f4fe4d16e352dde54c50dfec49a",
+    "desktopIPCOnly": true,
+    "files": 180
+  },
+  "preview": "http://127.0.0.1:4340/",
+  "physicalPhonesVerified": false,
+  "nativeInstallersBuilt": false,
+  "deployed": false,
+  "githubPushed": false,
+  "storeSubmitted": false
+}

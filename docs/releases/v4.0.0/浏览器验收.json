@@ -1,0 +1,74 @@
+{
+  "source": "Ego Lite 当前源码的本地真实页面；移动尺寸为触屏模拟，未做实体手机验证",
+  "checks": [
+    {
+      "width": 320,
+      "height": 568,
+      "pageOverflow": false,
+      "bodyOverflow": false,
+      "withinViewport": true,
+      "dialogHeight": 544,
+      "closeSize": [
+        44,
+        44
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "pageOverflow": false,
+      "bodyOverflow": false,
+      "withinViewport": true,
+      "dialogHeight": 820,
+      "closeSize": [
+        44,
+        44
+      ]
+    },
+    {
+      "width": 720,
+      "height": 324,
+      "pageOverflow": false,
+      "bodyOverflow": false,
+      "withinViewport": true,
+      "dialogHeight": 308,
+      "closeSize": [
+        44,
+        44
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "pageOverflow": false,
+      "bodyOverflow": false,
+      "withinViewport": true,
+      "dialogHeight": 374,
+      "closeSize": [
+        44,
+        44
+      ]
+    },
+    {
+      "width": 1500,
+      "height": 760,
+      "pageOverflow": false,
+      "bodyOverflow": false,
+      "withinViewport": true,
+      "dialogHeight": 710,
+      "closeSize": [
+        44,
+        44
+      ]
+    }
+  ],
+  "settingExpansionPreserved": true,
+  "seedDeposit": {
+    "amount": 5,
+    "bagAfter": 34,
+    "dockAfter": 15
+  },
+  "chronicleExportDownloaded": true,
+  "offlineBootAndCommunity": true,
+  "passed": true
+}

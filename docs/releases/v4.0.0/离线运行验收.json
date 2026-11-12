@@ -1,0 +1,33 @@
+{
+  "offlineNetwork": true,
+  "source": "正常资源检查点导入后，以真实前台帧推进，非注入时间",
+  "time": 1107.8649000000398,
+  "bots": [
+    {
+      "model": "gardener",
+      "battery": 55.29199999999982,
+      "state": "waiting",
+      "trips": 1,
+      "x": 1264.0757054611051,
+      "y": 1859.547776202151
+    },
+    {
+      "model": "hauler",
+      "battery": 59.95800000000006,
+      "state": "waiting",
+      "trips": 0,
+      "x": 1264.0757054611051,
+      "y": 1859.547776202151
+    }
+  ],
+  "beds": [
+    {
+      "crop": {
+        "kind": "root",
+        "readyAt": 1195.8242000000394
+      },
+      "inventory": {}
+    }
+  ],
+  "bootHidden": true
+}
