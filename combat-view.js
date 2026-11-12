@@ -2,7 +2,7 @@
 export function drawCombat(c,s,reduced=false){
  const a=s.expedition.shot;if(!a||a.until<=s.time)return;
  const duration=a.duration||.25,t=Math.max(0,Math.min(1,1-(a.until-s.time)/duration)),angle=Math.atan2(a.ty-a.y,a.tx-a.x),bow=['bow','prismBow'].includes(a.weapon),hammer=['hammer','gravityHammer'].includes(a.weapon);
- c.save();c.lineCap='round';c.globalAlpha=reduced?1:1-t*.7;
+ c.save();if(a.combo){c.strokeStyle='#f5dd9d';c.lineWidth=7;c.globalAlpha=reduced?.7:.6*(1-t);c.beginPath();c.moveTo(a.origin.x,a.origin.y-18);c.lineTo(a.x,a.y+12);c.stroke();}c.lineCap='round';c.globalAlpha=reduced?1:1-t*.7;
  c.strokeStyle={fire:'#ffc17e',frost:'#c5edee',pierce:'#e4d5a5',blunt:'#dec89a',energy:'#a2e5da'}[a.kind]||'#e4d5a5';c.fillStyle=c.strokeStyle;c.lineWidth=3;
  if(bow){
   // 箭迹在命中时出现；其后保留短暂余迹，不暗示延迟结算伤害。

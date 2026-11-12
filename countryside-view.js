@@ -1,3 +1,4 @@
+import {drawVillageContribution} from './community-view.js';
 import {playerSpriteName} from './character-view.js';
 import {ANIMALS,PEN_TYPES,ROOMS} from './countryside-data.js';
 import {VILLAGES} from './settlements.js';
@@ -13,6 +14,8 @@ export function drawCountrysideObject(view,c,s,n){
  view.sprite(c,n.type,n.x,n.y,125);const p=n.pen;if(!p)return true;
  for(let i=0;i<p.animals;i++){const x=n.x-20+i%2*30,y=n.y-12+Math.floor(i/2)*9;view.sprite(c,ANIMALS[PEN_TYPES[n.type].species].sprite,x,y+(view.reducedMotion?0:Math.sin(s.time*2+i)*1.3),28);}
  if(p.roof){c.strokeStyle='#344b37';c.lineWidth=3;c.fillStyle='#6f8a60';c.beginPath();c.moveTo(n.x-65,n.y-102);c.lineTo(n.x,n.y-127);c.lineTo(n.x+65,n.y-103);c.lineTo(n.x+53,n.y-88);c.lineTo(n.x-55,n.y-87);c.closePath();c.fill();c.stroke();c.beginPath();c.moveTo(n.x-53,n.y-88);c.lineTo(n.x-53,n.y-25);c.moveTo(n.x+53,n.y-88);c.lineTo(n.x+53,n.y-25);c.stroke();}
+ // 初级只有木鸡舍与陶碗；机械装置仅在自动喂养升级后出现。
+ c.save();c.fillStyle='#aa8964';c.strokeStyle='#493f30';c.lineWidth=2;c.beginPath();c.ellipse(n.x+50,n.y+5,13,6,0,0,7);c.fill();c.stroke();if(p.food>0){c.fillStyle='#e3cc91';for(let i=0;i<5;i++)c.fillRect(n.x+42+i*3,n.y+1+(i%2)*2,2,2);}c.restore();
  if(p.auto)view.sprite(c,'gatherbot',n.x+57,n.y-5,25);
  if(p.animals){c.fillStyle='#283e30';c.fillRect(n.x-28,n.y+8,56,5);c.fillStyle=p.food<=0?'#d5a17c':'#d6cf8d';c.fillRect(n.x-28,n.y+8,56*p.food/24,5);if(p.food<=0){c.font='11px sans-serif';c.fillStyle='#f1d2a0';c.textAlign='center';c.fillText('等待饲料',n.x,n.y+27);}}
  return true;
@@ -38,6 +41,7 @@ export function drawVillageInterior(view,c,s,dt){
   if(id==='workshop'){view.sprite(c,'table',r.x-65,190,80);view.sprite(c,'gatherbot',r.x+73,190,49);view.sprite(c,'chest',r.x+76,300,47);}
   if(id==='seedhouse'){view.sprite(c,'nursery',r.x+65,205,72);view.sprite(c,'archive',r.x-72,215,70);view.sprite(c,'flower',r.x+78,295,36);}
  }
+ drawVillageContribution(c,s,v.village,365,423,1.15);
  if(s.campLiving?.joint===2&&['bay','ridge'].includes(v.village)){view.sprite(c,'chest',575,300,50);plate(c,'两地共建',575,243);}
  const pop=s.settlements.villages[v.village].population;
  for(let i=3;i<pop;i++){const t=view.reducedMotion?0:v.clock;actors.push({kind:'resident',sprite:i%2?'companion-ranger':'companion-botanist',x:150+(i-3)*100+Math.sin(t*.3+i)*35,y:440+Math.cos(t*.2+i)*30,name:'聚落居民'});}

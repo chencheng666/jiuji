@@ -1,7 +1,7 @@
 {
   "name": "九级",
-  "version": "3.4.0",
-  "commit": "a5199bda1711c445a5cb66c8ee2b9d3f22528c57",
-  "download": "downloads/Jiuji-v3.4.0.zip",
-  "download_sha256": "03d771ee5b32190ded021c9f2048935e91a2fb84c4cafb66abeb31a12271c909"
+  "version": "4.0.0",
+  "commit": "8c96d6c716de764c79b54579455d399047ce7b43",
+  "download": "downloads/Jiuji-v4.0.0.zip",
+  "download_sha256": "48b8e65f88ed6e76141a54892fb02e300d83f5bfd0588df2a47bda0251948d12"
 }

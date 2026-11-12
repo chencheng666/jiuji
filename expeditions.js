@@ -111,9 +111,14 @@ const eRealm=s=>s.expedition.current;
 export function equippedWeapon(s){const e=s.expedition?.equipped;if(e&&s.inventory[e]&&s.durability[e]>0)return e;return ['copperSpear','spear'].find(k=>s.inventory[k]&&s.durability[k]>0)||null;}
 export function effectiveWeapon(s,id){const base=WEAPONS[id];if(!base)return null;const spec=s.homestead?.specialty[id];const w={...base,...(id==='bow'?(spec==='steady'?{damage:25,range:410,cooldown:.95}:spec==='rapid'?{damage:15,cooldown:.5}:{}):id==='hammer'?(spec==='stagger'?{damage:23}:spec==='crack'?{damage:35,area:65,cooldown:1.2}:{}):{})};return{...w,damage:w.damage*(hasModule(s,'precision')?1.15:1),cooldown:w.cooldown*(hasModule(s,'precision')?1.1:1),range:w.range*(hasModule(s,'reach')?1.15:1),...(w.power?{power:w.power*(hasModule(s,'capacitor')?.75:1)}:{})};}
 export function equip(s,id){if(s.status!=='playing'||!WEAPONS[id]||!s.inventory[id]||!s.durability[id])return{ok:false,reason:'这件武器暂时无法使用'};s.expedition.equipped=id;return{ok:true};}
-export function expeditionAttack(s,{give,say}){
+export function expeditionAttack(s,{give,say,walkable}){
  if(s.status!=='playing'||s.attackCooldown>0)return{ok:false};
  const id=equippedWeapon(s),w=effectiveWeapon(s,id)||{damage:5,range:85,cooldown:.6,kind:'blunt'};
+ // 翻滚后的短窗口只允许一次近战突进；不能穿越海岸，也不刷新无敌或冷却。
+ const combo=!!(id&&!w.ammo&&w.range<200&&s.expedition.rollCombo?.until>=s.time&&walkable);
+ const origin={x:s.player.x,y:s.player.y};
+ if(combo){const roll=s.expedition.rollCombo;for(let i=0;i<6;i++){const x=s.player.x+roll.dx*10,y=s.player.y+roll.dy*10;if(!walkable(s,x,y))break;s.player.x=x;s.player.y=y;}}
+ s.expedition.rollCombo=null;
  const candidates=[...s.expedition.creatures.filter(m=>m.hp>0&&!m.pacified),...s.enemies].filter(m=>dist(m,s.player)<=w.range).sort((a,b)=>dist(a,s.player)-dist(b,s.player));
  if(!candidates.length){s.attackCooldown=.25;s.swingUntil=s.time+.2;return{ok:false,reason:'攻击范围内没有目标'};}
  if(w.power&&(s.odyssey?.power||0)<w.power&&!s.odyssey?.creative)return{ok:false,reason:'便携晶能不足，使用晶能电池或换回普通武器'};
@@ -121,8 +126,8 @@ export function expeditionAttack(s,{give,say}){
  if(w.ammo)s.inventory[w.ammo]--;if(w.power&&s.odyssey&&!s.odyssey.creative)s.odyssey.power=Math.max(0,s.odyssey.power-w.power);
  s.attackCooldown=w.cooldown;s.swingUntil=s.time+.25;
  const main=candidates[0],targets=w.area?candidates.filter(m=>dist(m,main)<=w.area):[main];
- s.expedition.shot={x:s.player.x,y:s.player.y-30,tx:main.x,ty:main.y-25,at:s.time,until:s.time+.42,duration:.42,kind:w.kind,weapon:id,label:['bow','prismBow'].includes(id)?'远程命中':id==='hammer'?'钝击 · 打断':w.kind==='frost'?'霜晶 · 减速':''};
- for(const m of targets){const d=creatureProfile(m),mult=d?.weak===w.kind?2:d?.armor&&w.kind==='pierce'?(d.behavior==='armor'&&m.cooldown>1?.85:.55):1;const damage=Math.round(w.damage*mult);m.hp-=damage;
+ s.expedition.shot={x:s.player.x,y:s.player.y-30,tx:main.x,ty:main.y-25,at:s.time,until:s.time+.42,duration:.42,kind:w.kind,weapon:id,combo,origin,label:combo?'翻滚突进 · 双倍伤害':['bow','prismBow'].includes(id)?'远程命中':id==='hammer'?'钝击 · 打断':w.kind==='frost'?'霜晶 · 减速':''};
+ for(const m of targets){const d=creatureProfile(m),mult=d?.weak===w.kind?2:d?.armor&&w.kind==='pierce'?(d.behavior==='armor'&&m.cooldown>1?.85:.55):1;const damage=Math.round(w.damage*mult*(combo?2:1));m.hp-=damage;
   if(d){if(d.phases&&d.phase!==creatureProfile(m).phase){m.warning=null;m.cooldown=1.5;say(s,d.name+'进入第 '+(creatureProfile(m).phase+1)+' 阶段，攻击与弱点已改变。');}if(w.kind==='frost')m.slow=2;if(w.kind==='blunt'&&id==='hammer'){m.stun=s.homestead?.specialty.hammer==='stagger'?1.2:.6;m.warning=null;}m.alert=4;}
   s.fx.push({x:m.x,y:m.y,at:s.time,text:(mult>1?'克制 ':'')+'−'+damage});
   if(m.hp<=0){s.stats.defeated++;s.insight+=d?.boss?8:2;if(d){give(s,d.drop);s.expedition.kills[m.kind]=(s.expedition.kills[m.kind]||0)+1;m.warning=null;m.respawnAt=d.boss||Object.hasOwn(RIFT_REALMS,eRealm(s))?0:s.time+240;if(d.boss&&!s.expedition.bosses.includes(m.kind))s.expedition.bosses.push(m.kind);say(s,'击败'+d.name+' · '+Object.entries(d.drop).map(([key,n])=>(EXPEDITION_ITEMS[key]?.name||({meat:'生肉',fur:'毛皮',ore:'铜矿'}[key]||key))+' ×'+n).join('、'),d.boss);}else say(s,'夜影消散 · 洞见 +2');}
@@ -134,7 +139,7 @@ export function dodge(s,dx,dy,walkable){
  const e=s.expedition;if(s.status!=='playing'||e.dodgeCooldown>0||s.player.hunger<3)return{ok:false,reason:'闪避需要 3 饱食，并有 3 秒冷却'};
  const length=Math.hypot(dx,dy);if(!length){dx=0;dy=s.player.face||1;}else{dx/=length;dy/=length;}
  let moved=false;for(let i=0;i<12;i++){if(!walkable(s,s.player.x+dx*10,s.player.y+dy*10))break;s.player.x+=dx*10;s.player.y+=dy*10;moved=true;}
- if(!moved)return{ok:false,reason:'前方无法闪避'};s.player.hunger-=3;e.invulnerable=.65;e.dodgeCooldown=3;s.action=null;s.channel=null;s.path=[];s.target=null;return{ok:true};
+ if(!moved)return{ok:false,reason:'前方无法闪避'};s.player.hunger-=3;e.invulnerable=.65;e.dodgeCooldown=3;e.rollCombo={dx,dy,until:s.time+.55};s.action=null;s.channel=null;s.path=[];s.target=null;return{ok:true};
 }
 export function stepExpedition(s,dt,walkable){
  const e=s.expedition;for(const k of ['cooldown','dodgeCooldown','invulnerable','slowed'])e[k]=Math.max(0,e[k]-dt);
@@ -142,7 +147,7 @@ export function stepExpedition(s,dt,walkable){
   m.cooldown=Math.max(0,m.cooldown-dt);m.slow=Math.max(0,m.slow-dt);m.stun=Math.max(0,m.stun-dt);m.alert=Math.max(0,(m.alert||0)-dt);if(m.stun)continue;
   if(m.warning){m.warning.left-=dt;if(m.warning.left<=0){const w=m.warning;m.warning=null;
     if((w.kind||d.kind)==='charge'&&walkable(s,w.x,w.y)){m.x=w.x;m.y=w.y;}
-    if(warningHits(w,s.player)&&!e.invulnerable){const armor=s.inventory.armor&&s.durability.armor>0;s.player.hp-=Math.round((w.damage||d.damage)*(armor?.55:1)*(s.symbiosis?.run?.deep?1.25:1));if(armor){s.durability.armor=Math.max(0,s.durability.armor-6);if(!s.durability.armor)s.inventory.armor=0;}if(m.kind==='spider')e.slowed=2;s.hurtUntil=s.time+.3;}m.cooldown=d.cooldown;
+    if(warningHits(w,s.player)&&!e.invulnerable){const armor=s.inventory.armor&&s.durability.armor>0;s.player.hp-=Math.round((w.damage||d.damage)*(armor?.55:1)*(s.symbiosis?.run?.deep?1.25:1));if(armor){s.durability.armor=Math.max(0,s.durability.armor-6);if(!s.durability.armor)s.inventory.armor=0;}if(m.kind==='spider')e.slowed=2;if(m.kind==='boar'){const dx=s.player.x-w.ox,dy=s.player.y-w.oy,l=Math.hypot(dx,dy)||1;for(let i=0;i<9;i++){const x=s.player.x+dx/l*8,y=s.player.y+dy/l*8;if(!walkable(s,x,y))break;s.player.x=x;s.player.y=y;}s.action=null;s.channel=null;s.path=[];s.target=null;}s.hurtUntil=s.time+.3;}m.cooldown=d.cooldown;
    }continue;}
   const distance=dist(m,s.player),home={x:m.homeX,y:m.homeY};
   // 回程虫洞附近是落脚地，野怪不会追入入口安全圈。
@@ -168,5 +173,5 @@ export function validateExpedition(s,num,validateMap){
  if(!e.worlds||Array.isArray(e.worlds)||Object.keys(e.worlds).length>Object.keys(REALMS).length-1)throw new Error('远征存档无效');
  for(const[id,w]of Object.entries(e.worlds)){if(!Object.hasOwn(REALMS,id)||id===e.current||!num(w.savedAt,0,s.time))throw new Error('区域存档无效');validateMap({...s,...w});creatures(w.creatures);}
  for(const map of [s,...Object.values(e.worlds)])for(const n of map.nodes.filter(n=>n.type==='wormhole'))if(!Object.hasOwn(REALMS,n.destination))throw new Error('虫洞目的地无效');
- e.shot=null;
+ e.shot=null;e.rollCombo=null;
 }
