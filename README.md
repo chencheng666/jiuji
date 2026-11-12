@@ -1,6 +1,8 @@
 # 九级 · 荒野共同体
 
-当前源码：**4.0.0 · 荒野共同体**。三类机器人、真实货物与自动返站充电，聚落来信、碎石小路和六地前哨，三级蒸汽工坊自动供料与加工，翻滚近战突进和三类夜影。网页已发布腾讯云；Windows、macOS 与离线 ZIP 已同步发行，见 [4.0下载](https://github.com/chencheng666/jiuji/releases/tag/v4.0.0) 和 [跨平台验收](docs/releases/v4.0.0/跨平台发行/说明.md)。手机界面按需展开，旧存档可接续。详见 [4.0 玩法与验收](docs/releases/v4.0.0/README.md)。
+当前源码：**4.1.0 · 夜行与火光（本地候选）**。五类分阶段夜间生灵、毒区与吞火预警、撞树阻挡与木料掉落、遭遇后记录的夜间图鉴、弯腰采集；蒸汽工坊先研究科技才能建造和生产。详见 [4.1 玩法、截图与验收](docs/releases/v4.1.0/README.md)。
+
+当前公开发行仍为 **4.0.0 · 荒野共同体**。三类机器人、聚落生活、六地经营和三级蒸汽工坊；腾讯云、GitHub、官网和 Windows/macOS 下载沿用已核验的 [4.0 发行](https://github.com/chencheng666/jiuji/releases/tag/v4.0.0)。本轮没有发布 4.1。
 
 网页版、ZIP、Windows/macOS 安装包和各商店独立发行；下载入口、版本与验收状态以[官网](https://www.daguojueqi.site/jiuji/official/)和发行记录为准。
 

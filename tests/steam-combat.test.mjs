@@ -4,7 +4,7 @@ import * as G from '../dist/survival.js';
 import {steamState,steamAction,stepSteam,steamStatus} from '../dist/steam.js';
 import {stepNightCreatures} from '../dist/night-creatures.js';
 import {robotStores} from '../dist/robotics.js';
-const setup=()=>{const s=G.createOdysseyGame(44);s.level=3;s.enemies=[];s.expedition.creatures=[];return s;};
+const setup=()=>{const s=G.createOdysseyGame(44);s.level=3;s.tech.push('steamcraft');s.enemies=[];s.expedition.creatures=[];return s;};
 const workshop=s=>{const b={id:'steam-test',type:'steamworks',x:s.player.x,y:s.player.y,fuel:0,stored:0,productionAt:0,readyAt:0,inventory:{wood:10,ore:3,seed:2,grass:4}};s.buildings.push(b);return b;};
 const tick=(s,seconds)=>{for(let i=0;i<seconds*10;i++){s.time+=.1;stepSteam(s,.1);}};
 const arm=(s,id='spear')=>{s.inventory[id]=1;s.durability[id]=G.ITEMS[id].durability;s.expedition.equipped=id;};

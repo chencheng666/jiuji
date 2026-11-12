@@ -1,3 +1,5 @@
+import {terrainPush,boarKnockback} from './terrain-impact.js';
+import {interruptNightAttack} from './night-creatures.js';
 import {RIFT_REALMS,CO_CREATURES} from './symbiosis-data.js';
 import {createRiftMap,finishRift,hasModule,follows} from './symbiosis.js';
 import {NEW_REALMS,NEW_CREATURES,NEW_WEAPONS,NEW_ITEMS} from './odyssey-data.js';
@@ -102,7 +104,7 @@ export function switchRealm(s,to,{nodes,isLand,say}){
  if(!e.visited.includes(to)){e.visited.push(to);s.insight+=5;}
  const exit=to==='home'?s.nodes.find(n=>n.destination===from):s.nodes.find(n=>n.destination==='home');
  s.player.x=(exit?.x||1180)+75;s.player.y=(exit?.y||1640)+20;
- s.enemies=[];s.action=null;s.channel=null;s.target=null;s.path=[];s.request=null;s.fx=[];s.wilderness.particles=[];
+ s.enemies=[];s.nightEncounter=null;s.action=null;s.channel=null;s.target=null;s.path=[];s.request=null;s.fx=[];s.wilderness.particles=[];
  if(Object.hasOwn(RIFT_REALMS,from)&&to==='home')finishRift(s,from);
  if(s.symbiosis?.following){const c=s.symbiosis.companions[s.symbiosis.following];c.x=s.player.x-30;c.y=s.player.y+20;}
  say(s,'抵达「'+REALMS[to].name+'」。营地与探索记录已保存。',true);return{ok:true,teleported:true,traveled:true};
@@ -127,7 +129,7 @@ export function expeditionAttack(s,{give,say,walkable}){
  s.attackCooldown=w.cooldown;s.swingUntil=s.time+.25;
  const main=candidates[0],targets=w.area?candidates.filter(m=>dist(m,main)<=w.area):[main];
  s.expedition.shot={x:s.player.x,y:s.player.y-30,tx:main.x,ty:main.y-25,at:s.time,until:s.time+.42,duration:.42,kind:w.kind,weapon:id,combo,origin,label:combo?'翻滚突进 · 双倍伤害':['bow','prismBow'].includes(id)?'远程命中':id==='hammer'?'钝击 · 打断':w.kind==='frost'?'霜晶 · 减速':''};
- for(const m of targets){const d=creatureProfile(m),mult=d?.weak===w.kind?2:d?.armor&&w.kind==='pierce'?(d.behavior==='armor'&&m.cooldown>1?.85:.55):1;const damage=Math.round(w.damage*mult*(combo?2:1));m.hp-=damage;
+ for(const m of targets){const d=creatureProfile(m),mult=d?.weak===w.kind?2:d?.armor&&w.kind==='pierce'?(d.behavior==='armor'&&m.cooldown>1?.85:.55):1;const damage=Math.round(w.damage*mult*(combo?2:1));m.hp-=damage;interruptNightAttack(s,m);
   if(d){if(d.phases&&d.phase!==creatureProfile(m).phase){m.warning=null;m.cooldown=1.5;say(s,d.name+'进入第 '+(creatureProfile(m).phase+1)+' 阶段，攻击与弱点已改变。');}if(w.kind==='frost')m.slow=2;if(w.kind==='blunt'&&id==='hammer'){m.stun=s.homestead?.specialty.hammer==='stagger'?1.2:.6;m.warning=null;}m.alert=4;}
   s.fx.push({x:m.x,y:m.y,at:s.time,text:(mult>1?'克制 ':'')+'−'+damage});
   if(m.hp<=0){s.stats.defeated++;s.insight+=d?.boss?8:2;if(d){give(s,d.drop);s.expedition.kills[m.kind]=(s.expedition.kills[m.kind]||0)+1;m.warning=null;m.respawnAt=d.boss||Object.hasOwn(RIFT_REALMS,eRealm(s))?0:s.time+240;if(d.boss&&!s.expedition.bosses.includes(m.kind))s.expedition.bosses.push(m.kind);say(s,'击败'+d.name+' · '+Object.entries(d.drop).map(([key,n])=>(EXPEDITION_ITEMS[key]?.name||({meat:'生肉',fur:'毛皮',ore:'铜矿'}[key]||key))+' ×'+n).join('、'),d.boss);}else say(s,'夜影消散 · 洞见 +2');}
@@ -146,8 +148,10 @@ export function stepExpedition(s,dt,walkable){
  for(const m of e.creatures){const d=creatureProfile(m);if(m.pacified)continue;if(m.hp<=0){if(m.respawnAt&&s.time>=m.respawnAt){m.hp=d.hp;m.x=m.homeX;m.y=m.homeY;m.respawnAt=0;m.warning=null;m.cooldown=2;}continue;}
   m.cooldown=Math.max(0,m.cooldown-dt);m.slow=Math.max(0,m.slow-dt);m.stun=Math.max(0,m.stun-dt);m.alert=Math.max(0,(m.alert||0)-dt);if(m.stun)continue;
   if(m.warning){m.warning.left-=dt;if(m.warning.left<=0){const w=m.warning;m.warning=null;
-    if((w.kind||d.kind)==='charge'&&walkable(s,w.x,w.y)){m.x=w.x;m.y=w.y;}
-    if(warningHits(w,s.player)&&!e.invulnerable){const armor=s.inventory.armor&&s.durability.armor>0;s.player.hp-=Math.round((w.damage||d.damage)*(armor?.55:1)*(s.symbiosis?.run?.deep?1.25:1));if(armor){s.durability.armor=Math.max(0,s.durability.armor-6);if(!s.durability.armor)s.inventory.armor=0;}if(m.kind==='spider')e.slowed=2;if(m.kind==='boar'){const dx=s.player.x-w.ox,dy=s.player.y-w.oy,l=Math.hypot(dx,dy)||1;for(let i=0;i<9;i++){const x=s.player.x+dx/l*8,y=s.player.y+dy/l*8;if(!walkable(s,x,y))break;s.player.x=x;s.player.y=y;}s.action=null;s.channel=null;s.path=[];s.target=null;}s.hurtUntil=s.time+.3;}m.cooldown=d.cooldown;
+    let blockedCharge=false;
+    if((w.kind||d.kind)==='charge'&&m.kind==='boar'){const impact=terrainPush(s,m,w,walkable);blockedCharge=impact.blocked;if(impact.tree){m.stun=2;s.fx.push({x:m.x,y:m.y,at:s.time,text:'撞树硬直 · 2秒'});}}
+    else if((w.kind||d.kind)==='charge'&&walkable(s,w.x,w.y)){m.x=w.x;m.y=w.y;}
+    if(!blockedCharge&&warningHits(w,s.player)&&!e.invulnerable){const armor=s.inventory.armor&&s.durability.armor>0;s.player.hp-=Math.round((w.damage||d.damage)*(armor?.55:1)*(s.symbiosis?.run?.deep?1.25:1));if(armor){s.durability.armor=Math.max(0,s.durability.armor-6);if(!s.durability.armor)s.inventory.armor=0;}if(m.kind==='spider')e.slowed=2;if(m.kind==='boar')boarKnockback(s,{x:w.ox,y:w.oy},walkable);s.hurtUntil=s.time+.3;}m.cooldown=d.cooldown;
    }continue;}
   const distance=dist(m,s.player),home={x:m.homeX,y:m.homeY};
   // 回程虫洞附近是落脚地，野怪不会追入入口安全圈。

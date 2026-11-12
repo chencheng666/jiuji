@@ -1,0 +1,38 @@
+{
+  "version": "4.1.0",
+  "offline": true,
+  "staticAuditPassed": true,
+  "bytes": 832597,
+  "sha256": "be50259fb6a9a881e59ca49425c91da24371695834cdd00636e09b88e2cfce27",
+  "desktopIPCOnly": true,
+  "files": 190,
+  "zipFile": "Jiuji-v4.1.0-offline.zip",
+  "status": "本地候选，未发布",
+  "unitTests": {
+    "passed": 263,
+    "failed": 0
+  },
+  "journeys": [
+    "一级至九级经典成长",
+    "一级至九级星海路线",
+    "六图前哨共建",
+    "正常资源蒸汽生产与搬运"
+  ],
+  "browser": {
+    "tool": "Ego Lite",
+    "viewports": [
+      "390×844",
+      "720×324",
+      "844×390"
+    ],
+    "horizontalOverflow": false,
+    "closeButtonPx": 44,
+    "nightGuideDirectlyExpanded": true,
+    "oldSaveImported": "4.0正常资源三级存档",
+    "offlineFileBoot": true,
+    "fixtureScreenshotsClearlyLabeled": true,
+    "physicalDeviceTest": false
+  },
+  "published": false,
+  "windowsMacNativeBuilt": false
+}
