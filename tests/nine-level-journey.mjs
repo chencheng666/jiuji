@@ -5,7 +5,16 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 const camp=s.buildings.find(b=>b.type==='campfire');
 function ensureFieldKit(){need('twig',12);need('grass',18);need('berry',20);if(s.inventory.torch<3)for(let i=s.inventory.torch||0;i<3;i++)make('torch');}
-function trial(id){const t=G.TRIALS.find(t=>t.id===id),o=t.options[0];for(const[k,n]of Object.entries(o.cost))need(k,n);walk(t);if(t.planted)plantMany(t.planted);fs.writeFileSync('artifacts/nine-trial-'+id+'.json',G.serialize(s));check(G.beginTrial(s,id,o.id));while(s.channel)advance();assert.ok(s.expansion.completed.includes(id));}
+function trial(id){
+ const t=G.TRIALS.find(t=>t.id===id),o=t.options[0];for(const[k,n]of Object.entries(o.cost))need(k,n);walk(t);if(t.planted)plantMany(t.planted);
+ // 林地野猪会撞断调谐。先真实制作并投放诱饵，再绕到遗迹另一侧，不能假定站着一定安全。
+ if(s.expedition.creatures.some(m=>m.hp>0&&G.distance(m,t)<350)){make('lure');walk({x:t.x+180,y:t.y+40});check(G.useItem(s,'lure'));walk({x:t.x,y:t.y-110});}
+ fs.writeFileSync('artifacts/nine-trial-'+id+'.json',G.serialize(s));
+ for(let attempt=0;attempt<5&&!s.expansion.completed.includes(id);attempt++){
+  if(G.distance(s.player,t)>140)walk({x:t.x,y:t.y-110});check(G.beginTrial(s,id,o.id));while(s.channel)advance();
+ }
+ assert.ok(s.expansion.completed.includes(id),JSON.stringify({id,message:s.message,time:s.time}));
+}
 for(let level=3;level<=8;level++){
   assert.equal(s.level,level);ensureFieldKit();const c=G.CHAPTERS[level];for(const id of c.tech)learn(id);trial(c.trial);
   const station=build(c.station,camp);
