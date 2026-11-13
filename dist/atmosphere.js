@@ -1,11 +1,12 @@
+import {plantingSpecies,TREE_SPECIES} from './tree-species.js';
 import {layoutPreview} from './camp-layout.js';
 import {weather,placementReason,plantingReason,BUILDING_NAMES} from './survival.js';
 // 绘图只读取世界状态，天气伤害与生产计时由生存规则计算。
-export function paintTerrain(view,id='home'){
+export function paintTerrain(view,id='home',seasonIndex=0){
   const canvas=document.createElement('canvas'),scale=view.terrainScale||1;canvas.width=Math.round(3600*scale);canvas.height=Math.round(2800*scale);
   const c=canvas.getContext('2d');if(!c)throw Error('设备无法创建地形画布');c.scale(scale,scale);let seed=17;
   const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
-  const palette={home:['#365956','#929575','#6a8067','#ac9c79','#929b68','#879b91'],verdant:['#294a49','#658774','#446e5c','#879776','#739775','#507e7a'],cinder:['#483d37','#9e8666','#82725b','#b69b72','#8d795b','#ad8a6d'],frost:['#3e606b','#b5c8c1','#93b1b0','#bacac9','#9db9b5','#c4d4d2'],mirror:['#665c49','#baa779','#a49368','#d0bd88','#a39e79','#d3ca9d'],orbit:['#252c43','#7f8d96','#576c7c','#9c9f9c','#6c7d83','#a0abb0']}[id]||['#223d42','#688b83','#466d65','#9caa80','#6b8d72','#a0bdb6'];c.fillStyle=palette[0];c.fillRect(0,0,3600,2800);
+  let palette={home:['#365956','#929575','#6a8067','#ac9c79','#929b68','#879b91'],verdant:['#294a49','#658774','#446e5c','#879776','#739775','#507e7a'],cinder:['#483d37','#9e8666','#82725b','#b69b72','#8d795b','#ad8a6d'],frost:['#3e606b','#b5c8c1','#93b1b0','#bacac9','#9db9b5','#c4d4d2'],mirror:['#665c49','#baa779','#a49368','#d0bd88','#a39e79','#d3ca9d'],orbit:['#252c43','#7f8d96','#576c7c','#9c9f9c','#6c7d83','#a0abb0']}[id]||['#223d42','#688b83','#466d65','#9caa80','#6b8d72','#a0bdb6'];if(['home','verdant'].includes(id)){if(seasonIndex===2)palette=['#355c59','#a9a079','#8f8e62','#b29b76','#9b9664','#a1aa89'];if(seasonIndex===3)palette=['#416b73','#bac9b7','#8ea99a','#c3baa0','#a3b8a0','#bfd1c2'];}c.fillStyle=palette[0];c.fillRect(0,0,3600,2800);
   c.strokeStyle='#adc1a426';c.lineWidth=2;
   for(let y=15;y<2800;y+=31)for(let x=rnd()*100;x<3600;x+=120+rnd()*60){c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+22,y+6,x+42,y);c.stroke();}
   view.shore(c);c.strokeStyle='#456b62';c.lineWidth=75;c.stroke();c.strokeStyle='#c1b28a';c.lineWidth=29;c.stroke();c.strokeStyle='#48513c';c.lineWidth=3;c.stroke();
@@ -74,7 +75,7 @@ export function buildingPreview(view,c,s){
   for(let y=Math.floor((s.player.y-220)/32)*32;y<s.player.y+220;y+=32){c.beginPath();c.moveTo(s.player.x-220,y);c.lineTo(s.player.x+220,y);c.stroke();}
   c.setLineDash([6,7]);c.strokeStyle='#e8d7a670';c.beginPath();c.arc(s.player.x,s.player.y,210,0,7);c.stroke();c.setLineDash([]);
   c.fillStyle=bad?'#b74d3c44':'#d0d69244';c.strokeStyle=bad?'#f0a18a':'#efe4b1';c.beginPath();c.ellipse(p.x,p.y,48,25,0,0,7);c.fill();c.stroke();
-  view.sprite(c,view.building,p.x,p.y,118,.7);label(c,bad||'点击建造 · '+BUILDING_NAMES[view.building],p.x,p.y-140,bad?'#f4baa3':'#f5e6bc');
+  if(!view.sceneArt?.draw(c,{id:'preview',type:view.building,...p},s,view,118,.7))view.sprite(c,view.building,p.x,p.y,118,.7);label(c,bad||'点击建造 · '+BUILDING_NAMES[view.building],p.x,p.y-140,bad?'#f4baa3':'#f5e6bc');
   if(!bad){const links=layoutPreview(s,{type:view.building,...p});for(const[order,link]of links.entries()){label(c,link.name+' · '+link.text+(link.active?'':'（营火未点燃）'),p.x,p.y-164-order*19,'#e6edbc');const target=link.target||link.partner;c.strokeStyle='#c7e9ac99';c.setLineDash([4,6]);c.beginPath();c.moveTo(p.x,p.y);c.lineTo(target.x,target.y);c.stroke();c.setLineDash([]);}}c.restore();
 }
 export function plantingPreview(view,c,s){
@@ -82,7 +83,7 @@ export function plantingPreview(view,c,s){
   const bad=plantingReason(s,p.x,p.y);
   c.save();c.setLineDash([5,8]);c.strokeStyle='#d5dc9b80';c.lineWidth=2;c.beginPath();c.arc(s.player.x,s.player.y,160,0,7);c.stroke();c.setLineDash([]);
   c.fillStyle=bad?'#b74d3c55':'#a6d99466';c.strokeStyle=bad?'#f0a18a':'#e1efaa';c.beginPath();c.ellipse(p.x,p.y,25,14,0,0,7);c.fill();c.stroke();
-  view.sprite(c,'tree',p.x,p.y,48,.7);label(c,bad||'点击播种 · 1 种子 · 生态 +3',p.x,p.y-72,bad?'#f4baa3':'#f5e6bc');c.restore();
+  if(!view.sceneArt?.draw(c,{id:'seed-preview',type:'tree',treeSpecies:plantingSpecies(s,p.x,p.y),sapling:true,...p},s,view,48,.7))view.sprite(c,'tree',p.x,p.y,48,.7);label(c,bad||'播种'+TREE_SPECIES[plantingSpecies(s,p.x,p.y)].name+' · 1 种子 · 生态 +3',p.x,p.y-72,bad?'#f4baa3':'#f5e6bc');c.restore();
 }
 export function screenWeather(c,s,w,h){
   const rain=weather(s);if(rain.raining){

@@ -1,18 +1,10 @@
-# 九级 · 夜行与火光
+# 九级 · 万木与夜影
 
-当前版本：**4.1.0 · 夜行与火光**。五类分阶段夜间生灵、毒区与吞火预警、撞树阻挡与木料掉落、遭遇后记录的夜间图鉴、弯腰采集；蒸汽工坊先研究科技才能建造和生产。腾讯云、GitHub、官网和 ZIP / Windows / macOS 下载已更新。
+当前版本：**4.2.0 · 万木与夜影**。十二种林木拥有独立树皮、树冠与季节表现；人物加入肘膝关节动作，五类夜间生灵接入程序化模型与状态反馈。旧存档自动补齐树种，采集、种植和九级成长规则继续沿用。
 
-[4.1 玩法与截图](docs/releases/v4.1.0/README.md) · [4.1 正式下载](https://github.com/chencheng666/jiuji/releases/tag/v4.1.0) · [跨平台发行验收](docs/releases/v4.1.0/跨平台发行/说明.md)。保留 4.0 的三类机器人、聚落生活、六地经营和近战翻滚突进，旧存档可导入接续。
+[国内试玩](https://www.daguojueqi.site/jiuji/) · [游戏官网与下载](https://www.daguojueqi.site/jiuji/official/) · [4.2 更新说明](docs/releases/4.2.0.md)。网页版、离线包和桌面发行状态以各自版本和实际下载文件为准。
 
-网页版、ZIP、Windows/macOS 安装包和各商店独立发行；下载入口、版本与验收状态以[官网](https://www.daguojueqi.site/jiuji/official/)和发行记录为准。
-
-原创俯视角单人生存游戏。采集、合成、建造、四季生活与双轨科技，从一根树枝成长到九级文明。
-
-- [国内试玩](https://www.daguojueqi.site/jiuji/)
-- [备用试玩](https://chencheng666.github.io/jiuji/)
-- [GitHub](https://github.com/chencheng666/jiuji)
-- [游戏官网](https://www.daguojueqi.site/jiuji/official/)
-- 公众号：**数字机器莱西奥**
+[十二林木观察室](https://www.daguojueqi.site/jiuji/forest-observatory.html) · [夜影观察室](https://www.daguojueqi.site/jiuji/night-observatory.html)。观察室使用游戏渲染器与演示状态，不读取或写入玩家存档。
 
 ## 3.3 营地协作
 

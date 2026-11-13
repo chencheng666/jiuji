@@ -2,7 +2,7 @@
 export const ANIMALS={
  chicken:{name:'原野鸡',sprite:'chicken',behavior:'peck',speed:19,when:'白昼和黄昏 · 草地',tip:'白天在草地觅食，夜里归巢。先建鸡舍，用种子温和引回，再投入谷籽饲料。',domestic:'chickencoop',bait:{seed:2},seasons:[0,1,2,3],hours:[20,230]},
  rabbit:{name:'棉尾兔',sprite:'rabbit',behavior:'hop',speed:30,when:'清晨至黄昏 · 草甸',tip:'靠近时先停下来。奔跑或挥动武器会让它逃开；兔苑可以用浆果引入。',domestic:'rabbitpen',bait:{berry:2},seasons:[0,1,2,3],hours:[8,230]},
- squirrel:{name:'松果栗鼠',sprite:'squirrel',behavior:'scurry',speed:35,when:'白昼 · 青杉林',tip:'在树根旁寻找种子，听到脚步会跳向另一棵树。只观察，不必捕捉。',seasons:[0,1,2],hours:[20,185]},
+ squirrel:{name:'松果栗鼠',sprite:'squirrel',behavior:'scurry',speed:35,when:'白昼 · 松杉林',tip:'在树根旁寻找种子，听到脚步会跳向另一棵树。只观察，不必捕捉。',seasons:[0,1,2],hours:[20,185]},
  butterfly:{name:'晨露蝶',sprite:'butterfly',behavior:'flutter',speed:17,when:'春夏白昼 · 花丛',tip:'春夏花开的白天出现，寒季暂别。留一些荧光花给它们。',seasons:[0,1],hours:[35,170]},
  frog:{name:'雨铃蛙',sprite:'frog',behavior:'hop',speed:19,when:'春夏雨天或雨后 · 水边',tip:'雨中及雨停后的短时间，能在池边发现它们。',seasons:[0,1],hours:[0,300],rain:true},
  firefly:{name:'星点萤',sprite:'firefly',behavior:'flutter',speed:12,when:'夏季黄昏与夜晚 · 水边',tip:'夏夜的水边会亮起细小光点。它们是季节访客，不提供安全照明。',seasons:[1],hours:[190,300]},

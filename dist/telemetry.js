@@ -17,7 +17,7 @@ export class GameTelemetry {
  setConsent(value){this.generation++;this.consent=!!value;this.store('jiuji.analytics.consent',value?'yes':'no');this.session=this.uuid();this.seq=0;this.activeMs=0;this.pendingMs=0;this.last=this.now();this.context=null;if(!value){this.token='';try{this.storage.removeItem('jiuji.analytics.token');}catch{}}}
  update(s,playing,visible){const t=this.now(),delta=Math.max(0,Math.min(1000,t-this.last));this.last=t;if(!this.consent||!this.enabledHost)return;const key=s.expedition.current+':'+s.level;if(this.context!==null&&this.context!==key)this.flush();this.context=key;this.nextContext={battleId:'journey-'+key.replace(':','-')+'-'+this.session,mapId:s.expedition.current,faction:'level-'+s.level,mode:'survival'};if(playing&&visible){this.activeMs+=delta;this.pendingMs+=delta;}this.playing=playing;this.visible=visible;}
  async flush(){if(!this.consent||!this.enabledHost||this.busy)return false;this.busy=true;const generation=this.generation;
-  const body={consent:true,token:this.token,sessionId:this.session,seq:++this.seq,activeMs:Math.floor(this.activeMs),visible:!!this.visible,playing:!!this.playing,version:'4.1.0',entry:this.entry,context:this.nextContext||null};
+  const body={consent:true,token:this.token,sessionId:this.session,seq:++this.seq,activeMs:Math.floor(this.activeMs),visible:!!this.visible,playing:!!this.playing,version:'4.2.0',entry:this.entry,context:this.nextContext||null};
   try{const result=await this.send(body);if(generation!==this.generation||!this.consent)return false;if(result.token){this.token=result.token;this.store('jiuji.analytics.token',this.token);}this.pendingMs=0;return true;}catch{return false;}finally{this.busy=false;}
  }
 }

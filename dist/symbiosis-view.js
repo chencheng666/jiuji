@@ -28,7 +28,7 @@ export function drawCoLife(view,c,s){
  if(s.motion&&s.time-s.motion.at<.65){const t=(s.time-s.motion.at)/.65;c.save();c.strokeStyle='#dfcf9b';c.globalAlpha=1-t;c.lineWidth=2;c.beginPath();c.ellipse(s.motion.x,s.motion.y,10+t*25,5+t*10,0,0,7);c.stroke();c.restore();}
  if(inRift(s)){const r=e.run;c.save();c.fillStyle='#d9d8b2';c.font='12px sans-serif';c.textAlign='center';c.fillText('归路始终可用 · 观测 '+r.anchors.filter(Boolean).length+'/3',s.player.x,s.player.y+40);c.restore();}
 }
-export function drawPhotoCaption(c,s,w,h){c.save();c.fillStyle='#172d29cc';c.fillRect(0,h-58,w,58);c.fillStyle='#f1dfa8';c.font='bold 18px sans-serif';c.fillText('九级 · 共生远征',20,h-30);c.font='12px sans-serif';c.fillStyle='#c3d9cb';c.fillText(s.level+' 级 · 种子 '+(s.symbiosis.run?.seed??s.seed)+' · 3.0.0',20,h-10);c.restore();}
+export function drawPhotoCaption(c,s,w,h){c.save();c.fillStyle='#172d29cc';c.fillRect(0,h-58,w,58);c.fillStyle='#f1dfa8';c.font='bold 18px sans-serif';c.fillText('九级 · 荒野留影',20,h-30);c.font='12px sans-serif';c.fillStyle='#c3d9cb';c.fillText(s.level+' 级 · 种子 '+(s.symbiosis.run?.seed??s.seed),20,h-10);c.restore();}
 
 // 地图编号指向真实地点，扫描模块可提前标出三段见闻。
 export function drawRiftMapMarkers(c,s){
