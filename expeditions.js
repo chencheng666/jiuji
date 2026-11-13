@@ -1,3 +1,4 @@
+import {initTreeSpecies} from './tree-species.js';
 import {terrainPush,boarKnockback} from './terrain-impact.js';
 import {interruptNightAttack} from './night-creatures.js';
 import {RIFT_REALMS,CO_CREATURES} from './symbiosis-data.js';
@@ -100,7 +101,7 @@ export function switchRealm(s,to,{nodes,isLand,say}){
  for(const n of next.nodes)if(n.respawnAt)n.respawnAt+=gap;
  for(const b of next.buildings){for(const k of ['readyAt','productionAt','workingUntil','baitAt'])if(b[k])b[k]+=gap;if(b.kitchen)b.kitchen.readyAt+=gap;if(b.crop)b.crop.readyAt+=gap;}
  for(const m of next.creatures){if(m.respawnAt)m.respawnAt+=gap;m.warning=null;}
- s.nodes=next.nodes;s.buildings=next.buildings;s.explored=next.explored;e.creatures=next.creatures;e.current=to;e.crossings++;e.cooldown=3;e.invulnerable=3;
+ s.nodes=next.nodes;s.buildings=next.buildings;s.explored=next.explored;e.creatures=next.creatures;e.current=to;initTreeSpecies(s);e.crossings++;e.cooldown=3;e.invulnerable=3;
  if(!e.visited.includes(to)){e.visited.push(to);s.insight+=5;}
  const exit=to==='home'?s.nodes.find(n=>n.destination===from):s.nodes.find(n=>n.destination==='home');
  s.player.x=(exit?.x||1180)+75;s.player.y=(exit?.y||1640)+20;

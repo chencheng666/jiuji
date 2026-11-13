@@ -1,5 +1,6 @@
 import {drawVillageContribution} from './community-view.js';
 import {playerSpriteName} from './character-view.js';
+import {drawTraveler} from './visual-scene.js';
 import {ANIMALS,PEN_TYPES,ROOMS} from './countryside-data.js';
 import {VILLAGES} from './settlements.js';
 import {nearbyRoom} from './countryside.js';
@@ -46,7 +47,7 @@ export function drawVillageInterior(view,c,s,dt){
  const pop=s.settlements.villages[v.village].population;
  for(let i=3;i<pop;i++){const t=view.reducedMotion?0:v.clock;actors.push({kind:'resident',sprite:i%2?'companion-ranger':'companion-botanist',x:150+(i-3)*100+Math.sin(t*.3+i)*35,y:440+Math.cos(t*.2+i)*30,name:'聚落居民'});}
  actors.push({kind:'player',x:v.x,y:v.y,sprite:playerSpriteName(v),name:'你'});
- actors.sort((a,b)=>a.y-b.y);for(const a of actors){view.sprite(c,a.sprite,a.x,a.y+(view.reducedMotion?0:Math.sin(v.clock*(a.kind==='player'&&v.walk?9:2))*1.2),a.kind==='player'?66:60);if(a.kind==='player'||Math.hypot(a.x-v.x,a.y-v.y)<125)plate(c,a.name,a.x,a.y-84);}
+ actors.sort((a,b)=>a.y-b.y);for(const a of actors){if(a.kind==='player'){c.save();c.translate(a.x,a.y);c.scale(.72,.72);drawTraveler(c,{...s,player:{...v,x:0,y:0},time:v.clock},view);c.restore();}else view.sprite(c,a.sprite,a.x,a.y+(view.reducedMotion?0:Math.sin(v.clock*(a.kind==='player'&&v.walk?9:2))*1.2),a.kind==='player'?66:60);if(a.kind==='player'||Math.hypot(a.x-v.x,a.y-v.y)<125)plate(c,a.name,a.x,a.y-84);}
  const room=nearbyRoom(s);if(room){c.strokeStyle='#eed997';c.lineWidth=2;c.beginPath();c.ellipse(ROOMS[room].x,ROOMS[room].y+8,40,16,0,0,7);c.stroke();}
  c.fillStyle='#516b4b';for(const[x,y]of[[55,525],[910,520],[280,565],[680,565]]){view.sprite(c,'bush',x,y,55);}
  c.fillStyle='#3d563d';c.fillRect(407,625,146,30);plate(c,'返回原岛',480,647);c.restore();

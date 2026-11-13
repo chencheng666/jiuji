@@ -1,0 +1,26 @@
+/* 林野与黄铜：不增加常驻面板，触屏沿用原来的折叠与安全区。 */
+:root{--paper:#eee7ce;--gold:#ddbd7b;--panel:#203a33f2}
+.dialog{background:radial-gradient(ellipse at 0 0,#53644a66,transparent 62%),linear-gradient(145deg,#283f35,#142e2b);border-color:#b9be8c70;box-shadow:0 28px 75px #071e1bcc,inset 0 1px #e7e1b62b}
+.dialog-header{background:linear-gradient(100deg,#b9a67512,transparent);border-bottom-color:#b9be8c38}.dialog-header h2{letter-spacing:.05em}
+.dialog-header .close,.dialog button[aria-label="关闭"]{display:inline-grid;place-items:center;line-height:1;padding:0}
+.tool-rail button,.camp-toolbar-toggle,.quest-toggle,.hotbar,.vital,.mini-map{background:linear-gradient(145deg,#405044f5,#233b33f2);border-color:#bec69d6b;box-shadow:0 3px 0 #102a2980,inset 0 1px #f0e2ad22}
+.tool-rail button{border-radius:13px 5px 13px 5px}.tool-rail b{letter-spacing:.07em}.tool-rail span{color:#ead29c;text-shadow:0 2px #102f28}
+.quest,.pinned,.context,.growth-strip>button{background:linear-gradient(125deg,#354c3df2,#1c3932ed);border-color:#bfc4a254;box-shadow:0 4px 16px #0b262b30}
+.hotbar{border-radius:15px 6px 15px 6px}.slot{background:linear-gradient(155deg,#69806324,#0c2d2938);border-color:#c4c6a245}.slot.active{background:linear-gradient(145deg,#b3b07938,#a4ae7615);border-color:#e5c887;box-shadow:inset 0 0 12px #dec17719,0 0 0 1px #d9be7944}
+.primary{background:linear-gradient(135deg,#ead097,#c9a96a);box-shadow:0 3px 0 #8b754c,inset 0 1px #fff1c080;color:#203e35;border-radius:8px;letter-spacing:.04em}
+button{transition:background-color .16s,border-color .16s,box-shadow .16s,filter .16s}button:focus-visible{outline:2px solid #f6d88f;outline-offset:3px}button:active:not(:disabled){filter:brightness(1.16)}
+@media(hover:hover) and (pointer:fine){.tool-rail button:hover,.slot:hover,.secondary:hover{border-color:#e5d6a6;box-shadow:0 3px 0 #102a2960,inset 0 0 16px #dae1aa15}.primary:hover{filter:brightness(1.08)}}
+@keyframes panel-unfold{from{opacity:0;translate:0 9px;scale:.99}to{opacity:1;translate:0 0;scale:1}}
+@keyframes notice-arrive{from{opacity:0;translate:0 -5px}to{opacity:1;translate:0 0}}
+.overlay:not([hidden]) .dialog{animation:panel-unfold .22s cubic-bezier(.2,.7,.2,1) both}.toast.show{animation:notice-arrive .18s ease-out both}
+/* 关闭系统/游戏动效时连界面过渡一起停止，按钮命中区不随动画移动。 */
+body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media(pointer:coarse),(max-width:650px){.dialog{box-shadow:0 12px 30px #071e1b80}.tool-rail button,.quest,.hotbar{box-shadow:inset 0 1px #f0e2ad22}.overlay{backdrop-filter:none}.tool-rail b{letter-spacing:0}}
+.tool-rail span svg{display:inline-block;width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+@media(max-width:650px),(orientation:landscape) and (max-height:560px){.tool-rail span svg{width:18px;height:18px;stroke-width:1.8}}
+.growth-strip>button:last-child{white-space:nowrap;flex-shrink:0}
+@media(orientation:portrait) and (max-width:650px){.compact-hud .growth-strip{max-width:calc(100% - 112px)}.growth-strip-main{flex:1;min-width:0}}
+
+/* 图鉴沿用游戏内的程序模型，观察卡片不主动播放动画。 */
+.night-portrait{display:block;width:100%;height:auto;max-width:240px;border-radius:12px;background:#132329;margin:0 auto 10px}
